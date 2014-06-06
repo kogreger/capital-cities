@@ -1,0 +1,344 @@
+-- prepare raw data (in shell)
+unzip '*.zip' -d .
+
+[[check data structure: head 04hni_0000.csv]]
+
+(for FILE in /Volumes/WD_8TB/Data_Transfer/pflow/hni04/*.csv; do echo "COPY hni04.point (pid, tno, sno, pdate, longitude, latitude, sex, age, padd, occup, purpose, magfac, magfac2, tmode) FROM '$FILE' DELIMITER ',' CSV;"; done) > import-hni04.sql
+
+-- create persontrip data table (563ms)
+CREATE SCHEMA hni04 
+	AUTHORIZATION postgres;
+CREATE SEQUENCE hni04.point_id_seq 
+  INCREMENT 1 
+  MINVALUE 1 
+  MAXVALUE 9223372036854775807 
+  START 1 
+  CACHE 1;
+ALTER TABLE hni04.point_id_seq 
+  OWNER TO postgres;
+CREATE TABLE hni04.point 
+(
+  id bigint NOT NULL DEFAULT nextval('hni04.point_id_seq'::regclass), 
+  pid integer, 
+  tno smallint, 
+  sno smallint, 
+  pdate timestamp without time zone, 
+  longitude double precision, 
+  latitude double precision, 
+  sex smallint, 
+  age smallint, 
+  padd character(8), 
+  occup smallint, 
+  purpose smallint, 
+  magfac smallint, 
+  magfac2 smallint, 
+  tmode smallint, 
+  geom geometry(Point, 4326), 
+  puid bigint
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE hni04.point 
+  OWNER TO postgres;
+
+-- import persontrip data into database table (434,308ms, ~7m)
+[[run import-hni04.sql in PostgreSQL]]
+
+-- create unique point IDs and calculate geometry from lat/lon (541,856ms, ~9m)
+UPDATE hni04.point 
+SET puid = id, 
+	geom = ST_SetSRID(ST_MakePoint(longitude, latitude), 4326);
+
+-- create table for person data (263,993ms, ~4m)
+CREATE TABLE hni04.person AS 
+SELECT pid, MIN(sex) sex, MIN(age) age, MIN(padd) padd, MIN(occup) occup, MIN(magfac) magfac, MIN(magfac2) magfac2 
+FROM hni04.point 
+GROUP BY pid 
+ORDER BY pid;
+
+-- create table for subtrip data (80,447ms, ~1.5m)
+CREATE TABLE hni04.subtrip AS 
+SELECT pid, tno, sno, MIN(tmode) tmode 
+FROM hni04.point 
+GROUP BY pid, tno, sno 
+ORDER BY pid, tno, sno;
+
+-- create table for trip data (44,771ms, ~1m)
+CREATE TABLE hni04.trip AS 
+SELECT pid, tno, MIN(purpose) purpose
+FROM hni04.point 
+GROUP BY pid, tno 
+ORDER BY pid, tno;
+
+-- clean-up point data table (~1s)
+ALTER TABLE hni04.point 
+DROP COLUMN longitude, 
+DROP COLUMN latitude, 
+DROP COLUMN sex, 
+DROP COLUMN age, 
+DROP COLUMN padd, 
+DROP COLUMN occup, 
+DROP COLUMN purpose, 
+DROP COLUMN tmode, 
+DROP COLUMN magfac, 
+DROP COLUMN magfac2;
+
+-- add activity to trip data (~1s)
+-- 1 home
+-- 2 work
+-- 3 education
+-- 4 shopping
+-- 5 leisure
+-- 6 errand
+-- 99 other/unknown
+ALTER TABLE hni04.trip ADD COLUMN activity smallint;
+UPDATE hni04.trip 
+SET activity = 
+(
+	SELECT CASE purpose 
+		WHEN 1 THEN 1 
+		WHEN 2 THEN 2 
+		WHEN 3 THEN 3 
+		WHEN 4 THEN 2 
+		WHEN 5 THEN 6 
+		WHEN 6 THEN 4 
+		WHEN 7 THEN 5 
+		WHEN 8 THEN 5 
+		WHEN 9 THEN 5 
+		WHEN 10 THEN 5 
+		WHEN 11 THEN 6 
+		WHEN 99 THEN 99 
+	END
+)
+
+-- add activity to subtrip data (shortened significantly by creating indices beforehand: ~ 2s)
+-- assumed home at start of day unless data says otherwise
+ALTER TABLE hni04.subtrip ADD COLUMN activity smallint;
+UPDATE hni04.subtrip s
+SET activity = 
+(
+	SELECT activity 
+	FROM hni04.trip t
+	WHERE t.pid = s.pid AND t.tno = (s.tno - 1)
+	LIMIT 1
+)
+WHERE s.tmode = 97;
+UPDATE hni04.subtrip s
+SET activity = 
+(
+	SELECT CASE
+		WHEN
+			(
+			SELECT activity
+			FROM hni04.trip t
+			WHERE t.pid = s.pid AND t.tno = (s.tno + 1)
+			LIMIT 1
+			) > 1
+		THEN 1
+	END
+)
+WHERE s.tno = 1 AND s.tmode = 97;
+
+-- add occupation category to person data (185ms)
+-- 1 blue-collar
+-- 2 white-collar
+-- 3 student
+-- 4 housewife/househusband
+-- 5 unemployed/retired
+-- 99 other/unknown
+ALTER TABLE hni04.person ADD COLUMN occupc smallint;
+UPDATE hni04.person 
+SET occupc = 
+(
+	SELECT CASE occup 
+		WHEN 1 THEN 2 
+		WHEN 2 THEN 2 
+		WHEN 3 THEN 2 
+		WHEN 4 THEN 2 
+		WHEN 5 THEN 2 
+		WHEN 6 THEN 1 
+		WHEN 7 THEN 1 
+		WHEN 8 THEN 1 
+		WHEN 9 THEN 1 
+		WHEN 10 THEN 3 
+		WHEN 11 THEN 3 
+		WHEN 12 THEN 4 
+		WHEN 13 THEN 5 
+		WHEN 99 THEN 99 
+	END
+)
+
+-- add transportation mode category to subtrip data (683ms)
+-- 1 walking
+-- 2 bicycle
+-- 3 motorcycle
+-- 4 taxi
+-- 5 car
+-- 6 truck
+-- 7 bus
+-- 8 railway
+-- 9 boat
+-- 10 airplane
+-- 97 stationary
+-- 99 other/unknown
+ALTER TABLE hni04.subtrip ADD COLUMN tmodec smallint;
+UPDATE hni04.subtrip 
+SET tmodec = 
+(
+	SELECT CASE tmode 
+		WHEN 1 THEN 1 
+		WHEN 2 THEN 2 
+		WHEN 3 THEN 3 
+		WHEN 4 THEN 3 
+		WHEN 5 THEN 5 
+		WHEN 6 THEN 5 
+		WHEN 7 THEN 7 
+		WHEN 8 THEN 7 
+		WHEN 9 THEN 4 
+		WHEN 10 THEN 4 
+		WHEN 11 THEN 4 
+		WHEN 12 THEN 7 
+		WHEN 13 THEN 7 
+		WHEN 14 THEN 7 
+		WHEN 15 THEN 6
+		WHEN 16 THEN 9 
+		WHEN 17 THEN 8 
+		WHEN 18 THEN 10 
+		WHEN 19 THEN 99 
+		WHEN 97 THEN 97
+		WHEN 99 THEN 99 
+	END
+)
+
+-- create indices for point data table (1,609,144ms, ~27m)
+CREATE UNIQUE INDEX idx_PUID_hni04_point 
+	ON hni04.point 
+	USING btree 
+	(puid);
+CREATE INDEX idx_PID_hni04_point 
+	ON hni04.point 
+	USING btree 
+	(pid);
+CREATE INDEX idx_TNO_hni04_point 
+	ON hni04.point 
+	USING btree 
+	(tno);
+CREATE INDEX idx_SNO_hni04_point 
+	ON hni04.point 
+	USING btree 
+	(sno);
+CREATE INDEX idx_PDATE_hni04_point 
+	ON hni04.point 
+	USING btree 
+	(pdate);
+CREATE INDEX idx_GEOM_hni04_point 
+	ON hni04.point 
+	USING gist 
+	(geom);
+
+-- create indices for person data table (115ms)
+CREATE INDEX idx_PID_hni04_person 
+	ON hni04.person 
+	USING btree 
+	(pid);
+CREATE INDEX idx_OCCUP_hni04_person 
+	ON hni04.person 
+	USING btree 
+	(occup);
+CREATE INDEX idx_OCCUPC_hni04_person 
+	ON hni04.person 
+	USING btree 
+	(occupc);
+
+-- create indices for subtrip data table (1,834ms)
+CREATE INDEX idx_PID_hni04_subtrip 
+	ON hni04.subtrip 
+	USING btree 
+	(pid);
+CREATE INDEX idx_TNO_hni04_subtrip 
+	ON hni04.subtrip 
+	USING btree 
+	(tno);
+CREATE INDEX idx_SNO_hni04_subtrip 
+	ON hni04.subtrip 
+	USING btree 
+	(sno);
+CREATE INDEX idx_TMODE_hni04_subtrip 
+	ON hni04.subtrip 
+	USING btree 
+	(tmode);
+CREATE INDEX idx_TMODEC_hni04_subtrip 
+	ON hni04.subtrip 
+	USING btree 
+	(tmodec);
+CREATE INDEX idx_ACTIVITY_hni04_subtrip 
+	ON hni04.subtrip 
+	USING btree 
+	(activity);
+
+-- create indices for trip data table (549ms)
+CREATE INDEX idx_PID_hni04_trip 
+	ON hni04.trip 
+	USING btree 
+	(pid);
+CREATE INDEX idx_TNO_hni04_trip 
+	ON hni04.trip 
+	USING btree 
+	(tno);
+CREATE INDEX idx_PURPOSE_hni04_trip 
+	ON hni04.trip 
+	USING btree 
+	(purpose);
+CREATE INDEX idx_ACTIVITY_hni04_trip 
+	ON hni04.trip 
+	USING btree 
+	(activity);
+
+-- create constraints for person data table (133ms)
+ALTER TABLE hni04.person
+ADD CONSTRAINT pkey_PID_hni04_person PRIMARY KEY(pid);
+
+-- create constraints for point data table (605,269ms, ~10m)
+ALTER TABLE hni04.point 
+ADD CONSTRAINT pkey_PUID_hni04_point PRIMARY KEY(puid), 
+ADD CONSTRAINT fkey_PID_person_hni04_point FOREIGN KEY (pid)
+	REFERENCES hni04.person (pid) MATCH SIMPLE
+	ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE;
+
+-- create constraints for subtrip data table (~1s)
+ALTER TABLE hni04.subtrip
+ADD CONSTRAINT pkey_PID_TNO_SNO_hni04_subtrip PRIMARY KEY(pid, tno, sno), 
+ADD CONSTRAINT fkey_PID_person_hni04_subtrip FOREIGN KEY (pid)
+	REFERENCES hni04.person (pid) MATCH SIMPLE
+	ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE;
+
+-- create constraints for trip data table (529ms)
+ALTER TABLE hni04.trip
+ADD CONSTRAINT pkey_PID_TNO_hni04_trip PRIMARY KEY(pid, tno), 
+ADD CONSTRAINT fkey_PID_person_hni04_trip FOREIGN KEY (pid)
+	REFERENCES hni04.person (pid) MATCH SIMPLE
+	ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE;
+
+-- analyze tables for better performance (~1m)
+ANALYZE hni04.person;
+ANALYZE hni04.point;
+ANALYZE hni04.subtrip;
+ANALYZE hni04.trip;
+
+-- add columns foor distance measurements
+ALTER TABLE hni04.point
+   ADD COLUMN dist double precision;
+ALTER TABLE hni04.subtrip
+   ADD COLUMN dist double precision;
+ALTER TABLE hni04.trip
+   ADD COLUMN dist double precision;
+
+-- calculate distance between point positions
+UPDATE hni04.point t1
+SET dist = 
+(
+  SELECT ST_Distance_Sphere(t1.geom, t2.geom) distance
+  FROM hni04.point t2 
+  WHERE t1.pid = t2.pid AND t1.tno = t2.tno AND t1.sno = t2.sno AND t2.pdate = (t1.pdate + interval '1 minute') 
+);
