@@ -328,7 +328,7 @@ ALTER TABLE dhk09.subtrip
 ALTER TABLE dhk09.trip
    ADD COLUMN dist double precision;
 
--- calculate distance between point positions (ms, ~h)
+-- calculate distance between point positions (238821668ms, ~2.7d)
 UPDATE dhk09.point t1
 SET dist = 
 (

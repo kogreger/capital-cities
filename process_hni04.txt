@@ -342,3 +342,12 @@ SET dist =
   FROM hni04.point t2 
   WHERE t1.pid = t2.pid AND t1.tno = t2.tno AND t1.sno = t2.sno AND t2.pdate = (t1.pdate + interval '1 minute') 
 );
+
+-- calculate distance between point positions (ms, ~d)
+UPDATE hni04.point t1
+SET dist = 
+(
+  SELECT ST_Distance_Sphere(t1.geom, t2.geom) distance
+  FROM hni04.point t2 
+  WHERE t1.pid = t2.pid AND t1.tno = t2.tno AND t1.sno = t2.sno AND t2.pdate = (t1.pdate + interval '1 minute') 
+);
