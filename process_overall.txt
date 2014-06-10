@@ -72,9 +72,11 @@ occupation 7: service -> blue-collar or white-collar?
 occupations 17 & 0: others & unknown (no housewife, no unemployed)
 transportation modes 5, 6 & 7: sedan, jeep, kijang; colt, mini cab & pick up (car or taxi)?
 transportation modes 16, 17, 18 & 19: bajaj, ojek, becak & omprengan (taxi)?
+transportation mode 97: stationarity (not in documentation)
 
 mnl96:
 purpose 10: church -> leisure or errand?
 transportation modes 2, 10: pedicab, HOV taxi (taxi)?
 transportation mode 6: jeepney (bus)?
 transportation mode 13: utility vehicle (truck)?
+transportation mode 97: stationarity (not in documentation)
