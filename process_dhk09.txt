@@ -336,3 +336,23 @@ SET dist =
   FROM dhk09.point t2 
   WHERE t1.pid = t2.pid AND t1.tno = t2.tno AND t1.sno = t2.sno AND t2.pdate = (t1.pdate + interval '1 minute') 
 );
+
+-- calculate distance of subtrips (ms, ~m)
+UPDATE dhk09.subtrip s 
+SET dist = 
+(
+	SELECT SUM(p.dist) 
+	FROM dhk09.point p 
+	WHERE (p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno) 
+	GROUP BY p.pid, p.tno, p.sno
+);
+
+-- calculate distance of trips (ms, ~m)
+UPDATE dhk09.trip t 
+SET dist = 
+(
+	SELECT SUM(s.dist) 
+	FROM dhk09.subtrip s 
+	WHERE (s.pid = t.pid AND s.tno = t.tno) 
+	GROUP BY s.pid, s.tno
+);
