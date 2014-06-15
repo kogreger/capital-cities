@@ -337,7 +337,7 @@ SET dist =
   WHERE t1.pid = t2.pid AND t1.tno = t2.tno AND t1.sno = t2.sno AND t2.pdate = (t1.pdate + interval '1 minute') 
 );
 
--- calculate distance of subtrips (ms, ~m)
+-- calculate distance of subtrips (40,585,200ms, ~11.3h)
 UPDATE dhk09.subtrip s 
 SET dist = 
 (
@@ -347,7 +347,7 @@ SET dist =
 	GROUP BY p.pid, p.tno, p.sno
 );
 
--- calculate distance of trips (ms, ~m)
+-- calculate distance of trips (11,159ms, ~12s)
 UPDATE dhk09.trip t 
 SET dist = 
 (
