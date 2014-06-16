@@ -351,3 +351,23 @@ SET dist =
   FROM hni04.point t2 
   WHERE t1.pid = t2.pid AND t1.tno = t2.tno AND t1.sno = t2.sno AND t2.pdate = (t1.pdate + interval '1 minute') 
 );
+
+-- calculate distance of subtrips (34,598,642ms, ~9.6h)
+UPDATE hni04.subtrip s 
+SET dist = 
+(
+	SELECT SUM(p.dist) 
+	FROM hni04.point p 
+	WHERE (p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno) 
+	GROUP BY p.pid, p.tno, p.sno
+);
+
+-- calculate distance of trips (7,092ms, ~7s)
+UPDATE hni04.trip t 
+SET dist = 
+(
+	SELECT SUM(s.dist) 
+	FROM hni04.subtrip s 
+	WHERE (s.pid = t.pid AND s.tno = t.tno) 
+	GROUP BY s.pid, s.tno
+);
