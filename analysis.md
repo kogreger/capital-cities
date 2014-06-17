@@ -3,28 +3,8 @@
 ## Descriptive Statistics 
 
 
-```r
-## initialize and load required packages
-library(RPostgreSQL)
-```
-
 ```
 ## Loading required package: DBI
-```
-
-```r
-library(Unicode)
-
-## initialize database connection and psql helper functions
-drv <- dbDriver("PostgreSQL")
-con <- dbConnect(drv, 
-                 host = "localhost", 
-                 port = "1111", 
-                 user = "postgres", 
-                 password = "postgres", 
-                 dbname = "pflow")
-
-source("psqlHelper.R")
 ```
 
 ### Sample Populations
@@ -32,46 +12,15 @@ source("psqlHelper.R")
 This section covers the descriptive statistics of the four sample populations.
 
 
-```r
-# load variable labels
-labelsSex <- read.table("labels_all_sex.txt", sep = "\t")
-labelsAge <- read.table("labels_all_age.txt", sep = "\t")
-labelsOccupC <- read.table("labels_all_occupc.txt", sep = "\t")
-labelsdhk09Occup <- read.table("labels_dhk09_occup.txt", sep = "\t")
-labelshni04Occup <- read.table("labels_hni04_occup.txt", sep = "\t")
-labelsjkt02Occup <- read.table("labels_jkt02_occup.txt", sep = "\t")
-labelsmnl96Occup <- read.table("labels_mnl96_occup.txt", sep = "\t")
-```
 
 #### Dhaka 2009
 
 
-```r
-## dhk09
-dhk09.person <- psqlGetTable(con, "dhk09", "person")
-# remove unnecessary columns (padd, magfac, magfac2)
-dhk09.person <- dhk09.person[, c("pid", "sex", "age", "occup", "occupc")]
-# factorize pid
-dhk09.person$pid <- factor(dhk09.person$pid)
-# remove NA sex (=0) and factorize
-dhk09.person <- dhk09.person[dhk09.person$sex != 0, ]
-dhk09.person$sex <- factor(dhk09.person$sex, 
-                           levels = c(1, 2), 
-                           labels = labelsSex[, 2])
-# factorize age (ordered)
-dhk09.person$age <- factor(dhk09.person$age, 
-                           levels = c(0:17), 
-                           ordered = TRUE, 
-                           labels = labelsAge[, 2])
-# factorize occupation
-dhk09.person$occup <- factor(dhk09.person$occup, 
-                             levels = c(0:8), 
-                             labels = labelsdhk09Occup[, 2])
-# factorize occupation class
-dhk09.person$occupc <- factor(dhk09.person$occupc, 
-                              levels = c(1:5, 99), 
-                              labels = labelsOccupC[, 2])
+The data were captured on October 1-2, 2009 with a sample size of 42,111 people.
 
+Data set description:
+
+```r
 names(dhk09.person)
 ```
 
@@ -86,7 +35,7 @@ str(dhk09.person)
 ```
 ## 'data.frame':	42111 obs. of  5 variables:
 ##  $ pid   : Factor w/ 42114 levels "1","2","3","4",..: 1 2 3 4 5 6 7 8 9 10 ...
-##  $ sex   : Factor w/ 2 levels "male","female": 1 2 2 1 1 2 2 1 2 2 ...
+##  $ sex   : Factor w/ 2 levels "Male","Female": 1 2 2 1 1 2 2 1 2 2 ...
 ##  $ age   : Ord.factor w/ 18 levels "[0, 5["<"[5, 10["<..: 11 10 5 4 8 6 2 11 10 10 ...
 ##  $ occup : Factor w/ 9 levels "Unknown","Government service",..: 3 7 6 6 3 7 6 3 7 7 ...
 ##  $ occupc: Factor w/ 6 levels "Blue-collar",..: 2 4 3 3 2 4 3 2 4 4 ...
@@ -97,7 +46,7 @@ levels(dhk09.person$sex)
 ```
 
 ```
-## [1] "male"   "female"
+## [1] "Male"   "Female"
 ```
 
 ```r
@@ -131,34 +80,55 @@ levels(dhk09.person$occupc)
 ## [5] "Unemployed, retired"     "Other, unknown"
 ```
 
+
+```r
+ggplot(dhk09.person, aes(sex)) +
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Dhaka 2009, Sex", x = "Sex", y = "Count")
+```
+
+![plot of chunk plotHistDhk09Person](figure/plotHistDhk09Person1.png) 
+
+```r
+ggplot(dhk09.person, aes(age)) +
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Dhaka 2009, Age", x = "Age", y = "Count") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+![plot of chunk plotHistDhk09Person](figure/plotHistDhk09Person2.png) 
+
+```r
+ggplot(dhk09.person, aes(occup)) +
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Dhaka 2009, Occupation", x = "Occupation", y = "Count") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+![plot of chunk plotHistDhk09Person](figure/plotHistDhk09Person3.png) 
+
+```r
+ggplot(dhk09.person, aes(occupc)) +
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Dhaka 2009, Occupation Group", x = "Occupation", y = "Count") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+![plot of chunk plotHistDhk09Person](figure/plotHistDhk09Person4.png) 
+
+
 #### Hanoi 2004
 
 
-```r
-## hni04
-hni04.person <- psqlGetTable(con, "hni04", "person")
-# remove unnecessary columns (padd, magfac, magfac2)
-hni04.person <- hni04.person[, c("pid", "sex", "age", "occup", "occupc")]
-# factorize pid
-hni04.person$pid <- factor(hni04.person$pid)
-# factorize sex
-hni04.person$sex <- factor(hni04.person$sex, 
-                           levels = c(1, 2), 
-                           labels = labelsSex[, 2])
-# factorize age (ordered)
-hni04.person$age <- factor(hni04.person$age, 
-                           levels = c(0:17), 
-                           ordered = TRUE, 
-                           labels = labelsAge[, 2])
-# factorize occupation
-hni04.person$occup <- factor(hni04.person$occup, 
-                             levels = c(0:16, 99), 
-                             labels = labelshni04Occup[, 2])
-# factorize occupation class
-hni04.person$occupc <- factor(hni04.person$occupc, 
-                              levels = c(1:5, 99), 
-                              labels = labelsOccupC[, 2])
+The data were captured on October 1-2, 2004 with a sample size of 58,018 people.
 
+Data set description:
+
+```r
 names(hni04.person)
 ```
 
@@ -173,7 +143,7 @@ str(hni04.person)
 ```
 ## 'data.frame':	58018 obs. of  5 variables:
 ##  $ pid   : Factor w/ 58018 levels "2","3","4","5",..: 1 2 3 4 5 6 7 8 9 10 ...
-##  $ sex   : Factor w/ 2 levels "male","female": 1 1 1 1 1 2 2 1 1 1 ...
+##  $ sex   : Factor w/ 2 levels "Male","Female": 1 1 1 1 1 2 2 1 1 1 ...
 ##  $ age   : Ord.factor w/ 18 levels "[0, 5["<"[5, 10["<..: 10 12 7 7 6 6 6 13 5 17 ...
 ##  $ occup : Factor w/ 18 levels "[Undocumented_1]",..: 2 3 5 5 8 5 5 14 14 14 ...
 ##  $ occupc: Factor w/ 6 levels "Blue-collar",..: 2 2 2 2 1 2 2 5 5 5 ...
@@ -184,7 +154,7 @@ levels(hni04.person$sex)
 ```
 
 ```
-## [1] "male"   "female"
+## [1] "Male"   "Female"
 ```
 
 ```r
@@ -233,34 +203,55 @@ levels(hni04.person$occupc)
 ## [5] "Unemployed, retired"     "Other, unknown"
 ```
 
+
+```r
+ggplot(hni04.person, aes(sex)) +
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Hanoi 2004, Sex", x = "Sex", y = "Count")
+```
+
+![plot of chunk plotHistHni04Person](figure/plotHistHni04Person1.png) 
+
+```r
+ggplot(hni04.person, aes(age)) +
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Hanoi 2004, Age", x = "Age", y = "Count") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+![plot of chunk plotHistHni04Person](figure/plotHistHni04Person2.png) 
+
+```r
+ggplot(hni04.person, aes(occup)) +
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Hanoi 2004, Occupation", x = "Occupation", y = "Count") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+![plot of chunk plotHistHni04Person](figure/plotHistHni04Person3.png) 
+
+```r
+ggplot(hni04.person, aes(occupc)) +
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Hanoi 2004, Occupation Group", x = "Occupation", y = "Count") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+![plot of chunk plotHistHni04Person](figure/plotHistHni04Person4.png) 
+
+
 #### Jakarta 2002
 
 
-```r
-## jkt02
-jkt02.person <- psqlGetTable(con, "jkt02", "person")
-# remove unnecessary columns (padd, magfac, magfac2)
-jkt02.person <- jkt02.person[, c("pid", "sex", "age", "occup", "occupc")]
-# factorize pid
-jkt02.person$pid <- factor(jkt02.person$pid)
-# factorize sex
-jkt02.person$sex <- factor(jkt02.person$sex, 
-                           levels = c(1, 2), 
-                           labels = labelsSex[, 2])
-# factorize age (ordered, no 0)
-jkt02.person$age <- factor(jkt02.person$age, 
-                           levels = c(0:17), 
-                           ordered = TRUE, 
-                           labels = labelsAge[, 2])
-# factorize occupation
-jkt02.person$occup <- factor(jkt02.person$occup, 
-                             levels = c(0:17, 99), 
-                             labels = labelsjkt02Occup[, 2])
-# factorize occupation class
-jkt02.person$occupc <- factor(jkt02.person$occupc, 
-                              levels = c(1:5, 99), 
-                              labels = labelsOccupC[, 2])
+The data were captured on October 1-2, 2002 with a sample size of 297,043 people.
 
+Data set description:
+
+```r
 names(jkt02.person)
 ```
 
@@ -275,7 +266,7 @@ str(jkt02.person)
 ```
 ## 'data.frame':	297043 obs. of  5 variables:
 ##  $ pid   : Factor w/ 297043 levels "1","2","3","4",..: 1 2 3 4 5 6 7 8 9 10 ...
-##  $ sex   : Factor w/ 2 levels "male","female": 1 2 1 1 2 1 2 2 1 2 ...
+##  $ sex   : Factor w/ 2 levels "Male","Female": 1 2 1 1 2 1 2 2 1 2 ...
 ##  $ age   : Ord.factor w/ 18 levels "[0, 5["<"[5, 10["<..: 8 7 3 14 6 6 5 2 11 10 ...
 ##  $ occup : Factor w/ 19 levels "Unknown","Professor, manager, director, etc.",..: 3 1 1 6 17 5 1 1 11 8 ...
 ##  $ occupc: Factor w/ 6 levels "Blue-collar",..: 2 6 6 2 1 3 6 6 1 2 ...
@@ -286,7 +277,7 @@ levels(jkt02.person$sex)
 ```
 
 ```
-## [1] "male"   "female"
+## [1] "Male"   "Female"
 ```
 
 ```r
@@ -336,34 +327,55 @@ levels(jkt02.person$occupc)
 ## [5] "Unemployed, retired"     "Other, unknown"
 ```
 
+
+```r
+ggplot(jkt02.person, aes(sex)) +
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Jakarta 2002, Sex", x = "Sex", y = "Count")
+```
+
+![plot of chunk plotHistJkt02Person](figure/plotHistJkt02Person1.png) 
+
+```r
+ggplot(jkt02.person, aes(age)) +
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Jakarta 2002, Age", x = "Age", y = "Count") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+![plot of chunk plotHistJkt02Person](figure/plotHistJkt02Person2.png) 
+
+```r
+ggplot(jkt02.person, aes(occup)) +
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Jakarta 2002, Occupation", x = "Occupation", y = "Count") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+![plot of chunk plotHistJkt02Person](figure/plotHistJkt02Person3.png) 
+
+```r
+ggplot(jkt02.person, aes(occupc)) +
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Jakarta 2002, Occupation Group", x = "Occupation", y = "Count") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+![plot of chunk plotHistJkt02Person](figure/plotHistJkt02Person4.png) 
+
+
 #### Metro Manila 1996
 
 
-```r
-## mnl96
-mnl96.person <- psqlGetTable(con, "mnl96", "person")
-# remove unnecessary columns (padd, magfac, magfac2)
-mnl96.person <- mnl96.person[, c("pid", "sex", "age", "occup", "occupc")]
-# factorize pid
-mnl96.person$pid <- factor(mnl96.person$pid)
-# factorize sex
-mnl96.person$sex <- factor(mnl96.person$sex, 
-                           levels = c(1, 2), 
-                           labels = labelsSex[, 2])
-# factorize age (ordered, no 0)
-mnl96.person$age <- factor(mnl96.person$age, 
-                           levels = c(0:17), 
-                           ordered = TRUE, 
-                           labels = labelsAge[, 2])
-# factorize occupation
-mnl96.person$occup <- factor(mnl96.person$occup, 
-                             levels = c(1:14, 99), 
-                             labels = labelsmnl96Occup[, 2])
-# factorize occupation class
-mnl96.person$occupc <- factor(mnl96.person$occupc, 
-                              levels = c(1:5, 99), 
-                              labels = labelsOccupC[, 2])
+The data were captured on October 1-2, 1996 with a sample size of 189,335 people.
 
+Data set description:
+
+```r
 names(mnl96.person)
 ```
 
@@ -378,7 +390,7 @@ str(mnl96.person)
 ```
 ## 'data.frame':	189335 obs. of  5 variables:
 ##  $ pid   : Factor w/ 189335 levels "1","2","3","4",..: 1 2 3 4 5 6 7 8 9 10 ...
-##  $ sex   : Factor w/ 2 levels "male","female": 1 2 1 2 2 1 1 1 2 2 ...
+##  $ sex   : Factor w/ 2 levels "Male","Female": 1 2 1 2 2 1 1 1 2 2 ...
 ##  $ age   : Ord.factor w/ 18 levels "[0, 5["<"[5, 10["<..: 8 8 3 3 2 10 4 3 3 4 ...
 ##  $ occup : Factor w/ 15 levels "Executive","Professional",..: 8 12 10 10 10 5 11 11 10 11 ...
 ##  $ occupc: Factor w/ 6 levels "Blue-collar",..: 2 4 3 3 3 2 3 3 3 3 ...
@@ -389,7 +401,7 @@ levels(mnl96.person$sex)
 ```
 
 ```
-## [1] "male"   "female"
+## [1] "Male"   "Female"
 ```
 
 ```r
@@ -425,22 +437,53 @@ levels(mnl96.person$occupc)
 ```
 
 
+```r
+ggplot(mnl96.person, aes(sex)) +
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Metro Manila 1996, Sex", x = "Sex", y = "Count")
+```
+
+![plot of chunk plotHistMnl96Person](figure/plotHistMnl96Person1.png) 
+
+```r
+ggplot(mnl96.person, aes(age)) +
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Metro Manila 1996, Age", x = "Age", y = "Count") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+![plot of chunk plotHistMnl96Person](figure/plotHistMnl96Person2.png) 
+
+```r
+ggplot(mnl96.person, aes(occup)) +
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Metro Manila 1996, Occupation", x = "Occupation", y = "Count") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+![plot of chunk plotHistMnl96Person](figure/plotHistMnl96Person3.png) 
+
+```r
+ggplot(mnl96.person, aes(occupc)) +
+  geom_bar() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Dhaka 2009, Occupation Group", x = "Occupation", y = "Count") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+![plot of chunk plotHistMnl96Person](figure/plotHistMnl96Person4.png) 
+
+
 # Final Steps
 
 It's always a good idea to clean up after you're done...
 
 
-```r
-## clean up database connection and database driver
-dbDisconnect(con)
-```
-
 ```
 ## [1] TRUE
-```
-
-```r
-dbUnloadDriver(drv)
 ```
 
 ```

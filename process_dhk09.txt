@@ -150,6 +150,7 @@ UPDATE dhk09.person
 SET occupc = 
 (
 	SELECT CASE occup 
+		WHEN 0 THEN 99
 		WHEN 1 THEN 2 
 		WHEN 2 THEN 2 
 		WHEN 3 THEN 2 

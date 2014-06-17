@@ -10,7 +10,7 @@ This GitHub repository contains only information about the Urban Mobility sub-pr
 [TBD]
 
 ## Data
-An introduction to the data sets used in this project can be found [here](http://bit.ly/capital-cities-data-introduction).
+An introduction to the data sets used in this project can be found [here](http://bit.ly/capital-cities-data-introduction). **Warning: This summary was created at an early stage of the project and hence contains both incomplete and partly deprecated information.**
 
 ## Analysis
 First preliminary results of descriptive analyses of the aforementioned data sets can be found [here](https://github.com/kogreger/capital-cities/blob/master/analysis.md).
