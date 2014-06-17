@@ -1,0 +1,18 @@
+0	[Undocumented_1]
+1	Leader of branches, units
+2	Professional
+3	Technical and associate professional
+4	Clerical worker
+5	Service worker, shop, market sales
+6	Skilled agriculture, forestry, fishery
+7	Craft and related trades
+8	Plant, machine operator, assembler
+9	Elementary occupation
+10	Elementary student
+11	High school & university student
+12	Housewife
+13	Jobless, retired
+14	[Undocumented_2]
+15	[Undocumented_3]
+16	[Undocumented_4]
+99	Unknown

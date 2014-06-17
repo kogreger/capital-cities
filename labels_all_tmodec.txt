@@ -1,0 +1,12 @@
+1	Walking
+2	Bicycle
+3	Motorcycle
+4	Taxi
+5	Car
+6	Truck
+7	Bus
+8	Railway
+9	Boat
+10	Airplane
+97	Stationarity
+99	Other, unknown

@@ -1,0 +1,19 @@
+0	Unknown
+1	Professor, manager, director, etc.
+2	Industry owner, retail owner, etc.
+3	Engineer, doctor, accountant, pilot, etc.
+4	Teacher, lecturer
+5	Administration staff
+6	Technician
+7	Waitress
+8	Vedor, salesman, etc.
+9	Handyman (carpenter, jewelry)
+10	Construction, station, port, warehouse
+11	Laborer
+12	Public transport driver
+13	Private driver
+14	Housekeeper, office boy, gardener, etc.
+15	Farmer, fisherman, etc.
+16	Security guard
+17	Others
+99	Unknown_2

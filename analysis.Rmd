@@ -1,0 +1,187 @@
+# Capital Cities (Mobility)
+
+## Descriptive Statistics 
+
+```{r initialization}
+## initialize and load required packages
+library(RPostgreSQL)
+library(Unicode)
+
+## initialize database connection and psql helper functions
+drv <- dbDriver("PostgreSQL")
+con <- dbConnect(drv, 
+                 host = "localhost", 
+                 port = "1111", 
+                 user = "postgres", 
+                 password = "postgres", 
+                 dbname = "pflow")
+
+source("psqlHelper.R")
+```
+
+### Sample Populations
+
+This section covers the descriptive statistics of the four sample populations.
+
+```{r loadVariableLabels}
+# load variable labels
+labelsSex <- read.table("labels_all_sex.txt", sep = "\t")
+labelsAge <- read.table("labels_all_age.txt", sep = "\t")
+labelsOccupC <- read.table("labels_all_occupc.txt", sep = "\t")
+labelsdhk09Occup <- read.table("labels_dhk09_occup.txt", sep = "\t")
+labelshni04Occup <- read.table("labels_hni04_occup.txt", sep = "\t")
+labelsjkt02Occup <- read.table("labels_jkt02_occup.txt", sep = "\t")
+labelsmnl96Occup <- read.table("labels_mnl96_occup.txt", sep = "\t")
+```
+
+#### Dhaka 2009
+
+```{r loadPreparedhk09}
+## dhk09
+dhk09.person <- psqlGetTable(con, "dhk09", "person")
+# remove unnecessary columns (padd, magfac, magfac2)
+dhk09.person <- dhk09.person[, c("pid", "sex", "age", "occup", "occupc")]
+# factorize pid
+dhk09.person$pid <- factor(dhk09.person$pid)
+# remove NA sex (=0) and factorize
+dhk09.person <- dhk09.person[dhk09.person$sex != 0, ]
+dhk09.person$sex <- factor(dhk09.person$sex, 
+                           levels = c(1, 2), 
+                           labels = labelsSex[, 2])
+# factorize age (ordered)
+dhk09.person$age <- factor(dhk09.person$age, 
+                           levels = c(0:17), 
+                           ordered = TRUE, 
+                           labels = labelsAge[, 2])
+# factorize occupation
+dhk09.person$occup <- factor(dhk09.person$occup, 
+                             levels = c(0:8), 
+                             labels = labelsdhk09Occup[, 2])
+# factorize occupation class
+dhk09.person$occupc <- factor(dhk09.person$occupc, 
+                              levels = c(1:5, 99), 
+                              labels = labelsOccupC[, 2])
+
+names(dhk09.person)
+str(dhk09.person)
+levels(dhk09.person$sex)
+levels(dhk09.person$age)
+levels(dhk09.person$occup)
+levels(dhk09.person$occupc)
+```
+
+#### Hanoi 2004
+
+```{r loadPreparehni04}
+## hni04
+hni04.person <- psqlGetTable(con, "hni04", "person")
+# remove unnecessary columns (padd, magfac, magfac2)
+hni04.person <- hni04.person[, c("pid", "sex", "age", "occup", "occupc")]
+# factorize pid
+hni04.person$pid <- factor(hni04.person$pid)
+# factorize sex
+hni04.person$sex <- factor(hni04.person$sex, 
+                           levels = c(1, 2), 
+                           labels = labelsSex[, 2])
+# factorize age (ordered)
+hni04.person$age <- factor(hni04.person$age, 
+                           levels = c(0:17), 
+                           ordered = TRUE, 
+                           labels = labelsAge[, 2])
+# factorize occupation
+hni04.person$occup <- factor(hni04.person$occup, 
+                             levels = c(0:16, 99), 
+                             labels = labelshni04Occup[, 2])
+# factorize occupation class
+hni04.person$occupc <- factor(hni04.person$occupc, 
+                              levels = c(1:5, 99), 
+                              labels = labelsOccupC[, 2])
+
+names(hni04.person)
+str(hni04.person)
+levels(hni04.person$sex)
+levels(hni04.person$age)
+levels(hni04.person$occup)
+levels(hni04.person$occupc)
+```
+
+#### Jakarta 2002
+
+```{r loadPreparejkt02}
+## jkt02
+jkt02.person <- psqlGetTable(con, "jkt02", "person")
+# remove unnecessary columns (padd, magfac, magfac2)
+jkt02.person <- jkt02.person[, c("pid", "sex", "age", "occup", "occupc")]
+# factorize pid
+jkt02.person$pid <- factor(jkt02.person$pid)
+# factorize sex
+jkt02.person$sex <- factor(jkt02.person$sex, 
+                           levels = c(1, 2), 
+                           labels = labelsSex[, 2])
+# factorize age (ordered, no 0)
+jkt02.person$age <- factor(jkt02.person$age, 
+                           levels = c(0:17), 
+                           ordered = TRUE, 
+                           labels = labelsAge[, 2])
+# factorize occupation
+jkt02.person$occup <- factor(jkt02.person$occup, 
+                             levels = c(0:17, 99), 
+                             labels = labelsjkt02Occup[, 2])
+# factorize occupation class
+jkt02.person$occupc <- factor(jkt02.person$occupc, 
+                              levels = c(1:5, 99), 
+                              labels = labelsOccupC[, 2])
+
+names(jkt02.person)
+str(jkt02.person)
+levels(jkt02.person$sex)
+levels(jkt02.person$age)
+levels(jkt02.person$occup)
+levels(jkt02.person$occupc)
+```
+
+#### Metro Manila 1996
+
+```{r loadPreparemnl96}
+## mnl96
+mnl96.person <- psqlGetTable(con, "mnl96", "person")
+# remove unnecessary columns (padd, magfac, magfac2)
+mnl96.person <- mnl96.person[, c("pid", "sex", "age", "occup", "occupc")]
+# factorize pid
+mnl96.person$pid <- factor(mnl96.person$pid)
+# factorize sex
+mnl96.person$sex <- factor(mnl96.person$sex, 
+                           levels = c(1, 2), 
+                           labels = labelsSex[, 2])
+# factorize age (ordered, no 0)
+mnl96.person$age <- factor(mnl96.person$age, 
+                           levels = c(0:17), 
+                           ordered = TRUE, 
+                           labels = labelsAge[, 2])
+# factorize occupation
+mnl96.person$occup <- factor(mnl96.person$occup, 
+                             levels = c(1:14, 99), 
+                             labels = labelsmnl96Occup[, 2])
+# factorize occupation class
+mnl96.person$occupc <- factor(mnl96.person$occupc, 
+                              levels = c(1:5, 99), 
+                              labels = labelsOccupC[, 2])
+
+names(mnl96.person)
+str(mnl96.person)
+levels(mnl96.person$sex)
+levels(mnl96.person$age)
+levels(mnl96.person$occup)
+levels(mnl96.person$occupc)
+```
+
+
+# Final Steps
+
+It's always a good idea to clean up after you're done...
+
+```{r cleanup}
+## clean up database connection and database driver
+dbDisconnect(con)
+dbUnloadDriver(drv)
+```
