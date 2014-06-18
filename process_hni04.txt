@@ -89,7 +89,7 @@ DROP COLUMN magfac2;
 -- 2 work
 -- 3 education
 -- 4 shopping
--- 5 leisure
+-- 5 social, recreation
 -- 6 errand
 -- 99 other/unknown
 ALTER TABLE hni04.trip ADD COLUMN activity smallint;
