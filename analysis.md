@@ -1,24 +1,24 @@
 # Capital Cities (Urban Mobility)
 
-## Descriptive Statistics 
 
 
-```
-## Loading required package: DBI
-```
-
-### Sample Populations
+## Sample Populations
 
 This section covers the descriptive statistics of the four sample populations.
 
 
 
-#### Dhaka 2009
+
+
+
+### Dhaka 2009
+
 
 
 The data were captured on October 1-2, 2009 with a sample size of 42,111 people.
 
 Data set description:
+
 
 ```r
 names(dhk09.person)
@@ -80,53 +80,17 @@ levels(dhk09.person$occupc)
 ## [5] "Unemployed, retired"     "Other, unknown"
 ```
 
-
-```r
-ggplot(dhk09.person, aes(sex)) +
-  geom_bar() +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Dhaka 2009, Sex", x = "Sex", y = "Count")
-```
-
-![plot of chunk plotHistDhk09Person](figure/plotHistDhk09Person1.png) 
-
-```r
-ggplot(dhk09.person, aes(age)) +
-  geom_bar() +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Dhaka 2009, Age", x = "Age", y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-```
-
-![plot of chunk plotHistDhk09Person](figure/plotHistDhk09Person2.png) 
-
-```r
-ggplot(dhk09.person, aes(occup)) +
-  geom_bar() +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Dhaka 2009, Occupation", x = "Occupation", y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-```
-
-![plot of chunk plotHistDhk09Person](figure/plotHistDhk09Person3.png) 
-
-```r
-ggplot(dhk09.person, aes(occupc)) +
-  geom_bar() +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Dhaka 2009, Occupation Group", x = "Occupation", y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-```
-
-![plot of chunk plotHistDhk09Person](figure/plotHistDhk09Person4.png) 
+![plot of chunk plotHistDhk09Person](figure/plotHistDhk09Person.png) 
 
 
-#### Hanoi 2004
+### Hanoi 2004
+
 
 
 The data were captured on October 1-2, 2004 with a sample size of 58,018 people.
 
 Data set description:
+
 
 ```r
 names(hni04.person)
@@ -203,53 +167,17 @@ levels(hni04.person$occupc)
 ## [5] "Unemployed, retired"     "Other, unknown"
 ```
 
-
-```r
-ggplot(hni04.person, aes(sex)) +
-  geom_bar() +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Hanoi 2004, Sex", x = "Sex", y = "Count")
-```
-
-![plot of chunk plotHistHni04Person](figure/plotHistHni04Person1.png) 
-
-```r
-ggplot(hni04.person, aes(age)) +
-  geom_bar() +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Hanoi 2004, Age", x = "Age", y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-```
-
-![plot of chunk plotHistHni04Person](figure/plotHistHni04Person2.png) 
-
-```r
-ggplot(hni04.person, aes(occup)) +
-  geom_bar() +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Hanoi 2004, Occupation", x = "Occupation", y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-```
-
-![plot of chunk plotHistHni04Person](figure/plotHistHni04Person3.png) 
-
-```r
-ggplot(hni04.person, aes(occupc)) +
-  geom_bar() +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Hanoi 2004, Occupation Group", x = "Occupation", y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-```
-
-![plot of chunk plotHistHni04Person](figure/plotHistHni04Person4.png) 
+![plot of chunk plotHistHni04Person](figure/plotHistHni04Person.png) 
 
 
-#### Jakarta 2002
+### Jakarta 2002
+
 
 
 The data were captured on October 1-2, 2002 with a sample size of 297,043 people.
 
 Data set description:
+
 
 ```r
 names(jkt02.person)
@@ -327,53 +255,17 @@ levels(jkt02.person$occupc)
 ## [5] "Unemployed, retired"     "Other, unknown"
 ```
 
-
-```r
-ggplot(jkt02.person, aes(sex)) +
-  geom_bar() +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Jakarta 2002, Sex", x = "Sex", y = "Count")
-```
-
-![plot of chunk plotHistJkt02Person](figure/plotHistJkt02Person1.png) 
-
-```r
-ggplot(jkt02.person, aes(age)) +
-  geom_bar() +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Jakarta 2002, Age", x = "Age", y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-```
-
-![plot of chunk plotHistJkt02Person](figure/plotHistJkt02Person2.png) 
-
-```r
-ggplot(jkt02.person, aes(occup)) +
-  geom_bar() +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Jakarta 2002, Occupation", x = "Occupation", y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-```
-
-![plot of chunk plotHistJkt02Person](figure/plotHistJkt02Person3.png) 
-
-```r
-ggplot(jkt02.person, aes(occupc)) +
-  geom_bar() +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Jakarta 2002, Occupation Group", x = "Occupation", y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-```
-
-![plot of chunk plotHistJkt02Person](figure/plotHistJkt02Person4.png) 
+![plot of chunk plotHistJkt02Person](figure/plotHistJkt02Person.png) 
 
 
-#### Metro Manila 1996
+### Metro Manila 1996
+
 
 
 The data were captured on October 1-2, 1996 with a sample size of 189,335 people.
 
 Data set description:
+
 
 ```r
 names(mnl96.person)
@@ -436,48 +328,30 @@ levels(mnl96.person$occupc)
 ## [5] "Unemployed, retired"     "Other, unknown"
 ```
 
-
-```r
-ggplot(mnl96.person, aes(sex)) +
-  geom_bar() +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Metro Manila 1996, Sex", x = "Sex", y = "Count")
-```
-
-![plot of chunk plotHistMnl96Person](figure/plotHistMnl96Person1.png) 
-
-```r
-ggplot(mnl96.person, aes(age)) +
-  geom_bar() +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Metro Manila 1996, Age", x = "Age", y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-```
-
-![plot of chunk plotHistMnl96Person](figure/plotHistMnl96Person2.png) 
-
-```r
-ggplot(mnl96.person, aes(occup)) +
-  geom_bar() +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Metro Manila 1996, Occupation", x = "Occupation", y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-```
-
-![plot of chunk plotHistMnl96Person](figure/plotHistMnl96Person3.png) 
-
-```r
-ggplot(mnl96.person, aes(occupc)) +
-  geom_bar() +
-  scale_y_continuous(labels = comma) +
-  labs(title = "Dhaka 2009, Occupation Group", x = "Occupation", y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-```
-
-![plot of chunk plotHistMnl96Person](figure/plotHistMnl96Person4.png) 
+![plot of chunk plotHistMnl96Person](figure/plotHistMnl96Person.png) 
 
 
-# Final Steps
+### Comparison Across Cities
+
+#### Sex
+
+![plot of chunk plotHistPersonSexAll](figure/plotHistPersonSexAll.png) 
+
+#### Age
+
+![plot of chunk plotHistPersonAgeAll](figure/plotHistPersonAgeAll.png) 
+
+#### Occupation
+
+![plot of chunk plotHistPersonOccupAll](figure/plotHistPersonOccupAll.png) 
+
+#### Occupation Group
+
+![plot of chunk plotHistPersonOccupcAll](figure/plotHistPersonOccupcAll.png) 
+
+
+
+## Final Steps
 
 It's always a good idea to clean up after you're done...
 

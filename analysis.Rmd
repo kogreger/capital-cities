@@ -1,11 +1,16 @@
 # Capital Cities (Urban Mobility)
 
-## Descriptive Statistics 
 
-```{r initialization, eval = TRUE, echo = FALSE, results = hide}
+
+## Sample Populations
+
+This section covers the descriptive statistics of the four sample populations.
+
+```{r initialization, eval = TRUE, echo = FALSE, message = FALSE}
 ## initialize and load required packages
-library(RPostgreSQL)
 library(ggplot2)
+library(gridExtra)
+library(RPostgreSQL)
 library(scales)
 
 ## initialize database connection and psql helper functions
@@ -23,11 +28,7 @@ source("psqlHelper.R")
 theme_set(theme_bw())
 ```
 
-### Sample Populations
-
-This section covers the descriptive statistics of the four sample populations.
-
-```{r loadVariableLabels, eval = TRUE, echo = FALSE, results = hide}
+```{r loadVariableLabels, eval = TRUE, echo = FALSE, message = FALSE}
 # load variable labels
 labelsSex <- read.table("labels_all_sex.txt", sep = "\t")
 labelsAge <- read.table("labels_all_age.txt", sep = "\t")
@@ -38,7 +39,8 @@ labelsJkt02Occup <- read.table("labels_jkt02_occup.txt", sep = "\t")
 labelsMnl96Occup <- read.table("labels_mnl96_occup.txt", sep = "\t")
 ```
 
-#### Dhaka 2009
+
+### Dhaka 2009
 
 ```{r loadDhk09Person, eval = TRUE, echo = FALSE}
 ## dhk09
@@ -66,10 +68,12 @@ dhk09.person$occupc <- factor(dhk09.person$occupc,
                               levels = c(1:5, 99), 
                               labels = labelsOccupC[, 2])
 ```
+
 The data were captured on October 1-2, 2009 with a sample size of `r format(nrow(dhk09.person), big.mark=",")` people.
 
 Data set description:
-```{r descrDhk09Person}
+
+```{r descDhk09Person}
 names(dhk09.person)
 str(dhk09.person)
 levels(dhk09.person$sex)
@@ -78,30 +82,34 @@ levels(dhk09.person$occup)
 levels(dhk09.person$occupc)
 ```
 
-```{r plotHistDhk09Person, eval = TRUE, echo = FALSE}
-ggplot(dhk09.person, aes(sex)) +
+```{r plotHistDhk09Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28}
+plotDhk09Sex <- ggplot(dhk09.person, aes(sex)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   labs(title = "Dhaka 2009, Sex", x = "Sex", y = "Count")
-ggplot(dhk09.person, aes(age)) +
+plotDhk09Age <- ggplot(dhk09.person, aes(age)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   labs(title = "Dhaka 2009, Age", x = "Age", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-ggplot(dhk09.person, aes(occup)) +
+plotDhk09Occup <- ggplot(dhk09.person, aes(occup)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   labs(title = "Dhaka 2009, Occupation", x = "Occupation", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-ggplot(dhk09.person, aes(occupc)) +
+plotDhk09Occupc <- ggplot(dhk09.person, aes(occupc)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
-  labs(title = "Dhaka 2009, Occupation Group", x = "Occupation", y = "Count") +
+  labs(title = "Dhaka 2009, Occupation Group", 
+       x = "Occupation Group", 
+       y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+grid.arrange(plotDhk09Sex, plotDhk09Age, plotDhk09Occup, plotDhk09Occupc, 
+             ncol = 1)
 ```
 
 
-#### Hanoi 2004
+### Hanoi 2004
 
 ```{r loadHni04Person, eval = TRUE, echo = FALSE}
 ## hni04
@@ -128,10 +136,12 @@ hni04.person$occupc <- factor(hni04.person$occupc,
                               levels = c(1:5, 99), 
                               labels = labelsOccupC[, 2])
 ```
+
 The data were captured on October 1-2, 2004 with a sample size of `r format(nrow(hni04.person), big.mark=",")` people.
 
 Data set description:
-```{r descrHni04Person}
+
+```{r descHni04Person}
 names(hni04.person)
 str(hni04.person)
 levels(hni04.person$sex)
@@ -140,30 +150,34 @@ levels(hni04.person$occup)
 levels(hni04.person$occupc)
 ```
 
-```{r plotHistHni04Person, eval = TRUE, echo = FALSE}
-ggplot(hni04.person, aes(sex)) +
+```{r plotHistHni04Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28}
+plotHni04Sex <- ggplot(hni04.person, aes(sex)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   labs(title = "Hanoi 2004, Sex", x = "Sex", y = "Count")
-ggplot(hni04.person, aes(age)) +
+plotHni04Age <- ggplot(hni04.person, aes(age)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   labs(title = "Hanoi 2004, Age", x = "Age", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-ggplot(hni04.person, aes(occup)) +
+plotHni04Occup <- ggplot(hni04.person, aes(occup)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   labs(title = "Hanoi 2004, Occupation", x = "Occupation", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-ggplot(hni04.person, aes(occupc)) +
+plotHni04Occupc <- ggplot(hni04.person, aes(occupc)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
-  labs(title = "Hanoi 2004, Occupation Group", x = "Occupation", y = "Count") +
+  labs(title = "Hanoi 2004, Occupation Group", 
+       x = "Occupation Group", 
+       y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+grid.arrange(plotHni04Sex, plotHni04Age, plotHni04Occup, plotHni04Occupc, 
+             ncol = 1)
 ```
 
 
-#### Jakarta 2002
+### Jakarta 2002
 
 ```{r loadJkt02Person, eval = TRUE, echo = FALSE}
 ## jkt02
@@ -190,10 +204,12 @@ jkt02.person$occupc <- factor(jkt02.person$occupc,
                               levels = c(1:5, 99), 
                               labels = labelsOccupC[, 2])
 ```
+
 The data were captured on October 1-2, 2002 with a sample size of `r format(nrow(jkt02.person), big.mark=",")` people.
 
 Data set description:
-```{r descrJkt02Person}
+
+```{r descJkt02Person}
 names(jkt02.person)
 str(jkt02.person)
 levels(jkt02.person$sex)
@@ -202,30 +218,34 @@ levels(jkt02.person$occup)
 levels(jkt02.person$occupc)
 ```
 
-```{r plotHistJkt02Person, eval = TRUE, echo = FALSE}
-ggplot(jkt02.person, aes(sex)) +
+```{r plotHistJkt02Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28}
+plotJkt02Sex <- ggplot(jkt02.person, aes(sex)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   labs(title = "Jakarta 2002, Sex", x = "Sex", y = "Count")
-ggplot(jkt02.person, aes(age)) +
+plotJkt02Age <- ggplot(jkt02.person, aes(age)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   labs(title = "Jakarta 2002, Age", x = "Age", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-ggplot(jkt02.person, aes(occup)) +
+plotJkt02Occup <- ggplot(jkt02.person, aes(occup)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   labs(title = "Jakarta 2002, Occupation", x = "Occupation", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-ggplot(jkt02.person, aes(occupc)) +
+plotJkt02Occupc <- ggplot(jkt02.person, aes(occupc)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
-  labs(title = "Jakarta 2002, Occupation Group", x = "Occupation", y = "Count") +
+  labs(title = "Jakarta 2002, Occupation Group", 
+       x = "Occupation Group", 
+       y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+grid.arrange(plotJkt02Sex, plotJkt02Age, plotJkt02Occup, plotJkt02Occupc, 
+             ncol = 1)
 ```
 
 
-#### Metro Manila 1996
+### Metro Manila 1996
 
 ```{r loadMnl96Person, eval = TRUE, echo = FALSE}
 ## mnl96
@@ -252,10 +272,12 @@ mnl96.person$occupc <- factor(mnl96.person$occupc,
                               levels = c(1:5, 99), 
                               labels = labelsOccupC[, 2])
 ```
+
 The data were captured on October 1-2, 1996 with a sample size of `r format(nrow(mnl96.person), big.mark=",")` people.
 
 Data set description:
-```{r descrMnl96Person}
+
+```{r descMnl96Person}
 names(mnl96.person)
 str(mnl96.person)
 levels(mnl96.person$sex)
@@ -264,34 +286,74 @@ levels(mnl96.person$occup)
 levels(mnl96.person$occupc)
 ```
 
-```{r plotHistMnl96Person, eval = TRUE, echo = FALSE}
-ggplot(mnl96.person, aes(sex)) +
+```{r plotHistMnl96Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28}
+plotMnl96Sex <- ggplot(mnl96.person, aes(sex)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   labs(title = "Metro Manila 1996, Sex", x = "Sex", y = "Count")
-ggplot(mnl96.person, aes(age)) +
+plotMnl96Age <- ggplot(mnl96.person, aes(age)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   labs(title = "Metro Manila 1996, Age", x = "Age", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-ggplot(mnl96.person, aes(occup)) +
+plotMnl96Occup <- ggplot(mnl96.person, aes(occup)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   labs(title = "Metro Manila 1996, Occupation", x = "Occupation", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-ggplot(mnl96.person, aes(occupc)) +
+plotMnl96Occupc <- ggplot(mnl96.person, aes(occupc)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
-  labs(title = "Dhaka 2009, Occupation Group", x = "Occupation", y = "Count") +
+  labs(title = "Metro Manila 1996, Occupation Group", 
+       x = "Occupation Group", 
+       y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+grid.arrange(plotMnl96Sex, plotMnl96Age, plotMnl96Occup, plotMnl96Occupc, 
+             ncol = 1)
 ```
 
 
-# Final Steps
+### Comparison Across Cities
+
+#### Sex
+
+```{r plotHistPersonSexAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10}
+grid.arrange(plotDhk09Sex, plotHni04Sex, plotJkt02Sex, plotMnl96Sex, 
+             ncol = 2, 
+             main = "Sex")
+```
+
+#### Age
+
+```{r plotHistPersonAgeAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10}
+grid.arrange(plotDhk09Age, plotHni04Age, plotJkt02Age, plotMnl96Age, 
+             ncol = 2, 
+             main = "Age")
+```
+
+#### Occupation
+
+```{r plotHistPersonOccupAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10}
+grid.arrange(plotDhk09Occup, plotHni04Occup, plotJkt02Occup, plotMnl96Occup, 
+             ncol = 2, 
+             main = "Occupation")
+```
+
+#### Occupation Group
+
+```{r plotHistPersonOccupcAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10}
+grid.arrange(plotDhk09Occupc, plotHni04Occupc, plotJkt02Occupc, plotMnl96Occupc, 
+             ncol = 2, 
+             main = "Occupation Group")
+```
+
+
+
+## Final Steps
 
 It's always a good idea to clean up after you're done...
 
-```{r cleanup, eval = TRUE, echo = FALSE, results = hide}
+```{r cleanup, eval = TRUE, echo = FALSE, message = FALSE}
 ## clean up database connection and database driver
 dbDisconnect(con)
 dbUnloadDriver(drv)
