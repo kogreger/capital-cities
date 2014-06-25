@@ -1,0 +1,20 @@
+select ST_Extent(geom) from dhk09.point;
+BOX(90.184077 23.579584,90.64125 24.177917)
+
+osmosis --read-pbf bangladesh-latest.osm.pbf --bounding-box left=90.184077 top=24.177917 right=90.64125 bottom=23.579584 --write-xml dhk.osm
+ogr2ogr -f "SQLite" -dsco SPATIALITE=YES dhk.db dhk.osm
+
+
+
+select ST_Extent(geom) from hni04.point;
+BOX(105.613571 20.904583,106.017917 21.411541)
+ 
+ 
+ 
+select ST_Extent(geom) from jkt02.point;
+BOX(106.347272 -6.773335,107.220416 -6.008843)
+
+
+
+select ST_Extent(geom) from mnl96.point;
+BOX(120.7114 14.1266,121.375 14.951743)
