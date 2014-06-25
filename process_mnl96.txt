@@ -91,7 +91,7 @@ DROP COLUMN magfac2;
 -- 2 work
 -- 3 education
 -- 4 shopping
--- 5 leisure
+-- 5 social, recreation
 -- 6 errand
 -- 99 other/unknown
 ALTER TABLE mnl96.trip ADD COLUMN activity smallint;
@@ -108,7 +108,7 @@ SET activity =
 		WHEN 7 THEN 5 
 		WHEN 8 THEN 5 
 		WHEN 9 THEN 4 
-		WHEN 10 THEN 6 
+		WHEN 10 THEN 5 
 		WHEN 11 THEN 6 
 		WHEN 12 THEN 99 
 		WHEN 99 THEN 99 

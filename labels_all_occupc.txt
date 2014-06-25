@@ -1,0 +1,6 @@
+1	Blue-collar
+2	White-collar
+3	Student
+4	Housewife, househusband
+5	Unemployed, retired
+99	Other, unknown

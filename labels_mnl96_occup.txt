@@ -1,0 +1,15 @@
+1	Executive
+2	Professional
+3	Technician
+4	Clerical
+5	Service
+6	Farmer
+7	Trade
+8	Operator
+9	Laborer
+10	Pupil
+11	Student
+12	Housewife
+13	Jobless
+14	Others
+99	Unknown

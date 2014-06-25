@@ -1,0 +1,9 @@
+0	Unknown
+1	Government service
+2	Private service
+3	Business
+4	Unemployed
+5	Student
+6	Housewife
+7	Agriculture, farming
+8	Others (specify)

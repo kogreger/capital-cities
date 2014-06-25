@@ -1,0 +1,7 @@
+1	Home
+2	Work
+3	Education
+4	Shopping
+5	Social, recreation
+6	Errand
+99	Other, unknown

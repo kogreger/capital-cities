@@ -1,17 +1,18 @@
-Capital  Cities Research Project
-================================
+# Capital Cities Research Project (Urban Mobility)
 
-This is the github repository for an ongoing research project at the Division for Spatial Information Science (SIS) at the University of Tsukuba.
+This is the GitHub repository for an ongoing research project at the Division for Spatial Information Science (SIS) at the University of Tsukuba. Project lead is [Prof. Yuji Murayama](http://giswin.geo.tsukuba.ac.jp/teacher/murayama/index-e.htm). The research project itself is divided into two sub-projects:
+* Urban Land Use - PI: Dr. Ronald C. Estoque
+* Urban Mobility - PI: [Konstantin Greger](http://www.konstantingreger.net)
 
-* Project lead: [Prof. Yuji Murayama](http://giswin.geo.tsukuba.ac.jp/teacher/murayama/index-e.htm)
-* PI: [Konstantin Greger](http://www.konstantingreger.net)
+This GitHub repository contains only information about the Urban Mobility sub-project.
 
-Research Purpose
-----------------
-
+## Research Purpose
 [TBD]
 
-Data
-----
+## Data
+An introduction to the data sets used in this project can be found [here](http://bit.ly/capital-cities-data-introduction). **Warning: This summary was created at an early stage of the project and hence contains both incomplete and partly deprecated information.**
 
-An introduction to the data used in this project can be found [here](http://bit.ly/capital-cities-data-introduction).
+## Analysis
+First preliminary results of descriptive analyses of the aforementioned data sets can be found [here](https://github.com/kogreger/capital-cities/blob/master/analysis.md).
+
+[EOF]
