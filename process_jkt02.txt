@@ -338,11 +338,31 @@ ALTER TABLE jkt02.subtrip
 ALTER TABLE jkt02.trip
    ADD COLUMN dist double precision;
 
--- calculate distance between point positions
+-- calculate distance between point positions (193,064,050ms, ~2.2d)
 UPDATE jkt02.point t1
 SET dist = 
 (
   SELECT ST_Distance_Sphere(t1.geom, t2.geom) distance
   FROM jkt02.point t2 
   WHERE t1.pid = t2.pid AND t1.tno = t2.tno AND t1.sno = t2.sno AND t2.pdate = (t1.pdate + interval '1 minute') 
+);
+
+-- calculate distance of subtrips (ms, ~h)
+UPDATE jkt02.subtrip s 
+SET dist = 
+(
+	SELECT SUM(p.dist) 
+	FROM jkt02.point p 
+	WHERE (p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno) 
+	GROUP BY p.pid, p.tno, p.sno
+);
+
+-- calculate distance of trips (ms, ~s)
+UPDATE jkt02.trip t 
+SET dist = 
+(
+	SELECT SUM(s.dist) 
+	FROM jkt02.subtrip s 
+	WHERE (s.pid = t.pid AND s.tno = t.tno) 
+	GROUP BY s.pid, s.tno
 );
