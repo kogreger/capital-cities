@@ -347,7 +347,7 @@ SET dist =
   WHERE t1.pid = t2.pid AND t1.tno = t2.tno AND t1.sno = t2.sno AND t2.pdate = (t1.pdate + interval '1 minute') 
 );
 
--- calculate distance of subtrips (ms, ~h)
+-- calculate distance of subtrips (171421198ms, ~2d)
 UPDATE jkt02.subtrip s 
 SET dist = 
 (
@@ -357,7 +357,7 @@ SET dist =
 	GROUP BY p.pid, p.tno, p.sno
 );
 
--- calculate distance of trips (ms, ~s)
+-- calculate distance of trips (34,224ms, ~34s)
 UPDATE jkt02.trip t 
 SET dist = 
 (
@@ -365,4 +365,42 @@ SET dist =
 	FROM jkt02.subtrip s 
 	WHERE (s.pid = t.pid AND s.tno = t.tno) 
 	GROUP BY s.pid, s.tno
+);
+
+-- add columns for subtrip start & end identification (83ms)
+ALTER TABLE jkt02.subtrip ADD COLUMN puid_s bigint;
+ALTER TABLE jkt02.subtrip ADD COLUMN puid_e bigint;
+ALTER TABLE jkt02.subtrip ADD COLUMN pdate_s timestamp without time zone;
+ALTER TABLE jkt02.subtrip ADD COLUMN pdate_e timestamp without time zone;
+
+-- identify subtrip start & end times (ms, ~h)
+UPDATE jkt02.subtrip s 
+SET pdate_s =
+(
+	SELECT MIN(pdate) 
+	FROM jkt02.point p
+	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno 
+	GROUP BY pid, tno, sno
+), pdate_e = 
+(
+	SELECT MAX(pdate) 
+	FROM jkt02.point p
+	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno 
+	GROUP BY pid, tno, sno
+);
+
+-- identify subtrip start & end point positions (ms, ~h)
+UPDATE jkt02.subtrip s 
+SET puid_s =
+(
+	SELECT MIN(id) 
+	FROM jkt02.point p
+	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno AND p.pdate = s.pdate_s
+	GROUP BY pid, tno, sno
+), puid_e = 
+(
+	SELECT MIN(id) 
+	FROM jkt02.point p
+	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno AND p.pdate = s.pdate_e
+	GROUP BY pid, tno, sno
 );

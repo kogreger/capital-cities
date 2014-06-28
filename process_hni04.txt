@@ -375,3 +375,41 @@ SET dist =
 	WHERE (s.pid = t.pid AND s.tno = t.tno) 
 	GROUP BY s.pid, s.tno
 );
+
+-- add columns for subtrip start & end identification (101ms)
+ALTER TABLE hni04.subtrip ADD COLUMN puid_s bigint;
+ALTER TABLE hni04.subtrip ADD COLUMN puid_e bigint;
+ALTER TABLE hni04.subtrip ADD COLUMN pdate_s timestamp without time zone;
+ALTER TABLE hni04.subtrip ADD COLUMN pdate_e timestamp without time zone;
+
+-- identify subtrip start & end times (48,684,016ms, ~13.5h)
+UPDATE hni04.subtrip s 
+SET pdate_s =
+(
+	SELECT MIN(pdate) 
+	FROM hni04.point p
+	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno 
+	GROUP BY pid, tno, sno
+), pdate_e = 
+(
+	SELECT MAX(pdate) 
+	FROM hni04.point p
+	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno 
+	GROUP BY pid, tno, sno
+);
+
+-- identify subtrip start & end point positions (6,684,890ms, ~1.9h)
+UPDATE hni04.subtrip s 
+SET puid_s =
+(
+	SELECT MIN(id) 
+	FROM hni04.point p
+	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno AND p.pdate = s.pdate_s
+	GROUP BY pid, tno, sno
+), puid_e = 
+(
+	SELECT MIN(id) 
+	FROM hni04.point p
+	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno AND p.pdate = s.pdate_e
+	GROUP BY pid, tno, sno
+);

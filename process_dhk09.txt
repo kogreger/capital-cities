@@ -321,7 +321,7 @@ ANALYZE dhk09.point;
 ANALYZE dhk09.subtrip;
 ANALYZE dhk09.trip;
 
--- add columns foor distance measurements (20ms)
+-- add columns for distance measurements (20ms)
 ALTER TABLE dhk09.point
    ADD COLUMN dist double precision;
 ALTER TABLE dhk09.subtrip
@@ -356,4 +356,42 @@ SET dist =
 	FROM dhk09.subtrip s 
 	WHERE (s.pid = t.pid AND s.tno = t.tno) 
 	GROUP BY s.pid, s.tno
+);
+
+-- add columns for subtrip start & end identification (20ms)
+ALTER TABLE dhk09.subtrip ADD COLUMN puid_s bigint;
+ALTER TABLE dhk09.subtrip ADD COLUMN puid_e bigint;
+ALTER TABLE dhk09.subtrip ADD COLUMN pdate_s timestamp without time zone;
+ALTER TABLE dhk09.subtrip ADD COLUMN pdate_e timestamp without time zone;
+
+-- identify subtrip start & end times (18,560,190ms, ~5.2h)
+UPDATE dhk09.subtrip s 
+SET pdate_s =
+(
+	SELECT MIN(pdate) 
+	FROM dhk09.point p
+	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno 
+	GROUP BY pid, tno, sno
+), pdate_e = 
+(
+	SELECT MAX(pdate) 
+	FROM dhk09.point p
+	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno 
+	GROUP BY pid, tno, sno
+);
+
+-- identify subtrip start & end point positions (466,444ms, ~7.8m)
+UPDATE dhk09.subtrip s 
+SET puid_s =
+(
+	SELECT MIN(id) 
+	FROM dhk09.point p
+	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno AND p.pdate = s.pdate_s
+	GROUP BY pid, tno, sno
+), puid_e = 
+(
+	SELECT MIN(id) 
+	FROM dhk09.point p
+	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno AND p.pdate = s.pdate_e
+	GROUP BY pid, tno, sno
 );
