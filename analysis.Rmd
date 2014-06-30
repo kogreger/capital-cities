@@ -1,11 +1,5 @@
 # Capital Cities (Urban Mobility)
 
-
-
-## Sample Populations
-
-This section covers the descriptive statistics of the four sample populations.
-
 ```{r initialization, eval = TRUE, echo = FALSE, message = FALSE}
 ## initialize and load required packages
 library(ggplot2)
@@ -27,6 +21,12 @@ source("psqlHelper.R")
 ## initialize ggplot
 theme_set(theme_bw())
 ```
+
+
+
+## Sample Populations
+
+This section covers the descriptive statistics of the four sample populations.
 
 ```{r loadVariableLabels, eval = TRUE, echo = FALSE, message = FALSE}
 # load variable labels
@@ -345,6 +345,15 @@ grid.arrange(plotDhk09Occup, plotHni04Occup, plotJkt02Occup, plotMnl96Occup,
 grid.arrange(plotDhk09Occupc, plotHni04Occupc, plotJkt02Occupc, plotMnl96Occupc, 
              ncol = 2, 
              main = "Occupation Group")
+```
+
+
+## Spatio-Temporal Distribution of Trip Origins
+
+This section covers the analysis of the distribution of the origins of trips in all four cities over space and time. For analysis purposes we generated concentric ring buffers in 5km distances from the centers of all four cities (as per the OpenStreetMap data).
+
+```{r loadTripOriginsDhk09, eval = TRUE, echo = FALSE}
+
 ```
 
 
