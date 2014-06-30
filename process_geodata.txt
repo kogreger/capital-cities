@@ -1,0 +1,49 @@
+-- create persontrip data table (205ms)
+CREATE SCHEMA geodata
+	AUTHORIZATION postgres;
+
+
+[[import capital_cities.shp via Spit]]
+
+
+-- create buffers around city centers in 5km distance
+DROP TABLE IF EXISTS geodata.buffers_5km;
+CREATE TABLE geodata.buffers_5km 
+(
+	gid serial PRIMARY KEY, 
+	name character varying(48), 
+	radius integer, 
+	geom geometry(POLYGON, 4326)
+);
+CREATE INDEX idx_geom_geodata_buffers_5km ON geodata.buffers_5km USING GIST(geom); 
+
+DROP FUNCTION IF EXISTS concentric_ring_buffers(minimum integer, maximum integer, step integer);
+CREATE FUNCTION concentric_ring_buffers(minimum integer, maximum integer, step integer) RETURNS integer AS $$
+DECLARE
+	quantity integer := 0;
+BEGIN
+	RAISE NOTICE 'Generating concentric ring buffers from % km to % km in % km steps.', minimum, maximum, step;
+	
+	FOR d IN minimum..maximum BY step LOOP
+		INSERT INTO geodata.buffers_5km (name, radius, geom) 
+		(
+			SELECT name, d, ST_Transform
+			(
+				ST_Difference
+				(
+					ST_Buffer(ST_Transform(geom, 3857), (d * 1000), 'quad_segs=90'), 
+					ST_Buffer(ST_Transform(geom, 3857), ((d * 1000) - (step * 1000)), 'quad_segs=90')
+				), 4326
+			)::geometry(Polygon,4326)  
+			FROM geodata.capital_cities
+		);
+		quantity := quantity + 1;
+	END LOOP;
+	
+	RAISE NOTICE 'Generated % concentric ring buffers.', quantity;
+	RETURN quantity;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT concentric_ring_buffers(5, 50, 5);
+
