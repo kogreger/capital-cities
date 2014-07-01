@@ -353,7 +353,10 @@ grid.arrange(plotDhk09Occupc, plotHni04Occupc, plotJkt02Occupc, plotMnl96Occupc,
 This section covers the analysis of the distribution of the origins of trips in all four cities over space and time. For analysis purposes we generated concentric ring buffers in 5km distances from the centers of all four cities (as per the OpenStreetMap data).
 
 ```{r loadTripOriginsDhk09, eval = TRUE, echo = FALSE}
-
+## SELECT b.radius, COUNT(t.puid_s) 
+## FROM dhk09.subtrip t, geodata.buffers_5km b, dhk09.point p 
+## WHERE b.name = 'Dhaka' AND date_part('hour', p.pdate) = 10 AND p.puid = t.puid_s ## AND ST_Intersects(p.geom, b.geom) 
+## GROUP BY b.radius;
 ```
 
 

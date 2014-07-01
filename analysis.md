@@ -2,11 +2,11 @@
 
 
 
+
+
 ## Sample Populations
 
 This section covers the descriptive statistics of the four sample populations.
-
-
 
 
 
@@ -348,6 +348,13 @@ levels(mnl96.person$occupc)
 #### Occupation Group
 
 ![plot of chunk plotHistPersonOccupcAll](figure/plotHistPersonOccupcAll.png) 
+
+
+## Spatio-Temporal Distribution of Trip Origins
+
+This section covers the analysis of the distribution of the origins of trips in all four cities over space and time. For analysis purposes we generated concentric ring buffers in 5km distances from the centers of all four cities (as per the OpenStreetMap data).
+
+
 
 
 

@@ -47,3 +47,91 @@ $$ LANGUAGE plpgsql;
 
 SELECT concentric_ring_buffers(5, 50, 5);
 
+
+[[import GADM administrative boundaries via DB Manager (not Spit: Multipolygons!)]]
+
+
+-- clean and process administrative boundary data
+ALTER TABLE geodata.adm_bangladesh
+	DROP COLUMN name_fao,
+	DROP COLUMN name_local,
+	DROP COLUMN name_obsol,
+	DROP COLUMN name_varia,
+	DROP COLUMN name_nonla,
+	DROP COLUMN name_frenc,
+	DROP COLUMN name_spani,
+	DROP COLUMN name_russi,
+	DROP COLUMN name_arabi,
+	DROP COLUMN name_chine,
+	DROP COLUMN waspartof,
+	DROP COLUMN contains,
+	DROP COLUMN sovereign,
+	DROP COLUMN www,
+	DROP COLUMN validfr,
+	DROP COLUMN validto,
+	DROP COLUMN eumember;
+ALTER TABLE geodata.adm_bangladesh 
+	ADD COLUMN adm_level integer;
+
+ALTER TABLE geodata.adm_indonesia
+	DROP COLUMN name_fao,
+	DROP COLUMN name_local,
+	DROP COLUMN name_obsol,
+	DROP COLUMN name_varia,
+	DROP COLUMN name_nonla,
+	DROP COLUMN name_frenc,
+	DROP COLUMN name_spani,
+	DROP COLUMN name_russi,
+	DROP COLUMN name_arabi,
+	DROP COLUMN name_chine,
+	DROP COLUMN waspartof,
+	DROP COLUMN contains,
+	DROP COLUMN sovereign,
+	DROP COLUMN www,
+	DROP COLUMN validfr,
+	DROP COLUMN validto,
+	DROP COLUMN eumember;
+ALTER TABLE geodata.adm_indonesia
+	ADD COLUMN adm_level integer;
+
+ALTER TABLE geodata.adm_philippines
+	DROP COLUMN name_fao,
+	DROP COLUMN name_local,
+	DROP COLUMN name_obsol,
+	DROP COLUMN name_varia,
+	DROP COLUMN name_nonla,
+	DROP COLUMN name_frenc,
+	DROP COLUMN name_spani,
+	DROP COLUMN name_russi,
+	DROP COLUMN name_arabi,
+	DROP COLUMN name_chine,
+	DROP COLUMN waspartof,
+	DROP COLUMN contains,
+	DROP COLUMN sovereign,
+	DROP COLUMN www,
+	DROP COLUMN validfr,
+	DROP COLUMN validto,
+	DROP COLUMN eumember;
+ALTER TABLE geodata.adm_philippines
+	ADD COLUMN adm_level integer;
+
+ALTER TABLE geodata.adm_vietnam
+	DROP COLUMN name_fao,
+	DROP COLUMN name_local,
+	DROP COLUMN name_obsol,
+	DROP COLUMN name_varia,
+	DROP COLUMN name_nonla,
+	DROP COLUMN name_frenc,
+	DROP COLUMN name_spani,
+	DROP COLUMN name_russi,
+	DROP COLUMN name_arabi,
+	DROP COLUMN name_chine,
+	DROP COLUMN waspartof,
+	DROP COLUMN contains,
+	DROP COLUMN sovereign,
+	DROP COLUMN www,
+	DROP COLUMN validfr,
+	DROP COLUMN validto,
+	DROP COLUMN eumember;
+ALTER TABLE geodata.adm_vietnam
+	ADD COLUMN adm_level integer;
