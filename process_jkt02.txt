@@ -373,7 +373,7 @@ ALTER TABLE jkt02.subtrip ADD COLUMN puid_e bigint;
 ALTER TABLE jkt02.subtrip ADD COLUMN pdate_s timestamp without time zone;
 ALTER TABLE jkt02.subtrip ADD COLUMN pdate_e timestamp without time zone;
 
--- identify subtrip start & end times (ms, ~h)
+-- identify subtrip start & end times (188,265,630ms, ~2.1d)
 UPDATE jkt02.subtrip s 
 SET pdate_s =
 (
