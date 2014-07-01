@@ -72,6 +72,20 @@ ALTER TABLE geodata.adm_bangladesh
 	DROP COLUMN eumember;
 ALTER TABLE geodata.adm_bangladesh 
 	ADD COLUMN adm_level integer;
+UPDATE geodata.adm_bangladesh 
+	SET adm_level = 4;
+UPDATE geodata.adm_bangladesh 
+	SET adm_level = 3
+	WHERE id_4 = 0;
+UPDATE geodata.adm_bangladesh 
+	SET adm_level = 2
+	WHERE id_3 = 0;
+UPDATE geodata.adm_bangladesh 
+	SET adm_level = 1
+	WHERE id_2 = 0;
+UPDATE geodata.adm_bangladesh 
+	SET adm_level = 0
+	WHERE id_1 = 0;
 
 ALTER TABLE geodata.adm_indonesia
 	DROP COLUMN name_fao,
@@ -93,6 +107,14 @@ ALTER TABLE geodata.adm_indonesia
 	DROP COLUMN eumember;
 ALTER TABLE geodata.adm_indonesia
 	ADD COLUMN adm_level integer;
+UPDATE geodata.adm_indonesia 
+	SET adm_level = 2;
+UPDATE geodata.adm_indonesia 
+	SET adm_level = 1
+	WHERE id_2 = 0;
+UPDATE geodata.adm_indonesia 
+	SET adm_level = 0
+	WHERE id_1 = 0;
 
 ALTER TABLE geodata.adm_philippines
 	DROP COLUMN name_fao,
@@ -114,6 +136,17 @@ ALTER TABLE geodata.adm_philippines
 	DROP COLUMN eumember;
 ALTER TABLE geodata.adm_philippines
 	ADD COLUMN adm_level integer;
+UPDATE geodata.adm_philippines 
+	SET adm_level = 3;
+UPDATE geodata.adm_philippines 
+	SET adm_level = 2
+	WHERE id_3 = 0;
+UPDATE geodata.adm_philippines 
+	SET adm_level = 1
+	WHERE id_2 = 0;
+UPDATE geodata.adm_philippines 
+	SET adm_level = 0
+	WHERE id_1 = 0;
 
 ALTER TABLE geodata.adm_vietnam
 	DROP COLUMN name_fao,
@@ -135,3 +168,18 @@ ALTER TABLE geodata.adm_vietnam
 	DROP COLUMN eumember;
 ALTER TABLE geodata.adm_vietnam
 	ADD COLUMN adm_level integer;
+UPDATE geodata.adm_vietnam 
+	SET adm_level = 4;
+UPDATE geodata.adm_vietnam 
+	SET adm_level = 3
+	WHERE id_4 = 0;
+UPDATE geodata.adm_vietnam 
+	SET adm_level = 2
+	WHERE id_3 = 0;
+UPDATE geodata.adm_vietnam 
+	SET adm_level = 1
+	WHERE id_2 = 0;
+UPDATE geodata.adm_vietnam 
+	SET adm_level = 0
+	WHERE id_1 = 0;
+
