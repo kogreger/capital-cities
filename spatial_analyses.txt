@@ -1,0 +1,19 @@
+-- identify subtrip origin locations (incl. starting hour and transportation mode)
+SELECT p.puid id, s.pid, s.tno, s.sno, s.tmodec, p.geom, date_part('hour', s.pdate_s) phour_s 
+FROM dhk09.point p 
+JOIN dhk09.subtrip s ON p.puid = s.puid_s 
+WHERE s.tmodec != 99 AND s.tmodec != 97
+
+
+-- identify trip origin locations (incl. starting hour and purpose)
+SELECT p.puid id, t.pid, t.tno, t.purpose, p.geom, date_part('hour', t.pdate_s) phour_s 
+FROM dhk09.point p 
+JOIN dhk09.trip t ON p.puid = t.puid_s;
+
+
+-- load PostGIS layer with query in QGIS
+uri = QgsDataSourceURI()
+uri.setConnection("server", "port", "database", "user", "password")
+uri.setDataSource("schema", "table", "geom", "sql_query", "key")
+uri.uri()
+qgis.utils.iface.addVectorLayer(uri.uri(), "layer_name", "postgres")
