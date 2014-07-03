@@ -389,7 +389,7 @@ SET pdate_s =
 	GROUP BY pid, tno, sno
 );
 
--- identify subtrip start & end point positions (ms, ~h)
+-- identify subtrip start & end point positions (199,001,258ms, ~2.3h)
 UPDATE jkt02.subtrip s 
 SET puid_s =
 (
