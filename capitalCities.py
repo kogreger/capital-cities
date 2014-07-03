@@ -25,6 +25,14 @@ These scripts run from the QGIS Python console:
 """
 
 
+from qgis.core import *
+from qgis.gui import *
+from qgis.utils import *
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
+from PyQt4.QtXml import *
+
+
 class capitalCities:
 	def __init__(self, iface):
 		"""
@@ -49,4 +57,11 @@ class capitalCities:
 		uri.setDataSource("", query, "geom", "", "id")
 		qgis.utils.iface.addVectorLayer(uri.uri(), layer, "postgres")
 		
+		img = QImage(QSize(1024, 768), QImage.Format_ARGB32_Premultiplied)
+		color = QColor(255,255,255)
+		img.fill(color.rgb())
+		p = QPainter()
+		p.begin(img)
+		p.setRenderHint(QPainter.Antialiasing)
+		render = QgsMapRenderer()
 		
