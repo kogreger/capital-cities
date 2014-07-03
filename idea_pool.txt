@@ -1,0 +1,6 @@
+- put socdem features (age, occupc) of sample pops in correlation with official socdem stats of country or city
+
+- jkt02: remove ppl with "unknown" occup, check resulting change in trip purpose distribution
+
+- calculate trip trajectories; analyze per hour (start), purpose; compare over 4 cities
+- analyze subtrip, trip lengths versus age, occupc, purpose, tmodec over time; compare over 4 cities

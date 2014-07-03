@@ -33,7 +33,9 @@
         <layer-tree-group expanded="1" checked="Qt::Unchecked" name="Trip origin locations">
             <customproperties/>
             <layer-tree-layer expanded="0" checked="Qt::Unchecked" id="dhk09_started_trips20140703153013030" name="dhk09_started_trips">
-                <customproperties/>
+                <customproperties>
+                    <property key="showFeatureCount" value="0"/>
+                </customproperties>
             </layer-tree-layer>
         </layer-tree-group>
         <layer-tree-group expanded="1" checked="Qt::Unchecked" name="PFlow data">
@@ -87,6 +89,7 @@
             <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buffers_5km20140630151449172"/>
             <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:3857" srcDatumTransform="-1" destDatumTransform="-1" layerid="stamen_toner20140703132032917"/>
             <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="capital_cities20140630123410579"/>
+            <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="point20140630152649854"/>
             <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="dhk09_started_subtrips20140702150952486"/>
         </layer_coordinate_transform_info>
     </mapcanvas>
@@ -2512,7 +2515,7 @@ JOIN dhk09.trip t ON p.puid = t.puid_s
             <provider encoding="System">postgres</provider>
             <previewExpression></previewExpression>
             <vectorjoins/>
-            <renderer-v2 attr="tmodec" symbollevels="0" type="categorizedSymbol">
+            <renderer-v2 attr="activity" symbollevels="0" type="categorizedSymbol">
                 <categories>
                     <category symbol="0" value="1" label="home"/>
                     <category symbol="1" value="2" label="work"/>
@@ -2523,17 +2526,17 @@ JOIN dhk09.trip t ON p.puid = t.puid_s
                     <category symbol="6" value="99" label="other / unknown"/>
                 </categories>
                 <symbols>
-                    <symbol alpha="0.662745" type="marker" name="0">
+                    <symbol alpha="0.698039" type="marker" name="0">
                         <layer pass="0" class="SimpleMarker" locked="0">
                             <prop k="angle" v="0"/>
                             <prop k="color" v="228,26,28,255"/>
-                            <prop k="color_border" v="0,0,0,0"/>
+                            <prop k="color_border" v="0,0,0,255"/>
                             <prop k="horizontal_anchor_point" v="1"/>
                             <prop k="name" v="circle"/>
                             <prop k="offset" v="0,0"/>
                             <prop k="offset_map_unit_scale" v="0,0"/>
                             <prop k="offset_unit" v="MM"/>
-                            <prop k="outline_style" v="solid"/>
+                            <prop k="outline_style" v="no"/>
                             <prop k="outline_width" v="0"/>
                             <prop k="outline_width_map_unit_scale" v="0,0"/>
                             <prop k="outline_width_unit" v="MM"/>
@@ -2544,17 +2547,17 @@ JOIN dhk09.trip t ON p.puid = t.puid_s
                             <prop k="vertical_anchor_point" v="1"/>
                         </layer>
                     </symbol>
-                    <symbol alpha="0.662745" type="marker" name="1">
+                    <symbol alpha="0.698039" type="marker" name="1">
                         <layer pass="0" class="SimpleMarker" locked="0">
                             <prop k="angle" v="0"/>
                             <prop k="color" v="55,126,184,255"/>
-                            <prop k="color_border" v="0,0,0,0"/>
+                            <prop k="color_border" v="0,0,0,255"/>
                             <prop k="horizontal_anchor_point" v="1"/>
                             <prop k="name" v="circle"/>
                             <prop k="offset" v="0,0"/>
                             <prop k="offset_map_unit_scale" v="0,0"/>
                             <prop k="offset_unit" v="MM"/>
-                            <prop k="outline_style" v="solid"/>
+                            <prop k="outline_style" v="no"/>
                             <prop k="outline_width" v="0"/>
                             <prop k="outline_width_map_unit_scale" v="0,0"/>
                             <prop k="outline_width_unit" v="MM"/>
@@ -2565,17 +2568,17 @@ JOIN dhk09.trip t ON p.puid = t.puid_s
                             <prop k="vertical_anchor_point" v="1"/>
                         </layer>
                     </symbol>
-                    <symbol alpha="0.662745" type="marker" name="2">
+                    <symbol alpha="0.698039" type="marker" name="2">
                         <layer pass="0" class="SimpleMarker" locked="0">
                             <prop k="angle" v="0"/>
                             <prop k="color" v="77,175,74,255"/>
-                            <prop k="color_border" v="0,0,0,0"/>
+                            <prop k="color_border" v="0,0,0,255"/>
                             <prop k="horizontal_anchor_point" v="1"/>
                             <prop k="name" v="circle"/>
                             <prop k="offset" v="0,0"/>
                             <prop k="offset_map_unit_scale" v="0,0"/>
                             <prop k="offset_unit" v="MM"/>
-                            <prop k="outline_style" v="solid"/>
+                            <prop k="outline_style" v="no"/>
                             <prop k="outline_width" v="0"/>
                             <prop k="outline_width_map_unit_scale" v="0,0"/>
                             <prop k="outline_width_unit" v="MM"/>
@@ -2586,17 +2589,17 @@ JOIN dhk09.trip t ON p.puid = t.puid_s
                             <prop k="vertical_anchor_point" v="1"/>
                         </layer>
                     </symbol>
-                    <symbol alpha="0.662745" type="marker" name="3">
+                    <symbol alpha="0.698039" type="marker" name="3">
                         <layer pass="0" class="SimpleMarker" locked="0">
                             <prop k="angle" v="0"/>
                             <prop k="color" v="152,78,163,255"/>
-                            <prop k="color_border" v="0,0,0,0"/>
+                            <prop k="color_border" v="0,0,0,255"/>
                             <prop k="horizontal_anchor_point" v="1"/>
                             <prop k="name" v="circle"/>
                             <prop k="offset" v="0,0"/>
                             <prop k="offset_map_unit_scale" v="0,0"/>
                             <prop k="offset_unit" v="MM"/>
-                            <prop k="outline_style" v="solid"/>
+                            <prop k="outline_style" v="no"/>
                             <prop k="outline_width" v="0"/>
                             <prop k="outline_width_map_unit_scale" v="0,0"/>
                             <prop k="outline_width_unit" v="MM"/>
@@ -2607,17 +2610,17 @@ JOIN dhk09.trip t ON p.puid = t.puid_s
                             <prop k="vertical_anchor_point" v="1"/>
                         </layer>
                     </symbol>
-                    <symbol alpha="0.662745" type="marker" name="4">
+                    <symbol alpha="0.698039" type="marker" name="4">
                         <layer pass="0" class="SimpleMarker" locked="0">
                             <prop k="angle" v="0"/>
                             <prop k="color" v="255,127,0,255"/>
-                            <prop k="color_border" v="0,0,0,0"/>
+                            <prop k="color_border" v="0,0,0,255"/>
                             <prop k="horizontal_anchor_point" v="1"/>
                             <prop k="name" v="circle"/>
                             <prop k="offset" v="0,0"/>
                             <prop k="offset_map_unit_scale" v="0,0"/>
                             <prop k="offset_unit" v="MM"/>
-                            <prop k="outline_style" v="solid"/>
+                            <prop k="outline_style" v="no"/>
                             <prop k="outline_width" v="0"/>
                             <prop k="outline_width_map_unit_scale" v="0,0"/>
                             <prop k="outline_width_unit" v="MM"/>
@@ -2628,17 +2631,17 @@ JOIN dhk09.trip t ON p.puid = t.puid_s
                             <prop k="vertical_anchor_point" v="1"/>
                         </layer>
                     </symbol>
-                    <symbol alpha="0.662745" type="marker" name="5">
+                    <symbol alpha="0.698039" type="marker" name="5">
                         <layer pass="0" class="SimpleMarker" locked="0">
                             <prop k="angle" v="0"/>
                             <prop k="color" v="255,255,51,255"/>
-                            <prop k="color_border" v="0,0,0,0"/>
+                            <prop k="color_border" v="0,0,0,255"/>
                             <prop k="horizontal_anchor_point" v="1"/>
                             <prop k="name" v="circle"/>
                             <prop k="offset" v="0,0"/>
                             <prop k="offset_map_unit_scale" v="0,0"/>
                             <prop k="offset_unit" v="MM"/>
-                            <prop k="outline_style" v="solid"/>
+                            <prop k="outline_style" v="no"/>
                             <prop k="outline_width" v="0"/>
                             <prop k="outline_width_map_unit_scale" v="0,0"/>
                             <prop k="outline_width_unit" v="MM"/>
@@ -2649,17 +2652,17 @@ JOIN dhk09.trip t ON p.puid = t.puid_s
                             <prop k="vertical_anchor_point" v="1"/>
                         </layer>
                     </symbol>
-                    <symbol alpha="0.662745" type="marker" name="6">
+                    <symbol alpha="0.698039" type="marker" name="6">
                         <layer pass="0" class="SimpleMarker" locked="0">
                             <prop k="angle" v="0"/>
-                            <prop k="color" v="255,255,255,0"/>
-                            <prop k="color_border" v="0,0,0,0"/>
+                            <prop k="color" v="8,48,107,255"/>
+                            <prop k="color_border" v="0,0,0,255"/>
                             <prop k="horizontal_anchor_point" v="1"/>
                             <prop k="name" v="circle"/>
                             <prop k="offset" v="0,0"/>
                             <prop k="offset_map_unit_scale" v="0,0"/>
                             <prop k="offset_unit" v="MM"/>
-                            <prop k="outline_style" v="solid"/>
+                            <prop k="outline_style" v="no"/>
                             <prop k="outline_width" v="0"/>
                             <prop k="outline_width_map_unit_scale" v="0,0"/>
                             <prop k="outline_width_unit" v="MM"/>
@@ -2892,7 +2895,7 @@ JOIN dhk09.trip t ON p.puid = t.puid_s
                     <widgetv2config IsMultiline="0" fieldEditable="1" UseHtml="0" labelOnTop="0"/>
                 </edittype>
             </edittypes>
-            <editform></editform>
+            <editform>.</editform>
             <editforminit></editforminit>
             <featformsuppress>0</featformsuppress>
             <annotationform>.</annotationform>
