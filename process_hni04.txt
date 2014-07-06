@@ -420,7 +420,7 @@ ALTER TABLE hni04.trip ADD COLUMN puid_e bigint;
 ALTER TABLE hni04.trip ADD COLUMN pdate_s timestamp without time zone;
 ALTER TABLE hni04.trip ADD COLUMN pdate_e timestamp without time zone;
 
--- identify trip start & end times (ms, ~h)
+-- identify trip start & end times (16,676,536ms, ~4.6h)
 UPDATE hni04.trip t 
 SET pdate_s =
 (
@@ -436,7 +436,7 @@ SET pdate_s =
 	GROUP BY pid, tno
 );
 
--- identify trip start & end point positions (14,721,578ms, ~4h)
+-- identify trip start & end point positions (9,356,351ms, ~2.6h)
 UPDATE hni04.trip t 
 SET puid_s =
 (

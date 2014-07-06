@@ -404,3 +404,41 @@ SET puid_s =
 	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno AND p.pdate = s.pdate_e
 	GROUP BY pid, tno, sno
 );
+
+-- add columns for trip start & end identification (49ms)
+ALTER TABLE jkt02.trip ADD COLUMN puid_s bigint;
+ALTER TABLE jkt02.trip ADD COLUMN puid_e bigint;
+ALTER TABLE jkt02.trip ADD COLUMN pdate_s timestamp without time zone;
+ALTER TABLE jkt02.trip ADD COLUMN pdate_e timestamp without time zone;
+
+-- identify trip start & end times (68,267,537ms, ~18.9h)
+UPDATE jkt02.trip t 
+SET pdate_s =
+(
+	SELECT MIN(pdate) 
+	FROM jkt02.point p
+	WHERE p.pid = t.pid AND p.tno = t.tno 
+	GROUP BY pid, tno
+), pdate_e = 
+(
+	SELECT MAX(pdate) 
+	FROM jkt02.point p
+	WHERE p.pid = t.pid AND p.tno = t.tno 
+	GROUP BY pid, tno
+);
+
+-- identify trip start & end point positions (64,975,405ms, ~18h)
+UPDATE jkt02.trip t 
+SET puid_s =
+(
+	SELECT MIN(id) 
+	FROM jkt02.point p
+	WHERE p.pid = t.pid AND p.tno = t.tno AND p.pdate = t.pdate_s
+	GROUP BY pid, tno
+), puid_e = 
+(
+	SELECT MIN(id) 
+	FROM jkt02.point p
+	WHERE p.pid = t.pid AND p.tno = t.tno AND p.pdate = T.pdate_e
+	GROUP BY pid, tno
+);
