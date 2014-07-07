@@ -19,6 +19,14 @@ GROUP BY b.radius, date_part('hour', t.pdate_s)
 ORDER BY date_part('hour', t.pdate_s), b.radius;
 
 
+-- count number of distinct people per buffer zone and hour
+SELECT b.radius, date_part('hour', p.pdate) phour, COUNT(DISTINCT pid) pcount 
+FROM geodata.buffers_5km b, dhk09.point p 
+WHERE b.radius = 50 AND date_part('hour', p.pdate) = 2 AND ST_Intersects(p.geom, b.geom) 
+GROUP BY b.radius, date_part('hour', p.pdate) 
+ORDER BY date_part('hour', p.pdate), b.radius;
+
+
 -- load PostGIS layer with query in QGIS
 uri = QgsDataSourceURI()
 uri.setConnection("server", "port", "database", "user", "password")

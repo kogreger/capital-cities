@@ -4,3 +4,6 @@
 
 - calculate trip trajectories; analyze per hour (start), purpose; compare over 4 cities
 - analyze subtrip, trip lengths versus age, occupc, purpose, tmodec over time; compare over 4 cities
+
+- analyze commuting times and distances (morning & evening) per city, as well as male/female
+- analyze number of intermediate trips during commuting process (morning & evening)

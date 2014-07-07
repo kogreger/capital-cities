@@ -433,3 +433,15 @@ SET puid_s =
 	WHERE p.pid = t.pid AND p.tno = t.tno AND p.pdate = T.pdate_e
 	GROUP BY pid, tno
 );
+
+-- add column for 5km buffer zone (389ms)
+ALTER TABLE dhk09.point ADD COLUMN buff bigint;
+
+-- identify point positions' 5km buffer zone (ms, ~h)
+UPDATE dhk09.point p 
+SET buff = 
+(
+	SELECT b.radius 
+	FROM geodata.buffers_5km b 
+	WHERE ST_Contains(b.geom, p.geom)
+);
