@@ -1,0 +1,13 @@
+1	To home
+2	To work
+3	To school
+4	Private business
+5	Employer's business
+6	Medical
+7	Social
+8	Eating
+9	Shopping
+10	Church
+11	Accompany other household members
+12	Others
+99	Unknown

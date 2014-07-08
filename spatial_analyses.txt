@@ -27,6 +27,26 @@ GROUP BY b.radius, date_part('hour', p.pdate)
 ORDER BY date_part('hour', p.pdate), b.radius;
 
 
+-- analyze commuting distance, duration, and intermediate stops
+WITH subtrip_info AS
+(
+	SELECT pid, tno, COUNT(sno) subtrips
+	FROM dhk09.subtrip 
+	GROUP BY pid, tno
+)
+SELECT t.pid, t.tno, t.activity, t.pdate_s, s.subtrips, t.dist, (t.pdate_e - t.pdate_s) duration  
+FROM dhk09.trip t 
+JOIN subtrip_info s ON t.pid = s.pid AND t.tno = s.tno 
+WHERE t.activity IN (1, 2, 3) AND 
+(
+	SELECT activity 
+	FROM dhk09.trip x 
+	WHERE x.pid = t.pid AND x.tno = (t.tno - 1)
+) IN (1, 2, 3, 99) 
+ORDER BY pid, tno;
+
+
+
 -- load PostGIS layer with query in QGIS
 uri = QgsDataSourceURI()
 uri.setConnection("server", "port", "database", "user", "password")

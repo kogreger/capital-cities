@@ -1,0 +1,21 @@
+1	Walking
+2	Bicycle
+3	Motorcycle (driver)
+4	Motorcycle (passenger)
+5	Car (driver)
+6	Car (passenger, not taxi)
+7	Minibus (<=25 pax)
+8	Standard bus (>25 pax)
+9	Cyclo
+10	Xe om
+11	Taxi
+12	Tourist bus
+13	Company bus
+14	School bus
+15	Truck
+16	Ferry
+17	Rail
+18	Air
+19	Others
+97	Stationarity
+99	Unknown

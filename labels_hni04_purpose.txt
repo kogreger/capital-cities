@@ -1,0 +1,12 @@
+1	To home
+2	To work
+3	To school (to study)
+4	At work/business
+5	To send off/pick up others
+6	Shopping/market
+7	To eat (not at home)
+8	Exercise
+9	Joyriding
+10	Social, recreation, religious
+11	Other private purposes
+99	Unknown

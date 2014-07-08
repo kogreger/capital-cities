@@ -1,0 +1,22 @@
+1	Walking
+2	Bicycle
+3	Motorcycle
+4	CNG, mishuk
+5	Auto temp
+6	Car
+7	Microbus, jeep
+8	Minibus, bus (private)
+9	Staff bus
+10	School, college bus
+11	Truck
+12	Auto (private)
+13	School van
+14	AC bus
+15	Rickshaw
+16	Taxi
+17	Water
+18	Rail
+19	Bus (BRTC)
+20	Bus (not BRTC)
+97	Stationarity
+99	Unknown

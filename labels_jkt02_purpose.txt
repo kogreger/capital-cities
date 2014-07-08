@@ -1,0 +1,9 @@
+1	To work
+2	To school
+3	To shopping
+4	Business
+5	Private
+6	To home
+7	Others
+9	Unknown
+99	Unknown_2

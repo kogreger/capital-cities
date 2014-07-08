@@ -1,0 +1,21 @@
+1	Walking
+2	Pedicab
+3	Bicycle
+4	Motorcycle
+5	Tricycle
+6	Jeepney
+7	Minibus
+8	Standard bus
+9	Taxi
+10	HOV taxi
+11	Car, jeep
+12	School, company, tourist bus
+13	Utility vehicle
+14	Truck
+15	Trailer
+16	LRT
+17	PNR
+18	Water transport
+19	Others
+97	Stationarity
+99	Unknown

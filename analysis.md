@@ -4,12 +4,10 @@
 
 
 
+
 ## Sample Populations
 
 This section covers the descriptive statistics of the four sample populations.
-
-
-
 
 ### Dhaka 2009
 
@@ -19,6 +17,14 @@ The data were captured on October 1-2, 2009 with a sample size of 42,111 people.
 
 Data set description:
 
+
+```r
+format(object.size(dhk09.person), units = "auto")
+```
+
+```
+## [1] "3.2 Mb"
+```
 
 ```r
 names(dhk09.person)
@@ -91,6 +97,14 @@ The data were captured on October 1-2, 2004 with a sample size of 58,018 people.
 
 Data set description:
 
+
+```r
+format(object.size(hni04.person), units = "auto")
+```
+
+```
+## [1] "4.2 Mb"
+```
 
 ```r
 names(hni04.person)
@@ -178,6 +192,14 @@ The data were captured on October 1-2, 2002 with a sample size of 297,043 people
 
 Data set description:
 
+
+```r
+format(object.size(jkt02.person), units = "auto")
+```
+
+```
+## [1] "21.5 Mb"
+```
 
 ```r
 names(jkt02.person)
@@ -268,6 +290,14 @@ Data set description:
 
 
 ```r
+format(object.size(mnl96.person), units = "auto")
+```
+
+```
+## [1] "13.7 Mb"
+```
+
+```r
 names(mnl96.person)
 ```
 
@@ -348,6 +378,277 @@ levels(mnl96.person$occupc)
 #### Occupation Group
 
 ![plot of chunk plotHistPersonOccupcAll](figure/plotHistPersonOccupcAll.png) 
+
+
+## Sample Trips
+
+### Dhaka 2009
+
+
+
+Data set description:
+
+
+```r
+format(object.size(dhk09.trip), units = "auto")
+```
+
+```
+## [1] "10.9 Mb"
+```
+
+```r
+names(dhk09.trip)
+```
+
+```
+## [1] "pid"      "tno"      "activity" "dist"     "pdate_s"  "pdate_e"
+```
+
+```r
+str(dhk09.trip)
+```
+
+```
+## 'data.frame':	251796 obs. of  6 variables:
+##  $ pid     : Factor w/ 42114 levels "1","2","3","4",..: 1 1 1 1 1 1 1 1 1 2 ...
+##  $ tno     : Factor w/ 21 levels "1","2","3","4",..: 1 2 3 4 5 6 7 8 9 1 ...
+##  $ activity: Factor w/ 7 levels "Home","Work",..: 7 2 7 1 7 5 7 1 7 7 ...
+##  $ dist    : num  0 8467 0 8469 0 ...
+##  $ pdate_s : POSIXct, format: "2009-10-01 00:00:00" "2009-10-01 08:00:00" ...
+##  $ pdate_e : POSIXct, format: "2009-10-01 08:00:00" "2009-10-01 09:30:00" ...
+```
+
+```r
+levels(dhk09.trip$activity)
+```
+
+```
+## [1] "Home"               "Work"               "Education"         
+## [4] "Shopping"           "Social, recreation" "Errand"            
+## [7] "Other, unknown"
+```
+
+```r
+table(dhk09.trip$activity)
+```
+
+```
+## 
+##               Home               Work          Education 
+##              45257              23676              13455 
+##           Shopping Social, recreation             Errand 
+##               6455               6775               1851 
+##     Other, unknown 
+##             154327
+```
+
+![plot of chunk plotHistDhk09Trip](figure/plotHistDhk09Trip.png) 
+
+### Hanoi 2004
+
+
+
+Data set description:
+
+
+```r
+format(object.size(hni04.trip), units = "auto")
+```
+
+```
+## [1] "13.4 Mb"
+```
+
+```r
+names(hni04.trip)
+```
+
+```
+## [1] "pid"      "tno"      "activity" "dist"     "pdate_s"  "pdate_e"
+```
+
+```r
+str(hni04.trip)
+```
+
+```
+## 'data.frame':	301281 obs. of  6 variables:
+##  $ pid     : Factor w/ 58018 levels "2","3","4","5",..: 2 3 3 3 3 3 3 3 3 3 ...
+##  $ tno     : Factor w/ 29 levels "1","2","3","4",..: 1 1 2 3 4 5 6 7 8 9 ...
+##  $ activity: Factor w/ 7 levels "Home","Work",..: NA 7 2 7 1 7 4 7 1 7 ...
+##  $ dist    : num  707 0 2415 504 2812 ...
+##  $ pdate_s : POSIXct, format: "2004-10-01 00:00:00" "2004-10-01 00:00:00" ...
+##  $ pdate_e : POSIXct, format: "2004-10-01 23:59:00" "2004-10-01 07:00:00" ...
+```
+
+```r
+levels(hni04.trip$activity)
+```
+
+```
+## [1] "Home"               "Work"               "Education"         
+## [4] "Shopping"           "Social, recreation" "Errand"            
+## [7] "Other, unknown"
+```
+
+```r
+table(hni04.trip$activity)
+```
+
+```
+## 
+##               Home               Work          Education 
+##              56799              27966              13628 
+##           Shopping Social, recreation             Errand 
+##               8065               4903              11011 
+##     Other, unknown 
+##             163771
+```
+
+![plot of chunk plotHistHni04Trip](figure/plotHistHni04Trip.png) 
+
+### Jakarta 2002
+
+
+
+Data set description:
+
+
+```r
+format(object.size(jkt02.trip), units = "auto")
+```
+
+```
+## [1] "77.3 Mb"
+```
+
+```r
+names(jkt02.trip)
+```
+
+```
+## [1] "pid"      "tno"      "activity" "dist"     "pdate_s"  "pdate_e"
+```
+
+```r
+str(jkt02.trip)
+```
+
+```
+## 'data.frame':	1788607 obs. of  6 variables:
+##  $ pid     : Factor w/ 297043 levels "1","2","3","4",..: 2 2 2 2 2 3 3 3 3 3 ...
+##  $ tno     : Factor w/ 33 levels "1","2","3","4",..: 1 2 3 4 5 1 2 3 4 5 ...
+##  $ activity: Factor w/ 7 levels "Home","Work",..: 7 7 7 4 7 7 7 7 3 7 ...
+##  $ dist    : num  0 976 0 2851 0 ...
+##  $ pdate_s : POSIXct, format: "2002-10-01 00:00:00" "2002-10-01 07:00:00" ...
+##  $ pdate_e : POSIXct, format: "2002-10-01 07:00:00" "2002-10-01 07:15:00" ...
+```
+
+```r
+levels(jkt02.trip$activity)
+```
+
+```
+## [1] "Home"               "Work"               "Education"         
+## [4] "Shopping"           "Social, recreation" "Errand"            
+## [7] "Other, unknown"
+```
+
+```r
+table(jkt02.trip$activity)
+```
+
+```
+## 
+##               Home               Work          Education 
+##             334970             152190             107652 
+##           Shopping Social, recreation             Errand 
+##              53452                  0              77765 
+##     Other, unknown 
+##            1062578
+```
+
+![plot of chunk plotHistJkt02Trip](figure/plotHistJkt02Trip.png) 
+
+### Metro Manila 1996
+
+
+```
+## Error: undefined columns selected
+```
+
+Data set description:
+
+
+```r
+format(object.size(mnl96.trip), units = "auto")
+```
+
+```
+## [1] "29.3 Mb"
+```
+
+```r
+names(mnl96.trip)
+```
+
+```
+## [1] "pid"      "tno"      "purpose"  "activity" "dist"
+```
+
+```r
+str(mnl96.trip)
+```
+
+```
+## 'data.frame':	836529 obs. of  5 variables:
+##  $ pid     : Factor w/ 189335 levels "1","2","3","4",..: 1 1 1 1 1 2 3 3 3 3 ...
+##  $ tno     : Factor w/ 40 levels "1","2","3","4",..: 1 2 3 4 5 1 1 2 3 4 ...
+##  $ purpose : int  99 2 99 1 99 1 99 3 99 1 ...
+##  $ activity: Factor w/ 7 levels "Home","Work",..: 7 2 7 1 7 1 7 3 7 1 ...
+##  $ dist    : num  NA NA NA NA NA NA NA NA NA NA ...
+```
+
+```r
+levels(mnl96.trip$activity)
+```
+
+```
+## [1] "Home"               "Work"               "Education"         
+## [4] "Shopping"           "Social, recreation" "Errand"            
+## [7] "Other, unknown"
+```
+
+```r
+table(mnl96.trip$activity)
+```
+
+```
+## 
+##               Home               Work          Education 
+##             196537              69837              57787 
+##           Shopping Social, recreation             Errand 
+##              21957              12575               7427 
+##     Other, unknown 
+##             470409
+```
+
+![plot of chunk plotHistMnl96Trip](figure/plotHistMnl96Trip.png) 
+
+### Comparison Across Cities
+
+![plot of chunk plotHistTripActivityAll](figure/plotHistTripActivityAll.png) 
+
+## Mobility Behavior
+
+### Dhaka 2009
+
+### Hanoi 2004
+
+### Jakarta 2002
+
+### Metro Manila 1996
 
 
 ## Spatio-Temporal Distribution of Trip Origins

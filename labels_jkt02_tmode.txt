@@ -1,0 +1,23 @@
+1	Walking to final destination
+2	Walking for transfer
+3	Bicycle
+4	Motorcycle
+5	Sedan, jeep, kijang
+6	Colt, mini cab
+7	Pick-up
+8	Truck
+9	Rail (express)
+10	Rail (economy)
+11	Patas AC
+12	Large bus (patas, regular)
+13	Medium bus
+14	Mini bus (ngkot or mikrolet)
+15	Taxi
+16	Bajaj
+17	Ojek
+18	Becak
+19	Omprengan
+20	Company bus, school bus, tour bus
+21	Others
+97	Stationarity
+99	Unknown

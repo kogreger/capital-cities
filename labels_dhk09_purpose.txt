@@ -1,0 +1,12 @@
+1	Homeward
+2	Work
+3	School
+4	Market
+5	Social
+6	Recreation
+7	Religious
+8	Medical
+9	Employment
+10	Goods
+11	Other
+99	Unknown
