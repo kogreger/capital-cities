@@ -138,6 +138,25 @@ SET activity =
 )
 WHERE s.tno = 1 AND s.tmode = 97;
 
+-- fill in activity of stationarity events to trip data (ms, ~m)
+-- assumed home at start of day unless data says otherwise
+WITH stationary AS
+(
+	SELECT pid, tno, sno, activity, tmode 
+	FROM dhk09.subtrip 
+	WHERE tmode = 97
+)
+UPDATE dhk09.trip t 
+SET activity = 
+(
+	SELECT s1.activity  
+	FROM stationary s1 
+	WHERE t.pid = s1.pid AND t.tno = s1.tno 
+	LIMIT 1
+) 
+FROM stationary s2 
+WHERE t.pid = s2.pid AND t.tno = s2.tno;
+
 -- add occupation category to person data (184ms)
 -- 1 blue-collar
 -- 2 white-collar
