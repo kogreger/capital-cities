@@ -402,6 +402,8 @@ dhk09.trip$activity <- factor(dhk09.trip$activity,
 #dhk09.trip.person <- merge(dhk09.trip, dhk09.person, by="pid")
 ```
 
+The `r format(nrow(dhk09.person), big.mark=",")` people in the sample made a total of `r format(nrow(dhk09.trip), big.mark=",")` trips.
+
 Data set description:
 
 ```{r descDhk09Trip}
@@ -441,6 +443,9 @@ hni04.trip$activity <- factor(hni04.trip$activity,
 # merge trip data with person data
 #hni04.trip.person <- merge(hni04.trip, hni04.person, by="pid")
 ```
+
+
+The `r format(nrow(hni04.person), big.mark=",")` people in the sample made a total of `r format(nrow(hni04.trip), big.mark=",")` trips.
 
 Data set description:
 
@@ -482,6 +487,9 @@ jkt02.trip$activity <- factor(jkt02.trip$activity,
 #jkt02.trip.person <- merge(jkt02.trip, jkt02.person, by="pid")
 ```
 
+
+The `r format(nrow(jkt02.person), big.mark=",")` people in the sample made a total of `r format(nrow(jkt02.trip), big.mark=",")` trips.
+
 Data set description:
 
 ```{r descJkt02Trip}
@@ -508,8 +516,9 @@ grid.arrange(plotJkt02Activity,
 # load trip data
 mnl96.trip <- psqlGetTable(con, "mnl96", "trip")
 # remove unnecessary column (purpose, puid_s, puid_e)
-mnl96.trip <- mnl96.trip[, c("pid", "tno", "activity", "dist", 
-                             "pdate_s", "pdate_e")]
+# mnl96.trip <- mnl96.trip[, c("pid", "tno", "activity", "dist", 
+#                              "pdate_s", "pdate_e")]
+mnl96.trip <- mnl96.trip[, c("pid", "tno", "activity", "dist")]
 # factorize pid
 mnl96.trip$pid <- factor(mnl96.trip$pid)
 # factorize tno
@@ -521,6 +530,8 @@ mnl96.trip$activity <- factor(mnl96.trip$activity,
 # merge trip data with person data
 #mnl96.trip.person <- merge(mnl96.trip, mnl96.person, by="pid")
 ```
+
+The `r format(nrow(mnl96.person), big.mark=",")` people in the sample made a total of `r format(nrow(mnl96.trip), big.mark=",")` trips.
 
 Data set description:
 
@@ -572,6 +583,9 @@ dhk09.subtrip$sno <- factor(dhk09.subtrip$sno)
 dhk09.subtrip$tmode <- factor(dhk09.subtrip$tmode, 
                                  levels = c(1:20, 97, 99), 
                                  labels = labelsDhk09TMode[, 2])
+# count stationary and all subtrips
+dhk09.subtrip.subtrips <- nrow(dhk09.subtrip)
+dhk09.subtrip.stationary <- nrow(subset(dhk09.subtrip, tmodec == 97))
 # remove unnecessary mode of transportation classes (10, 97, 99) and factorize
 dhk09.subtrip <- dhk09.subtrip[dhk09.subtrip$tmodec != 10 & 
                                dhk09.subtrip$tmodec != 97 & 
@@ -584,8 +598,10 @@ dhk09.subtrip$activity <- factor(dhk09.subtrip$activity,
                                  levels = c(1:6, 99), 
                                  labels = labelsActivity[, 2])
 # merge subtrip data with person data
-dhk09.subtrip.person <- merge(dhk09.subtrip, dhk09.person, by="pid")
+#dhk09.subtrip.person <- merge(dhk09.subtrip, dhk09.person, by="pid")
 ```
+
+The `r format(nrow(dhk09.person), big.mark=",")` people in the sample made a total of `r format(dhk09.subtrip.subtrips, big.mark=",")` subtrips. `r format(dhk09.subtrip.stationary / (dhk09.subtrip.subtrips / 100), digits = 1, nsmall = 1)`% of these are actually stationarity events, which reduces the true number of subtrips to `r format(nrow(dhk09.subtrip), big.mark=",")`.
 
 Data set description:
 
@@ -628,6 +644,9 @@ hni04.subtrip$sno <- factor(hni04.subtrip$sno)
 hni04.subtrip$tmode <- factor(hni04.subtrip$tmode, 
                                  levels = c(1:19, 97, 99), 
                                  labels = labelsHni04TMode[, 2])
+# count stationary and all subtrips
+hni04.subtrip.subtrips <- nrow(hni04.subtrip)
+hni04.subtrip.stationary <- nrow(subset(hni04.subtrip, tmodec == 97))
 # remove unnecessary mode of transportation classes (10, 97, 99) and factorize
 hni04.subtrip <- hni04.subtrip[hni04.subtrip$tmodec != 10 & 
                                hni04.subtrip$tmodec != 97 & 
@@ -642,6 +661,8 @@ hni04.subtrip$activity <- factor(hni04.subtrip$activity,
 # merge subtrip data with person data
 #hni04.subtrip.person <- merge(hni04.subtrip, hni04.person, by="pid")
 ```
+
+The `r format(nrow(hni04.person), big.mark=",")` people in the sample made a total of `r format(hni04.subtrip.subtrips, big.mark=",")` subtrips. `r format(hni04.subtrip.stationary / (hni04.subtrip.subtrips / 100), digits = 1, nsmall = 1)`% of these are actually stationarity events, which reduces the true number of subtrips to `r format(nrow(hni04.subtrip), big.mark=",")`.
 
 Data set description:
 
@@ -684,6 +705,9 @@ jkt02.subtrip$sno <- factor(jkt02.subtrip$sno)
 jkt02.subtrip$tmode <- factor(jkt02.subtrip$tmode, 
                                  levels = c(1:21, 97, 99), 
                                  labels = labelsJkt02TMode[, 2])
+# count stationary and all subtrips
+jkt02.subtrip.subtrips <- nrow(jkt02.subtrip)
+jkt02.subtrip.stationary <- nrow(subset(jkt02.subtrip, tmodec == 97))
 # remove unnecessary mode of transportation classes (10, 97, 99) and factorize
 jkt02.subtrip <- jkt02.subtrip[jkt02.subtrip$tmodec != 10 & 
                                jkt02.subtrip$tmodec != 97 & 
@@ -698,6 +722,8 @@ jkt02.subtrip$activity <- factor(jkt02.subtrip$activity,
 # merge subtrip data with person data
 #jkt02.subtrip.person <- merge(jkt02.subtrip, jkt02.person, by="pid")
 ```
+
+The `r format(nrow(jkt02.person), big.mark=",")` people in the sample made a total of `r format(jkt02.subtrip.subtrips, big.mark=",")` subtrips. `r format(jkt02.subtrip.stationary / (jkt02.subtrip.subtrips / 100), digits = 1, nsmall = 1)`% of these are actually stationarity events, which reduces the true number of subtrips to `r format(nrow(jkt02.subtrip), big.mark=",")`.
 
 Data set description:
 
@@ -742,6 +768,9 @@ mnl96.subtrip$sno <- factor(mnl96.subtrip$sno)
 mnl96.subtrip$tmode <- factor(mnl96.subtrip$tmode, 
                                  levels = c(1:19, 97, 99), 
                                  labels = labelsMnl96TMode[, 2])
+# count stationary and all subtrips
+mnl96.subtrip.subtrips <- nrow(mnl96.subtrip)
+mnl96.subtrip.stationary <- nrow(subset(mnl96.subtrip, tmodec == 97))
 # remove unnecessary mode of transportation classes (10, 97, 99) and factorize
 mnl96.subtrip <- mnl96.subtrip[mnl96.subtrip$tmodec != 10 & 
                                mnl96.subtrip$tmodec != 97 & 
@@ -756,6 +785,8 @@ mnl96.subtrip$activity <- factor(mnl96.subtrip$activity,
 # merge subtrip data with person data
 #mnl96.subtrip.person <- merge(mnl96.subtrip, mnl96.person, by="pid")
 ```
+
+The `r format(nrow(mnl96.person), big.mark=",")` people in the sample made a total of `r format(mnl96.subtrip.subtrips, big.mark=",")` subtrips. `r format(mnl96.subtrip.stationary / (mnl96.subtrip.subtrips / 100), digits = 1, nsmall = 1)`% of these are actually stationarity events, which reduces the true number of subtrips to `r format(nrow(mnl96.subtrip), big.mark=",")`.
 
 Data set description:
 
