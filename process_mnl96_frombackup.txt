@@ -1,13 +1,15 @@
--- prepare raw data (in shell)
-unzip '*.zip' -d .
-
-[[check data structure: head 96mnl_0000.csv]]
-
-(for FILE in /Volumes/WD_8TB/Data_Transfer/pflow/mnl96/t-csv/*.csv; do echo "COPY mnl96.point (pid, tno, sno, pdate, longitude, latitude, sex, age, padd, occup, purpose, magfac, magfac2, tmode) FROM '$FILE' DELIMITER ',' CSV;"; done) > import-mnl96.sql
-
--- create persontrip data table (2,121ms)
+-- prepare raw data from data backup (3,255,898ms, ~1h)
 CREATE SCHEMA mnl96 
 	AUTHORIZATION postgres;
+CREATE TABLE mnl96.pointx AS 
+	SELECT p.pid, p.tno, p.sno, p.pdate, p.geom, r.sex, r.age, r.padd, r.work occup, t.purpose, p.magfac, p.magfac2, s.means tmode 
+	FROM mnl96.point p, mnl96.person r, mnl96.trip t, mnl96.subtrip s 
+	WHERE (p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno) AND (p.pid = t.pid AND p.tno = t.tno) AND (p.pid = r.pid) 
+	ORDER BY pdate, pid;
+DROP TABLE mnl96.point, mnl96.person, mnl96.trip, mnl96.subtrip CASCADE;
+DROP SEQUENCE mnl96.point_id_seq CASCADE;
+
+-- create persontrip data table (17ms)
 CREATE SEQUENCE mnl96.point_id_seq 
   INCREMENT 1 
   MINVALUE 1 
@@ -23,8 +25,6 @@ CREATE TABLE mnl96.point
   tno smallint, 
   sno smallint, 
   pdate timestamp without time zone, 
-  longitude double precision, 
-  latitude double precision, 
   sex smallint, 
   age smallint, 
   padd character(8), 
@@ -42,38 +42,38 @@ WITH (
 ALTER TABLE mnl96.point 
   OWNER TO postgres;
 
--- import persontrip data into database table (9,567,189ms, ~2.7h)
-[[run import-mnl96.sql in PostgreSQL]]
+-- import persontrip data into database table (1,839,747ms, ~31m)
+INSERT INTO mnl96.point (pid, tno, sno, pdate, sex, age, padd, occup, purpose, magfac, magfac2, tmode, geom) 
+SELECT pid, tno, sno, pdate, sex, age, padd, occup, purpose, magfac, magfac2, tmode, geom
+FROM mnl96.pointx 
+ORDER BY pdate, pid; 
 
----from here---
-
--- create unique point IDs and calculate geometry from lat/lon (2,995,502ms, ~50m)
+-- create unique point IDs and calculate geometry from lat/lon (1,318,199ms, ~22m)
 UPDATE mnl96.point 
-SET puid = id, 
-	geom = ST_SetSRID(ST_MakePoint(longitude, latitude), 4326);
+SET puid = id;
 
--- create table for person data (2,076,273ms, ~34.5m)
+-- create table for person data (685,636ms, ~11m)
 CREATE TABLE mnl96.person AS 
 SELECT pid, MIN(sex) sex, MIN(age) age, MIN(padd) padd, MIN(occup) occup, MIN(magfac) magfac, MIN(magfac2) magfac2 
 FROM mnl96.point 
 GROUP BY pid 
 ORDER BY pid;
 
--- create table for subtrip data (1,775,151ms, ~29.5m)
+-- create table for subtrip data (826,449ms, ~14m)
 CREATE TABLE mnl96.subtrip AS 
 SELECT pid, tno, sno, MIN(tmode) tmode 
 FROM mnl96.point 
 GROUP BY pid, tno, sno 
 ORDER BY pid, tno, sno;
 
--- create table for trip data (1,084,979ms, ~18m)
+-- create table for trip data (325,940ms, ~5.5m)
 CREATE TABLE mnl96.trip AS 
 SELECT pid, tno, MIN(purpose) purpose
 FROM mnl96.point 
 GROUP BY pid, tno 
 ORDER BY pid, tno;
 
--- clean-up point data table (~1.5s)
+-- clean-up point data table (~1s)
 ALTER TABLE mnl96.point 
 DROP COLUMN longitude, 
 DROP COLUMN latitude, 
@@ -86,7 +86,7 @@ DROP COLUMN tmode,
 DROP COLUMN magfac, 
 DROP COLUMN magfac2;
 
--- add activity to trip data (6,719ms, ~7s)
+-- add activity to trip data (4,619ms)
 -- 1 home
 -- 2 work
 -- 3 education
@@ -99,19 +99,23 @@ UPDATE mnl96.trip
 SET activity = 
 (
 	SELECT CASE purpose 
-		WHEN 1 THEN 2 
-		WHEN 2 THEN 3 
-		WHEN 3 THEN 4 
+		WHEN 1 THEN 1 
+		WHEN 2 THEN 2 
+		WHEN 3 THEN 3 
 		WHEN 4 THEN 2 
-		WHEN 5 THEN 6 
-		WHEN 6 THEN 1 
-		WHEN 7 THEN 99 
-		WHEN 9 THEN 99 
+		WHEN 5 THEN 2 
+		WHEN 6 THEN 6 
+		WHEN 7 THEN 5 
+		WHEN 8 THEN 5 
+		WHEN 9 THEN 4 
+		WHEN 10 THEN 5 
+		WHEN 11 THEN 6 
+		WHEN 12 THEN 99 
 		WHEN 99 THEN 99 
 	END
 )
 
--- add activity to subtrip data (shortened significantly by creating indices beforehand: 14,315,754ms, ~4h)
+-- add activity to subtrip data (shortened significantly by creating indices beforehand: 27,453,699ms, ~7.5h)
 -- assumed home at start of day unless data says otherwise
 ALTER TABLE mnl96.subtrip ADD COLUMN activity smallint;
 UPDATE mnl96.subtrip s
@@ -139,36 +143,7 @@ SET activity =
 )
 WHERE s.tno = 1 AND s.tmode = 97;
 
--- fill in activity of stationarity events to trip data (44,499,897ms, ~12.4h)
--- assumed home at start of day unless data says otherwise
-WITH stationary AS
-(
-	SELECT pid, tno, sno, activity, tmode 
-	FROM mnl96.subtrip 
-	WHERE tmode = 97
-)
-UPDATE mnl96.trip t 
-SET activity = 
-(
-	SELECT s1.activity  
-	FROM stationary s1 
-	WHERE t.pid = s1.pid AND t.tno = s1.tno 
-	LIMIT 1
-) 
-FROM stationary s2 
-WHERE t.pid = s2.pid AND t.tno = s2.tno;
-
--- fill in activity of non-stationary events to subtrip data (26,679ms, ~27s)
-UPDATE mnl96.subtrip s
-SET activity = 
-(
-	SELECT activity 
-	FROM mnl96.trip t
-	WHERE t.pid = s.pid AND t.tno = s.tno
-)
-WHERE s.tmode != 97;
-
--- add occupation category to person data (917ms)
+-- add occupation category to person data (1,389ms)
 -- 1 blue-collar
 -- 2 white-collar
 -- 3 student
@@ -182,27 +157,23 @@ SET occupc =
 	SELECT CASE occup 
 		WHEN 1 THEN 2 
 		WHEN 2 THEN 2 
-		WHEN 3 THEN 2 
+		WHEN 3 THEN 1 
 		WHEN 4 THEN 2 
 		WHEN 5 THEN 2 
 		WHEN 6 THEN 1 
-		WHEN 7 THEN 1 
+		WHEN 7 THEN 2 
 		WHEN 8 THEN 2 
 		WHEN 9 THEN 1 
-		WHEN 10 THEN 1 
-		WHEN 11 THEN 1 
-		WHEN 12 THEN 1 
-		WHEN 13 THEN 1
-		WHEN 14 THEN 1 
-		WHEN 15 THEN 1
-		WHEN 16 THEN 1
-		WHEN 17 THEN 99
-		WHEN 0 THEN 99
+		WHEN 10 THEN 3 
+		WHEN 11 THEN 3 
+		WHEN 12 THEN 4 
+		WHEN 13 THEN 5
+		WHEN 14 THEN 99 
 		WHEN 99 THEN 99 
 	END
 )
 
--- add transportation mode category to subtrip data (6,319ms, ~6s)
+-- add transportation mode category to subtrip data (5,708ms)
 -- 1 walking
 -- 2 bicycle
 -- 3 motorcycle
@@ -221,32 +192,30 @@ SET tmodec =
 (
 	SELECT CASE tmode 
 		WHEN 1 THEN 1 
-		WHEN 2 THEN 1 
+		WHEN 2 THEN 4 
 		WHEN 3 THEN 2 
 		WHEN 4 THEN 3 
-		WHEN 5 THEN 5 
-		WHEN 6 THEN 5 
-		WHEN 7 THEN 5 
-		WHEN 8 THEN 6 
-		WHEN 9 THEN 8 
-		WHEN 10 THEN 8 
-		WHEN 11 THEN 7 
+		WHEN 5 THEN 3 
+		WHEN 6 THEN 7 
+		WHEN 7 THEN 7 
+		WHEN 8 THEN 7 
+		WHEN 9 THEN 4 
+		WHEN 10 THEN 4 
+		WHEN 11 THEN 5 
 		WHEN 12 THEN 7 
-		WHEN 13 THEN 7 
-		WHEN 14 THEN 7 
-		WHEN 15 THEN 4
-		WHEN 16 THEN 4 
-		WHEN 17 THEN 4 
-		WHEN 18 THEN 4 
-		WHEN 19 THEN 4 
-		WHEN 20 THEN 7 
-		WHEN 21 THEN 99 
+		WHEN 13 THEN 6 
+		WHEN 14 THEN 6 
+		WHEN 15 THEN 6
+		WHEN 16 THEN 8 
+		WHEN 17 THEN 8 
+		WHEN 18 THEN 9 
+		WHEN 19 THEN 99 
 		WHEN 97 THEN 97
 		WHEN 99 THEN 99 
 	END
 )
 
--- create indices for point data table (37,322,158ms, ~10h)
+-- create indices for point data table (18,370,356ms, ~5h)
 CREATE UNIQUE INDEX idx_PUID_mnl96_point 
 	ON mnl96.point 
 	USING btree 
@@ -272,7 +241,7 @@ CREATE INDEX idx_GEOM_mnl96_point
 	USING gist 
 	(geom);
 
--- create indices for person data table (1,045ms)
+-- create indices for person data table (1,338ms)
 CREATE INDEX idx_PID_mnl96_person 
 	ON mnl96.person 
 	USING btree 
@@ -286,7 +255,7 @@ CREATE INDEX idx_OCCUPC_mnl96_person
 	USING btree 
 	(occupc);
 
--- create indices for subtrip data table (1,834ms)
+-- create indices for subtrip data table (16,986ms, ~17s)
 CREATE INDEX idx_PID_mnl96_subtrip 
 	ON mnl96.subtrip 
 	USING btree 
@@ -312,7 +281,7 @@ CREATE INDEX idx_ACTIVITY_mnl96_subtrip
 	USING btree 
 	(activity);
 
--- create indices for trip data table (549ms)
+-- create indices for trip data table (9,053ms, ~9s)
 CREATE INDEX idx_PID_mnl96_trip 
 	ON mnl96.trip 
 	USING btree 
@@ -330,32 +299,32 @@ CREATE INDEX idx_ACTIVITY_mnl96_trip
 	USING btree 
 	(activity);
 
--- create constraints for person data table (~2s)
+-- create constraints for person data table (318ms)
 ALTER TABLE mnl96.person
 ADD CONSTRAINT pkey_PID_mnl96_person PRIMARY KEY(pid);
 
--- create constraints for point data table (3,027,857ms, ~50m)
+-- create constraints for point data table (1,780,285ms, ~30m)
 ALTER TABLE mnl96.point 
 ADD CONSTRAINT pkey_PUID_mnl96_point PRIMARY KEY(puid), 
 ADD CONSTRAINT fkey_PID_person_mnl96_point FOREIGN KEY (pid)
 	REFERENCES mnl96.person (pid) MATCH SIMPLE
 	ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE;
 
--- create constraints for subtrip data table (~5s)
+-- create constraints for subtrip data table (3,804ms, ~4s)
 ALTER TABLE mnl96.subtrip
 ADD CONSTRAINT pkey_PID_TNO_SNO_mnl96_subtrip PRIMARY KEY(pid, tno, sno), 
 ADD CONSTRAINT fkey_PID_person_mnl96_subtrip FOREIGN KEY (pid)
 	REFERENCES mnl96.person (pid) MATCH SIMPLE
 	ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE;
 
--- create constraints for trip data table (~3s)
+-- create constraints for trip data table (3,231ms, ~3s)
 ALTER TABLE mnl96.trip
 ADD CONSTRAINT pkey_PID_TNO_mnl96_trip PRIMARY KEY(pid, tno), 
 ADD CONSTRAINT fkey_PID_person_mnl96_trip FOREIGN KEY (pid)
 	REFERENCES mnl96.person (pid) MATCH SIMPLE
 	ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE;
 
--- analyze tables for better performance (205,480ms, ~3.5m)
+-- analyze tables for better performance (306,539ms, ~5m)
 ANALYZE mnl96.person;
 ANALYZE mnl96.point;
 ANALYZE mnl96.subtrip;
@@ -369,119 +338,11 @@ ALTER TABLE mnl96.subtrip
 ALTER TABLE mnl96.trip
    ADD COLUMN dist double precision;
 
--- calculate distance between point positions (193,064,050ms, ~2.2d)
+-- calculate distance between point positions
 UPDATE mnl96.point t1
 SET dist = 
 (
   SELECT ST_Distance_Sphere(t1.geom, t2.geom) distance
   FROM mnl96.point t2 
   WHERE t1.pid = t2.pid AND t1.tno = t2.tno AND t1.sno = t2.sno AND t2.pdate = (t1.pdate + interval '1 minute') 
-);
-
--- calculate distance of subtrips (171421198ms, ~2d)
-UPDATE mnl96.subtrip s 
-SET dist = 
-(
-	SELECT SUM(p.dist) 
-	FROM mnl96.point p 
-	WHERE (p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno) 
-	GROUP BY p.pid, p.tno, p.sno
-);
-
--- calculate distance of trips (34,224ms, ~34s)
-UPDATE mnl96.trip t 
-SET dist = 
-(
-	SELECT SUM(s.dist) 
-	FROM mnl96.subtrip s 
-	WHERE (s.pid = t.pid AND s.tno = t.tno) 
-	GROUP BY s.pid, s.tno
-);
-
--- add columns for subtrip start & end identification (83ms)
-ALTER TABLE mnl96.subtrip ADD COLUMN puid_s bigint;
-ALTER TABLE mnl96.subtrip ADD COLUMN puid_e bigint;
-ALTER TABLE mnl96.subtrip ADD COLUMN pdate_s timestamp without time zone;
-ALTER TABLE mnl96.subtrip ADD COLUMN pdate_e timestamp without time zone;
-
--- identify subtrip start & end times (188,265,630ms, ~2.1d)
-UPDATE mnl96.subtrip s 
-SET pdate_s =
-(
-	SELECT MIN(pdate) 
-	FROM mnl96.point p
-	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno 
-	GROUP BY pid, tno, sno
-), pdate_e = 
-(
-	SELECT MAX(pdate) 
-	FROM mnl96.point p
-	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno 
-	GROUP BY pid, tno, sno
-);
-
--- identify subtrip start & end point positions (199,001,258ms, ~2.3h)
-UPDATE mnl96.subtrip s 
-SET puid_s =
-(
-	SELECT MIN(id) 
-	FROM mnl96.point p
-	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno AND p.pdate = s.pdate_s
-	GROUP BY pid, tno, sno
-), puid_e = 
-(
-	SELECT MIN(id) 
-	FROM mnl96.point p
-	WHERE p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno AND p.pdate = s.pdate_e
-	GROUP BY pid, tno, sno
-);
-
--- add columns for trip start & end identification (49ms)
-ALTER TABLE mnl96.trip ADD COLUMN puid_s bigint;
-ALTER TABLE mnl96.trip ADD COLUMN puid_e bigint;
-ALTER TABLE mnl96.trip ADD COLUMN pdate_s timestamp without time zone;
-ALTER TABLE mnl96.trip ADD COLUMN pdate_e timestamp without time zone;
-
--- identify trip start & end times (68,267,537ms, ~18.9h)
-UPDATE mnl96.trip t 
-SET pdate_s =
-(
-	SELECT MIN(pdate) 
-	FROM mnl96.point p
-	WHERE p.pid = t.pid AND p.tno = t.tno 
-	GROUP BY pid, tno
-), pdate_e = 
-(
-	SELECT MAX(pdate) 
-	FROM mnl96.point p
-	WHERE p.pid = t.pid AND p.tno = t.tno 
-	GROUP BY pid, tno
-);
-
--- identify trip start & end point positions (64,975,405ms, ~18h)
-UPDATE mnl96.trip t 
-SET puid_s =
-(
-	SELECT MIN(id) 
-	FROM mnl96.point p
-	WHERE p.pid = t.pid AND p.tno = t.tno AND p.pdate = t.pdate_s
-	GROUP BY pid, tno
-), puid_e = 
-(
-	SELECT MIN(id) 
-	FROM mnl96.point p
-	WHERE p.pid = t.pid AND p.tno = t.tno AND p.pdate = T.pdate_e
-	GROUP BY pid, tno
-);
-
--- add column for 5km buffer zone (18ms)
-ALTER TABLE mnl96.point ADD COLUMN buff bigint;
-
--- identify point positions' 5km buffer zone (ms, ~d)
-UPDATE mnl96.point p 
-SET buff = 
-(
-	SELECT b.radius 
-	FROM geodata.buffers_5km b 
-	WHERE ST_Contains(b.geom, p.geom)
 );

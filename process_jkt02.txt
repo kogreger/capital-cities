@@ -137,6 +137,35 @@ SET activity =
 )
 WHERE s.tno = 1 AND s.tmode = 97;
 
+-- fill in activity of stationarity events to trip data (44,499,897ms, ~12.4h)
+-- assumed home at start of day unless data says otherwise
+WITH stationary AS
+(
+	SELECT pid, tno, sno, activity, tmode 
+	FROM jkt02.subtrip 
+	WHERE tmode = 97
+)
+UPDATE jkt02.trip t 
+SET activity = 
+(
+	SELECT s1.activity  
+	FROM stationary s1 
+	WHERE t.pid = s1.pid AND t.tno = s1.tno 
+	LIMIT 1
+) 
+FROM stationary s2 
+WHERE t.pid = s2.pid AND t.tno = s2.tno;
+
+-- fill in activity of non-stationary events to subtrip data (26,679ms, ~27s)
+UPDATE jkt02.subtrip s
+SET activity = 
+(
+	SELECT activity 
+	FROM jkt02.trip t
+	WHERE t.pid = s.pid AND t.tno = s.tno
+)
+WHERE s.tmode != 97;
+
 -- add occupation category to person data (917ms)
 -- 1 blue-collar
 -- 2 white-collar
@@ -441,4 +470,16 @@ SET puid_s =
 	FROM jkt02.point p
 	WHERE p.pid = t.pid AND p.tno = t.tno AND p.pdate = T.pdate_e
 	GROUP BY pid, tno
+);
+
+-- add column for 5km buffer zone (18ms)
+ALTER TABLE jkt02.point ADD COLUMN buff bigint;
+
+-- identify point positions' 5km buffer zone (ms, ~d)
+UPDATE jkt02.point p 
+SET buff = 
+(
+	SELECT b.radius 
+	FROM geodata.buffers_5km b 
+	WHERE ST_Contains(b.geom, p.geom)
 );

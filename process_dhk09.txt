@@ -138,7 +138,7 @@ SET activity =
 )
 WHERE s.tno = 1 AND s.tmode = 97;
 
--- fill in activity of stationarity events to trip data (ms, ~m)
+-- fill in activity of stationarity events to trip data (885,371ms, ~14.8m)
 -- assumed home at start of day unless data says otherwise
 WITH stationary AS
 (
@@ -156,6 +156,16 @@ SET activity =
 ) 
 FROM stationary s2 
 WHERE t.pid = s2.pid AND t.tno = s2.tno;
+
+-- fill in activity of non-stationary events to subtrip data (5,160ms, ~5s)
+UPDATE dhk09.subtrip s
+SET activity = 
+(
+	SELECT activity 
+	FROM dhk09.trip t
+	WHERE t.pid = s.pid AND t.tno = s.tno
+)
+WHERE s.tmode != 97;
 
 -- add occupation category to person data (184ms)
 -- 1 blue-collar
@@ -456,7 +466,7 @@ SET puid_s =
 -- add column for 5km buffer zone (389ms)
 ALTER TABLE dhk09.point ADD COLUMN buff bigint;
 
--- identify point positions' 5km buffer zone (ms, ~h)
+-- identify point positions' 5km buffer zone (200,972,954ms, ~2.3d)
 UPDATE dhk09.point p 
 SET buff = 
 (
