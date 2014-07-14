@@ -492,3 +492,10 @@ SET buff =
 	FROM geodata.buffers_5km b 
 	WHERE ST_Contains(b.geom, p.geom)
 );
+
+
+-- create index for buffer zone in point data table (864,296ms, ~14.4m)
+CREATE INDEX idx_buff_hni04_point
+  ON hni04.point
+  USING btree
+  (buff);

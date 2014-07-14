@@ -475,7 +475,7 @@ SET buff =
 	WHERE ST_Contains(b.geom, p.geom)
 );
 
--- create index for buffer zone in point data table (ms)
+-- create index for buffer zone in point data table (2,113,581ms, ~35m)
 CREATE INDEX idx_buff_dhk09_point
   ON dhk09.point
   USING btree
