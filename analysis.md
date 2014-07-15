@@ -5,6 +5,7 @@
 
 
 
+
 ## Sample Populations
 
 This section covers the descriptive statistics of the four sample populations.
@@ -114,7 +115,6 @@ with(dhk09.person, table(age, sex))
 ```
 
 ![plot of chunk plotHistDhk09Person](figure/plotHistDhk09Person.png) 
-
 
 ### Hanoi 2004
 
@@ -236,7 +236,6 @@ with(hni04.person, table(age, sex))
 ```
 
 ![plot of chunk plotHistHni04Person](figure/plotHistHni04Person.png) 
-
 
 ### Jakarta 2002
 
@@ -360,10 +359,24 @@ with(jkt02.person, table(age, sex))
 
 ![plot of chunk plotHistJkt02Person](figure/plotHistJkt02Person.png) 
 
-
 ### Metro Manila 1996
 
 
+```
+## [1] TRUE
+```
+
+```
+## [1] TRUE
+```
+
+```
+## [1] TRUE
+```
+
+```
+## [1] TRUE
+```
 
 The data were captured on October 1-2, 1996 with a sample size of 189,335 people.
 
@@ -468,7 +481,6 @@ with(mnl96.person, table(age, sex))
 
 ![plot of chunk plotHistMnl96Person](figure/plotHistMnl96Person.png) 
 
-
 ### Comparison Across Cities
 
 #### Sex
@@ -486,6 +498,7 @@ with(mnl96.person, table(age, sex))
 #### Occupation Group
 
 ![plot of chunk plotHistPersonOccupcAll](figure/plotHistPersonOccupcAll.png) 
+
 
 
 ## Sample Trips
@@ -521,12 +534,12 @@ str(dhk09.trip)
 
 ```
 ## 'data.frame':	251796 obs. of  6 variables:
-##  $ pid     : Factor w/ 42114 levels "1","2","3","4",..: 2 2 2 2 2 3 3 3 3 3 ...
-##  $ tno     : Factor w/ 21 levels "1","2","3","4",..: 1 2 3 4 5 1 2 3 4 5 ...
-##  $ activity: Factor w/ 7 levels "Home","Work",..: 7 4 7 1 7 7 3 7 1 7 ...
-##  $ dist    : num  0 2550 0 2422 0 ...
-##  $ pdate_s : POSIXct, format: "2009-10-01 00:00:00" "2009-10-01 16:00:00" ...
-##  $ pdate_e : POSIXct, format: "2009-10-01 16:00:00" "2009-10-01 16:20:00" ...
+##  $ pid     : Factor w/ 42114 levels "1","2","3","4",..: 1 1 1 1 2 2 3 3 4 4 ...
+##  $ tno     : Factor w/ 21 levels "1","2","3","4",..: 2 4 6 8 2 4 2 4 2 4 ...
+##  $ activity: Factor w/ 7 levels "Home","Work",..: 2 1 5 1 4 1 3 1 3 1 ...
+##  $ dist    : num  8467 8469 424 427 2550 ...
+##  $ pdate_s : POSIXct, format: "2009-10-01 08:00:00" "2009-10-01 17:00:00" ...
+##  $ pdate_e : POSIXct, format: "2009-10-01 09:30:00" "2009-10-01 18:29:00" ...
 ```
 
 ```r
@@ -546,11 +559,11 @@ table(dhk09.trip$activity)
 ```
 ## 
 ##               Home               Work          Education 
-##              45260              23677              13455 
+##             132400              47051              26879 
 ##           Shopping Social, recreation             Errand 
-##               6455               6776               1851 
+##              12883              13524               3698 
 ##     Other, unknown 
-##             154322
+##              15166
 ```
 
 ![plot of chunk plotHistDhk09Trip](figure/plotHistDhk09Trip.png) 
@@ -587,12 +600,12 @@ str(hni04.trip)
 
 ```
 ## 'data.frame':	301281 obs. of  6 variables:
-##  $ pid     : Factor w/ 58018 levels "2","3","4","5",..: 2 3 3 3 3 3 3 3 3 3 ...
-##  $ tno     : Factor w/ 29 levels "1","2","3","4",..: 1 1 2 3 4 5 6 7 8 9 ...
-##  $ activity: Factor w/ 7 levels "Home","Work",..: NA 7 2 7 1 7 4 7 1 7 ...
-##  $ dist    : num  707 0 2415 504 2812 ...
-##  $ pdate_s : POSIXct, format: "2004-10-01 00:00:00" "2004-10-01 00:00:00" ...
-##  $ pdate_e : POSIXct, format: "2004-10-01 23:59:00" "2004-10-01 07:00:00" ...
+##  $ pid     : Factor w/ 58018 levels "2","3","4","5",..: 3 3 3 3 5 5 5 6 6 7 ...
+##  $ tno     : Factor w/ 29 levels "1","2","3","4",..: 2 4 6 8 2 4 6 2 4 2 ...
+##  $ activity: Factor w/ 7 levels "Home","Work",..: 2 1 4 1 2 5 1 2 1 2 ...
+##  $ dist    : num  2415 2812 1245 1098 2937 ...
+##  $ pdate_s : POSIXct, format: "2004-10-01 07:00:00" "2004-10-01 17:00:00" ...
+##  $ pdate_e : POSIXct, format: "2004-10-01 07:20:00" "2004-10-01 17:30:00" ...
 ```
 
 ```r
@@ -612,11 +625,11 @@ table(hni04.trip$activity)
 ```
 ## 
 ##               Home               Work          Education 
-##              56799              27966              13628 
+##             156085              55745              27244 
 ##           Shopping Social, recreation             Errand 
-##               8065               4903              11011 
+##              16095               9665              20701 
 ##     Other, unknown 
-##             163771
+##                258
 ```
 
 ![plot of chunk plotHistHni04Trip](figure/plotHistHni04Trip.png) 
@@ -653,12 +666,12 @@ str(jkt02.trip)
 
 ```
 ## 'data.frame':	1788607 obs. of  6 variables:
-##  $ pid     : Factor w/ 297043 levels "1","2","3","4",..: 2 2 2 2 2 3 3 3 3 3 ...
-##  $ tno     : Factor w/ 33 levels "1","2","3","4",..: 1 2 3 4 5 1 2 3 4 5 ...
-##  $ activity: Factor w/ 7 levels "Home","Work",..: 7 7 7 4 7 7 7 7 3 7 ...
-##  $ dist    : num  0 976 0 2851 0 ...
-##  $ pdate_s : POSIXct, format: "2002-10-01 00:00:00" "2002-10-01 07:00:00" ...
-##  $ pdate_e : POSIXct, format: "2002-10-01 07:00:00" "2002-10-01 07:15:00" ...
+##  $ pid     : Factor w/ 297043 levels "1","2","3","4",..: 2 2 3 3 3 4 4 5 5 6 ...
+##  $ tno     : Factor w/ 33 levels "1","2","3","4",..: 2 4 2 4 6 2 4 2 4 2 ...
+##  $ activity: Factor w/ 7 levels "Home","Work",..: 7 4 7 3 1 2 1 2 1 2 ...
+##  $ dist    : num  976 2851 7098 4004 3959 ...
+##  $ pdate_s : POSIXct, format: "2002-10-01 07:00:00" "2002-10-01 15:30:00" ...
+##  $ pdate_e : POSIXct, format: "2002-10-01 07:15:00" "2002-10-01 15:45:00" ...
 ```
 
 ```r
@@ -678,11 +691,11 @@ table(jkt02.trip$activity)
 ```
 ## 
 ##               Home               Work          Education 
-##             334970             152190             107652 
+##             965732             304304             215303 
 ##           Shopping Social, recreation             Errand 
-##              53452                  0              77765 
+##             106896                  0             155493 
 ##     Other, unknown 
-##            1062578
+##              40227
 ```
 
 ![plot of chunk plotHistJkt02Trip](figure/plotHistJkt02Trip.png) 
@@ -690,6 +703,21 @@ table(jkt02.trip$activity)
 ### Metro Manila 1996
 
 
+```
+## [1] TRUE
+```
+
+```
+## [1] TRUE
+```
+
+```
+## [1] TRUE
+```
+
+```
+## [1] TRUE
+```
 
 The 189,335 people in the sample made a total of 836,529 trips.
 
@@ -755,13 +783,14 @@ table(mnl96.trip$activity)
 ![plot of chunk plotHistTripActivityAll](figure/plotHistTripActivityAll.png) 
 
 
+
 ## Sample Subtrips
 
 ### Dhaka 2009
 
 
 
-The 42,111 people in the sample made a total of 167,354 subtrips. 87.6% of these are actually stationarity events, which reduces the true number of subtrips to 20,679.
+The 42,111 people in the sample made a total of 314,029 subtrips. 46.7% of these are actually stationarity events, which reduces the true number of subtrips to 167,354.
 
 Data set description:
 
@@ -794,7 +823,7 @@ str(dhk09.subtrip)
 ##  $ sno     : Factor w/ 5 levels "1","2","3","4",..: 1 2 1 1 1 1 1 1 1 1 ...
 ##  $ tmode   : Factor w/ 22 levels "Walking","Bicycle",..: 1 15 1 1 1 1 6 6 6 6 ...
 ##  $ tmodec  : Factor w/ 9 levels "Walking","Bicycle",..: 1 4 1 1 1 1 5 5 5 5 ...
-##  $ activity: Factor w/ 7 levels "Home","Work",..: NA NA NA NA NA NA NA NA NA NA ...
+##  $ activity: Factor w/ 7 levels "Home","Work",..: 1 1 3 1 3 1 2 7 7 1 ...
 ##  $ dist    : num  2189 1318 1177 1177 869 ...
 ##  $ pdate_s : POSIXct, format: "2009-10-01 21:00:00" "2009-10-01 21:10:00" ...
 ##  $ pdate_e : POSIXct, format: "2009-10-01 21:10:00" "2009-10-01 21:20:00" ...
@@ -838,11 +867,11 @@ table(dhk09.subtrip$activity)
 ```
 ## 
 ##               Home               Work          Education 
-##                  0                  0                  0 
+##              70455              40388              19804 
 ##           Shopping Social, recreation             Errand 
-##                  0                  0                  0 
+##              10308              12183               3227 
 ##     Other, unknown 
-##                  0
+##              10989
 ```
 
 ![plot of chunk plotHistDhk09Subtrip](figure/plotHistDhk09Subtrip.png) 
@@ -851,7 +880,7 @@ table(dhk09.subtrip$activity)
 
 
 
-The 58,018 people in the sample made a total of 124,062 subtrips. 144.1% of these are actually stationarity events, which reduces the true number of subtrips to -54,689.
+The 58,018 people in the sample made a total of 302,813 subtrips. 59.0% of these are actually stationarity events, which reduces the true number of subtrips to 124,062.
 
 Data set description:
 
@@ -884,7 +913,7 @@ str(hni04.subtrip)
 ##  $ sno     : Factor w/ 4 levels "1","2","3","4": 1 1 1 1 1 1 1 1 1 1 ...
 ##  $ tmode   : Factor w/ 21 levels "Walking","Bicycle",..: 3 3 3 3 3 3 3 3 3 4 ...
 ##  $ tmodec  : Factor w/ 9 levels "Walking","Bicycle",..: 3 3 3 3 3 3 3 3 3 3 ...
-##  $ activity: Factor w/ 7 levels "Home","Work",..: NA NA NA NA NA NA NA NA NA NA ...
+##  $ activity: Factor w/ 7 levels "Home","Work",..: 2 1 2 1 4 1 2 5 1 2 ...
 ##  $ dist    : num  10674 11336 2415 2812 1245 ...
 ##  $ pdate_s : POSIXct, format: "2004-10-01 06:45:00" "2004-10-01 18:00:00" ...
 ##  $ pdate_e : POSIXct, format: "2004-10-01 08:00:00" "2004-10-01 19:00:00" ...
@@ -928,11 +957,11 @@ table(hni04.subtrip$activity)
 ```
 ## 
 ##               Home               Work          Education 
-##                  0                  0                  0 
+##              57542              28254              13994 
 ##           Shopping Social, recreation             Errand 
-##                  0                  0                  0 
+##               8093               4920              11097 
 ##     Other, unknown 
-##                  0
+##                134
 ```
 
 ![plot of chunk plotHistHni04Subtrip](figure/plotHistHni04Subtrip.png) 
@@ -940,8 +969,23 @@ table(hni04.subtrip$activity)
 ### Jakarta 2002
 
 
+```
+## [1] TRUE
+```
 
-The 297,043 people in the sample made a total of 1,058,822 subtrips. 98.5% of these are actually stationarity events, which reduces the true number of subtrips to 16,364.
+```
+## [1] TRUE
+```
+
+```
+## [1] TRUE
+```
+
+```
+## [1] TRUE
+```
+
+The 297,043 people in the sample made a total of 2,101,280 subtrips. 49.6% of these are actually stationarity events, which reduces the true number of subtrips to 1,058,822.
 
 Data set description:
 
@@ -1030,8 +1074,23 @@ table(jkt02.subtrip$activity)
 ### Metro Manila 1996
 
 
+```
+## [1] TRUE
+```
 
-The 189,335 people in the sample made a total of 565,041 subtrips. 90.7% of these are actually stationarity events, which reduces the true number of subtrips to 52,824.
+```
+## [1] TRUE
+```
+
+```
+## [1] TRUE
+```
+
+```
+## [1] TRUE
+```
+
+The 189,335 people in the sample made a total of 1,077,258 subtrips. 47.5% of these are actually stationarity events, which reduces the true number of subtrips to 565,041.
 
 Data set description:
 
@@ -1120,6 +1179,7 @@ table(mnl96.subtrip$activity)
 ![plot of chunk plotHistSubtripTModeCAll](figure/plotHistSubtripTModeCAll.png) 
 
 
+
 ## Mobility Behavior
 
 ### Dhaka 2009
@@ -1129,6 +1189,39 @@ table(mnl96.subtrip$activity)
 ### Jakarta 2002
 
 ### Metro Manila 1996
+
+
+
+## Spatio-Temporal Distribution of People
+
+This section covers the analysis of the distribution of people in all four cities over space and time. For analysis purposes we generated concentric ring buffers in 5km distances from the centers of all four cities (as per the OpenStreetMap data).
+
+### Dhaka 2009
+
+
+
+![plot of chunk plotSTDistributionDhk09Absolute](figure/plotSTDistributionDhk09Absolute.png) 
+
+![plot of chunk plotSTDistributionDhk09Relative](figure/plotSTDistributionDhk09Relative.png) 
+
+### Hanoi 2004
+
+
+
+![plot of chunk plotSTDistributionHni04Absolute](figure/plotSTDistributionHni04Absolute.png) 
+
+![plot of chunk plotSTDistributionHni04Relative](figure/plotSTDistributionHni04Relative.png) 
+
+### Jakarta 2002
+
+### Metro Manila 1996
+
+### Comparison Across Cities
+
+![plot of chunk plotSTDistALlAbs](figure/plotSTDistALlAbs.png) 
+
+![plot of chunk plotSTDistALlRel](figure/plotSTDistALlRel.png) 
+
 
 
 ## Spatio-Temporal Distribution of Trip Origins

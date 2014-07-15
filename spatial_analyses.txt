@@ -1,3 +1,12 @@
+-- load PostGIS layer with query in QGIS
+uri = QgsDataSourceURI()
+uri.setConnection("server", "port", "database", "user", "password")
+uri.setDataSource("schema", "table", "geom", "sql_query", "key")
+uri.uri()
+qgis.utils.iface.addVectorLayer(uri.uri(), "layer_name", "postgres")
+
+
+
 -- identify subtrip origin locations (incl. starting hour and transportation mode)
 SELECT p.puid id, s.pid, s.tno, s.sno, s.tmodec, p.geom, date_part('hour', s.pdate_s) phour_s 
 FROM dhk09.point p 
@@ -20,36 +29,32 @@ ORDER BY date_part('hour', t.pdate_s), b.radius;
 
 
 -- count number of distinct people per buffer zone and hour
-SELECT b.radius, date_part('hour', p.pdate) phour, COUNT(DISTINCT pid) pcount 
-FROM geodata.buffers_5km b, dhk09.point p 
-WHERE b.radius = 50 AND date_part('hour', p.pdate) = 2 AND ST_Intersects(p.geom, b.geom) 
-GROUP BY b.radius, date_part('hour', p.pdate) 
-ORDER BY date_part('hour', p.pdate), b.radius;
+SELECT buff, date_part('hour', pdate) phour, COUNT(DISTINCT pid) pcount 
+FROM dhk09.point p 
+GROUP BY buff, date_part('hour', pdate) 
+ORDER BY date_part('hour', pdate), buff;
 
 
 -- analyze commuting distance, duration, and intermediate stops
+-- purpose needs to be one of 1, 2, 3 - has to be matched to each dataset!
+-- activity of preceding trip needs to be one of 1, 2, 3
+-- mode of transportation of trips' subtrips must not contain 97
 WITH subtrip_info AS
 (
-	SELECT pid, tno, COUNT(sno) subtrips
+	SELECT pid, tno, COUNT(sno) subtrips, MAX(tmodec) tmodec
 	FROM dhk09.subtrip 
 	GROUP BY pid, tno
 )
-SELECT t.pid, t.tno, t.activity, t.pdate_s, s.subtrips, t.dist, (t.pdate_e - t.pdate_s) duration  
+SELECT t.pid, t.tno, t.purpose, t.activity, t.pdate_s, s.subtrips, t.dist, (t.pdate_e - t.pdate_s) duration  
 FROM dhk09.trip t 
 JOIN subtrip_info s ON t.pid = s.pid AND t.tno = s.tno 
-WHERE t.activity IN (1, 2, 3) AND 
+WHERE t.purpose IN (1, 2, 3)  AND 
 (
 	SELECT activity 
 	FROM dhk09.trip x 
 	WHERE x.pid = t.pid AND x.tno = (t.tno - 1)
-) IN (1, 2, 3, 99) 
+) IN (1, 2, 3) AND s.tmodec != 97 
 ORDER BY pid, tno;
 
 
-
--- load PostGIS layer with query in QGIS
-uri = QgsDataSourceURI()
-uri.setConnection("server", "port", "database", "user", "password")
-uri.setDataSource("schema", "table", "geom", "sql_query", "key")
-uri.uri()
-qgis.utils.iface.addVectorLayer(uri.uri(), "layer_name", "postgres")
+"#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00"

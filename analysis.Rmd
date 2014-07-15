@@ -1,11 +1,13 @@
 # Capital Cities (Urban Mobility)
 
-```{r initialization, eval = TRUE, echo = FALSE, message = FALSE}
+```{r initialization, eval = TRUE, echo = FALSE, message = FALSE, cache = TRUE}
 ## initialize and load required packages
 library(ggplot2)
 library(gridExtra)
+library(RColorBrewer)
 library(RPostgreSQL)
 library(scales)
+library(xtable)
 
 ## initialize database connection and psql helper functions
 drv <- dbDriver("PostgreSQL")
@@ -14,15 +16,18 @@ con <- dbConnect(drv,
                  port = "1111", 
                  user = "postgres", 
                  password = "postgres", 
-                 dbname = "pflow")
+                 dbname = "postgres")
 
+# helper files
 source("psqlHelper.R")
+source("ggplot2Helper.R")
 
 ## initialize ggplot
 theme_set(theme_bw())
+colHni04 <- "#e41a1c"
 ```
 
-```{r loadVariableLabels, eval = TRUE, echo = FALSE, message = FALSE}
+```{r loadVariableLabels, eval = TRUE, echo = FALSE, message = FALSE, cache = TRUE}
 # load variable labels
 labelsSex <- read.table("labels_all_sex.txt", sep = "\t")
 labelsAge <- read.table("labels_all_age.txt", sep = "\t")
@@ -44,13 +49,14 @@ labelsMnl96TMode <- read.table("labels_mnl96_tmode.txt", sep = "\t")
 ```
 
 
+
 ## Sample Populations
 
 This section covers the descriptive statistics of the four sample populations.
 
 ### Dhaka 2009
 
-```{r loadDhk09Person, eval = TRUE, echo = FALSE}
+```{r loadDhk09Person, eval = TRUE, echo = FALSE, cache = TRUE}
 # load person data
 dhk09.person <- psqlGetTable(con, "dhk09", "person")
 # remove unnecessary columns (padd, magfac, magfac2)
@@ -81,7 +87,7 @@ The data were captured on October 1-2, 2009 with a sample size of `r format(nrow
 
 Data set description:
 
-```{r descDhk09Person}
+```{r descDhk09Person, cache = TRUE}
 format(object.size(dhk09.person), units = "auto")
 names(dhk09.person)
 str(dhk09.person)
@@ -92,16 +98,18 @@ levels(dhk09.person$occupc)
 with(dhk09.person, table(age, sex))
 ```
 
-```{r plotHistDhk09Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28}
-plotDhk09Sex <- ggplot(dhk09.person, aes(sex)) +
-  geom_bar() +
+```{r plotHistDhk09Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28, cache = TRUE}
+plotDhk09Sex <- ggplot(dhk09.person, aes(sex, fill = sex)) +
+  geom_bar() + 
   scale_y_continuous(labels = comma) +
-  scale_x_discrete(limits = labelsSex[, 2]) +
-  labs(title = "Dhaka 2009, Sex", x = "Sex", y = "Count")
+  scale_x_discrete(limits = labelsSex[, 2]) + 
+  scale_fill_brewer(palette = "Set1") + 
+  labs(title = "Dhaka 2009, Sex", x = "Sex", y = "Count") + 
+  theme(legend.position = "none")
 plotDhk09Age <- ggplot(dhk09.person, aes(age)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
-  scale_x_discrete(limits = labelsAge[, 2]) +
+  scale_x_discrete(limits = labelsAge[, 2]) + 
   labs(title = "Dhaka 2009, Age", x = "Age", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 plotDhk09Occup <- ggplot(dhk09.person, aes(occup)) +
@@ -122,10 +130,9 @@ grid.arrange(plotDhk09Sex, plotDhk09Age, plotDhk09Occup, plotDhk09OccupC,
              ncol = 1)
 ```
 
-
 ### Hanoi 2004
 
-```{r loadHni04Person, eval = TRUE, echo = FALSE}
+```{r loadHni04Person, eval = TRUE, echo = FALSE, cache = TRUE}
 # load person data
 hni04.person <- psqlGetTable(con, "hni04", "person")
 # remove unnecessary columns (padd, magfac, magfac2)
@@ -155,7 +162,7 @@ The data were captured on October 1-2, 2004 with a sample size of `r format(nrow
 
 Data set description:
 
-```{r descHni04Person}
+```{r descHni04Person, cache = TRUE}
 format(object.size(hni04.person), units = "auto")
 names(hni04.person)
 str(hni04.person)
@@ -166,12 +173,14 @@ levels(hni04.person$occupc)
 with(hni04.person, table(age, sex))
 ```
 
-```{r plotHistHni04Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28}
-plotHni04Sex <- ggplot(hni04.person, aes(sex)) +
-  geom_bar() +
+```{r plotHistHni04Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28, cache = TRUE}
+plotHni04Sex <- ggplot(dhk09.person, aes(sex, fill = sex)) +
+  geom_bar() + 
   scale_y_continuous(labels = comma) +
-  scale_x_discrete(limits = labelsSex[, 2]) +
-  labs(title = "Hanoi 2004, Sex", x = "Sex", y = "Count")
+  scale_x_discrete(limits = labelsSex[, 2]) + 
+  scale_fill_brewer(palette = "Set1") + 
+  labs(title = "Hanoi 2004, Sex", x = "Sex", y = "Count") + 
+  theme(legend.position = "none")
 plotHni04Age <- ggplot(hni04.person, aes(age)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
@@ -196,10 +205,9 @@ grid.arrange(plotHni04Sex, plotHni04Age, plotHni04Occup, plotHni04OccupC,
              ncol = 1)
 ```
 
-
 ### Jakarta 2002
 
-```{r loadJkt02Person, eval = TRUE, echo = FALSE}
+```{r loadJkt02Person, eval = TRUE, echo = FALSE, cache = TRUE}
 # load person data
 jkt02.person <- psqlGetTable(con, "jkt02", "person")
 # remove unnecessary columns (padd, magfac, magfac2)
@@ -229,7 +237,7 @@ The data were captured on October 1-2, 2002 with a sample size of `r format(nrow
 
 Data set description:
 
-```{r descJkt02Person}
+```{r descJkt02Person, cache = TRUE}
 format(object.size(jkt02.person), units = "auto")
 names(jkt02.person)
 str(jkt02.person)
@@ -240,12 +248,14 @@ levels(jkt02.person$occupc)
 with(jkt02.person, table(age, sex))
 ```
 
-```{r plotHistJkt02Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28}
-plotJkt02Sex <- ggplot(jkt02.person, aes(sex)) +
-  geom_bar() +
+```{r plotHistJkt02Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28, cache = TRUE}
+plotJkt02Sex <- ggplot(dhk09.person, aes(sex, fill = sex)) +
+  geom_bar() + 
   scale_y_continuous(labels = comma) +
-  scale_x_discrete(limits = labelsSex[, 2]) +
-  labs(title = "Jakarta 2002, Sex", x = "Sex", y = "Count")
+  scale_x_discrete(limits = labelsSex[, 2]) + 
+  scale_fill_brewer(palette = "Set1") + 
+  labs(title = "Jakarta 2002, Sex", x = "Sex", y = "Count") + 
+  theme(legend.position = "none")
 plotJkt02Age <- ggplot(jkt02.person, aes(age)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
@@ -270,12 +280,30 @@ grid.arrange(plotJkt02Sex, plotJkt02Age, plotJkt02Occup, plotJkt02OccupC,
              ncol = 1)
 ```
 
-
 ### Metro Manila 1996
 
-```{r loadMnl96Person, eval = TRUE, echo = FALSE}
+```{r loadMnl96Person, eval = TRUE, echo = FALSE, cache = TRUE}
 # load person data
+# @@@ load from database "pflow"
+dbDisconnect(con)
+dbUnloadDriver(drv)
+drv <- dbDriver("PostgreSQL")
+con <- dbConnect(drv, 
+                 host = "localhost", 
+                 port = "1111", 
+                 user = "postgres", 
+                 password = "postgres", 
+                 dbname = "pflow")
 mnl96.person <- psqlGetTable(con, "mnl96", "person")
+dbDisconnect(con)
+dbUnloadDriver(drv)
+drv <- dbDriver("PostgreSQL")
+con <- dbConnect(drv, 
+                 host = "localhost", 
+                 port = "1111", 
+                 user = "postgres", 
+                 password = "postgres", 
+                 dbname = "postgres")
 # remove unnecessary columns (padd, magfac, magfac2)
 mnl96.person <- mnl96.person[, c("pid", "sex", "age", "occup", "occupc")]
 # factorize pid
@@ -303,7 +331,7 @@ The data were captured on October 1-2, 1996 with a sample size of `r format(nrow
 
 Data set description:
 
-```{r descMnl96Person}
+```{r descMnl96Person, cache = TRUE}
 format(object.size(mnl96.person), units = "auto")
 names(mnl96.person)
 str(mnl96.person)
@@ -314,12 +342,14 @@ levels(mnl96.person$occupc)
 with(mnl96.person, table(age, sex))
 ```
 
-```{r plotHistMnl96Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28}
-plotMnl96Sex <- ggplot(mnl96.person, aes(sex)) +
-  geom_bar() +
+```{r plotHistMnl96Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28, cache = TRUE}
+plotMnl96Sex <- ggplot(dhk09.person, aes(sex, fill = sex)) +
+  geom_bar() + 
   scale_y_continuous(labels = comma) +
-  scale_x_discrete(limits = labelsSex[, 2]) +
-  labs(title = "Metro Manila 1996, Sex", x = "Sex", y = "Count")
+  scale_x_discrete(limits = labelsSex[, 2]) + 
+  scale_fill_brewer(palette = "Set1") + 
+  labs(title = "Metro Manila 1996, Sex", x = "Sex", y = "Count") + 
+  theme(legend.position = "none")
 plotMnl96Age <- ggplot(mnl96.person, aes(age)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
@@ -344,12 +374,11 @@ grid.arrange(plotMnl96Sex, plotMnl96Age, plotMnl96Occup, plotMnl96OccupC,
              ncol = 1)
 ```
 
-
 ### Comparison Across Cities
 
 #### Sex
 
-```{r plotHistPersonSexAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10}
+```{r plotHistPersonSexAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10, cache = TRUE}
 grid.arrange(plotDhk09Sex, plotHni04Sex, plotJkt02Sex, plotMnl96Sex, 
              ncol = 2, 
              main = "Sex")
@@ -357,7 +386,7 @@ grid.arrange(plotDhk09Sex, plotHni04Sex, plotJkt02Sex, plotMnl96Sex,
 
 #### Age
 
-```{r plotHistPersonAgeAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10}
+```{r plotHistPersonAgeAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10, cache = TRUE}
 grid.arrange(plotDhk09Age, plotHni04Age, plotJkt02Age, plotMnl96Age, 
              ncol = 2, 
              main = "Age")
@@ -365,7 +394,7 @@ grid.arrange(plotDhk09Age, plotHni04Age, plotJkt02Age, plotMnl96Age,
 
 #### Occupation
 
-```{r plotHistPersonOccupAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10}
+```{r plotHistPersonOccupAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10, cache = TRUE}
 grid.arrange(plotDhk09Occup, plotHni04Occup, plotJkt02Occup, plotMnl96Occup, 
              ncol = 2, 
              main = "Occupation")
@@ -373,19 +402,21 @@ grid.arrange(plotDhk09Occup, plotHni04Occup, plotJkt02Occup, plotMnl96Occup,
 
 #### Occupation Group
 
-```{r plotHistPersonOccupcAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10}
+```{r plotHistPersonOccupcAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10, cache = TRUE}
 grid.arrange(plotDhk09OccupC, plotHni04OccupC, plotJkt02OccupC, plotMnl96OccupC, 
              ncol = 2, 
              main = "Occupation Group")
 ```
 
 
+
 ## Sample Trips
 
 ### Dhaka 2009
 
-```{r loadTripsDhk09, eval = TRUE, echo = FALSE}
+```{r loadTripsDhk09, eval = TRUE, echo = FALSE, cache = TRUE}
 # load trip data
+# @@@ should be changed to exclude stationarity events
 dhk09.trip <- psqlGetTable(con, "dhk09", "trip")
 # remove unnecessary column (purpose, puid_s, puid_e)
 dhk09.trip <- dhk09.trip[, c("pid", "tno", "activity", "dist", 
@@ -406,7 +437,7 @@ The `r format(nrow(dhk09.person), big.mark=",")` people in the sample made a tot
 
 Data set description:
 
-```{r descDhk09Trip}
+```{r descDhk09Trip, cache = TRUE}
 format(object.size(dhk09.trip), units = "auto")
 names(dhk09.trip)
 str(dhk09.trip)
@@ -414,7 +445,7 @@ levels(dhk09.trip$activity)
 table(dhk09.trip$activity)
 ```
 
-```{r plotHistDhk09Trip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7}
+```{r plotHistDhk09Trip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
 plotDhk09Activity <- ggplot(dhk09.trip, aes(activity)) +
   geom_bar() +
   scale_y_continuous(labels = comma) + 
@@ -426,8 +457,9 @@ grid.arrange(plotDhk09Activity,
 
 ### Hanoi 2004
 
-```{r loadTripsHni04, eval = TRUE, echo = FALSE}
+```{r loadTripsHni04, eval = TRUE, echo = FALSE, cache = TRUE}
 # load trip data
+# @@@ should be changed to exclude stationarity events
 hni04.trip <- psqlGetTable(con, "hni04", "trip")
 # remove unnecessary column (purpose, puid_s, puid_e)
 hni04.trip <- hni04.trip[, c("pid", "tno", "activity", "dist", 
@@ -449,7 +481,7 @@ The `r format(nrow(hni04.person), big.mark=",")` people in the sample made a tot
 
 Data set description:
 
-```{r descHni04Trip}
+```{r descHni04Trip, cache = TRUE}
 format(object.size(hni04.trip), units = "auto")
 names(hni04.trip)
 str(hni04.trip)
@@ -457,7 +489,7 @@ levels(hni04.trip$activity)
 table(hni04.trip$activity)
 ```
 
-```{r plotHistHni04Trip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7}
+```{r plotHistHni04Trip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
 plotHni04Activity <- ggplot(hni04.trip, aes(activity)) +
   geom_bar() +
   scale_y_continuous(labels = comma) + 
@@ -469,8 +501,9 @@ grid.arrange(plotHni04Activity,
 
 ### Jakarta 2002
 
-```{r loadTripsJkt02, eval = TRUE, echo = FALSE}
+```{r loadTripsJkt02, eval = TRUE, echo = FALSE, cache = TRUE}
 # load trip data
+# @@@ should be changed to exclude stationarity events
 jkt02.trip <- psqlGetTable(con, "jkt02", "trip")
 # remove unnecessary column (purpose, puid_s, puid_e)
 jkt02.trip <- jkt02.trip[, c("pid", "tno", "activity", "dist", 
@@ -492,7 +525,7 @@ The `r format(nrow(jkt02.person), big.mark=",")` people in the sample made a tot
 
 Data set description:
 
-```{r descJkt02Trip}
+```{r descJkt02Trip, cache = TRUE}
 format(object.size(jkt02.trip), units = "auto")
 names(jkt02.trip)
 str(jkt02.trip)
@@ -500,7 +533,7 @@ levels(jkt02.trip$activity)
 table(jkt02.trip$activity)
 ```
 
-```{r plotHistJkt02Trip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7}
+```{r plotHistJkt02Trip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
 plotJkt02Activity <- ggplot(jkt02.trip, aes(activity)) +
   geom_bar() +
   scale_y_continuous(labels = comma) + 
@@ -512,9 +545,30 @@ grid.arrange(plotJkt02Activity,
 
 ### Metro Manila 1996
 
-```{r loadTripsMnl96, eval = TRUE, echo = FALSE}
+```{r loadTripsMnl96, eval = TRUE, echo = FALSE, cache = TRUE}
 # load trip data
+# @@@ load from database "pflow"
+dbDisconnect(con)
+dbUnloadDriver(drv)
+drv <- dbDriver("PostgreSQL")
+con <- dbConnect(drv, 
+                 host = "localhost", 
+                 port = "1111", 
+                 user = "postgres", 
+                 password = "postgres", 
+                 dbname = "pflow")
+
+# @@@ should be changed to exclude stationarity events
 mnl96.trip <- psqlGetTable(con, "mnl96", "trip")
+dbDisconnect(con)
+dbUnloadDriver(drv)
+drv <- dbDriver("PostgreSQL")
+con <- dbConnect(drv, 
+                 host = "localhost", 
+                 port = "1111", 
+                 user = "postgres", 
+                 password = "postgres", 
+                 dbname = "postgres")
 # remove unnecessary column (purpose, puid_s, puid_e)
 # mnl96.trip <- mnl96.trip[, c("pid", "tno", "activity", "dist", 
 #                              "pdate_s", "pdate_e")]
@@ -535,7 +589,7 @@ The `r format(nrow(mnl96.person), big.mark=",")` people in the sample made a tot
 
 Data set description:
 
-```{r descMnl96Trip}
+```{r descMnl96Trip, cache = TRUE}
 format(object.size(mnl96.trip), units = "auto")
 names(mnl96.trip)
 str(mnl96.trip)
@@ -543,7 +597,7 @@ levels(mnl96.trip$activity)
 table(mnl96.trip$activity)
 ```
 
-```{r plotHistMnl96Trip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7}
+```{r plotHistMnl96Trip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
 plotMnl96Activity <- ggplot(mnl96.trip, aes(activity)) +
   geom_bar() +
   scale_y_continuous(labels = comma) + 
@@ -555,7 +609,7 @@ grid.arrange(plotMnl96Activity,
 
 ### Comparison Across Cities
 
-```{r plotHistTripActivityAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10}
+```{r plotHistTripActivityAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10, cache = TRUE}
 grid.arrange(plotDhk09Activity, plotHni04Activity, 
              plotJkt02Activity, plotMnl96Activity, 
              ncol = 2, 
@@ -563,12 +617,13 @@ grid.arrange(plotDhk09Activity, plotHni04Activity,
 ```
 
 
+
 ## Sample Subtrips
 
 ### Dhaka 2009
 
-```{r loadSubtripsDhk09, eval = TRUE, echo = FALSE}
-# load trip data
+```{r loadSubtripsDhk09, eval = TRUE, echo = FALSE, cache = TRUE}
+# load subtrip data
 dhk09.subtrip <- psqlGetTable(con, "dhk09", "subtrip")
 # remove unnecessary column (purpose, puid_s, puid_e)
 dhk09.subtrip <- dhk09.subtrip[, c("pid", "tno", "sno", "tmode", "tmodec", 
@@ -605,7 +660,7 @@ The `r format(nrow(dhk09.person), big.mark=",")` people in the sample made a tot
 
 Data set description:
 
-```{r descDhk09Subtrip}
+```{r descDhk09Subtrip, cache = TRUE}
 format(object.size(dhk09.subtrip), units = "auto")
 names(dhk09.subtrip)
 str(dhk09.subtrip)
@@ -615,7 +670,7 @@ levels(dhk09.subtrip$activity)
 table(dhk09.subtrip$activity)
 ```
 
-```{r plotHistDhk09Subtrip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7}
+```{r plotHistDhk09Subtrip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
 plotDhk09TModeC <- ggplot(dhk09.subtrip, aes(tmodec)) +
   geom_bar() +
   scale_y_continuous(labels = comma) + 
@@ -628,8 +683,8 @@ grid.arrange(plotDhk09TModeC,
 
 ### Hanoi 2004
 
-```{r loadSubtripsHni04, eval = TRUE, echo = FALSE}
-# load trip data
+```{r loadSubtripsHni04, eval = TRUE, echo = FALSE, cache = TRUE}
+# load subtrip data
 hni04.subtrip <- psqlGetTable(con, "hni04", "subtrip")
 # remove unnecessary column (purpose, puid_s, puid_e)
 hni04.subtrip <- hni04.subtrip[, c("pid", "tno", "sno", "tmode", "tmodec", 
@@ -666,7 +721,7 @@ The `r format(nrow(hni04.person), big.mark=",")` people in the sample made a tot
 
 Data set description:
 
-```{r descHni04Subtrip}
+```{r descHni04Subtrip, cache = TRUE}
 format(object.size(hni04.subtrip), units = "auto")
 names(hni04.subtrip)
 str(hni04.subtrip)
@@ -676,7 +731,7 @@ levels(hni04.subtrip$activity)
 table(hni04.subtrip$activity)
 ```
 
-```{r plotHistHni04Subtrip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7}
+```{r plotHistHni04Subtrip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
 plotHni04TModeC <- ggplot(hni04.subtrip, aes(tmodec)) +
   geom_bar() +
   scale_y_continuous(labels = comma) + 
@@ -689,9 +744,28 @@ grid.arrange(plotHni04TModeC,
 
 ### Jakarta 2002
 
-```{r loadSubtripsJkt02, eval = TRUE, echo = FALSE}
-# load trip data
+```{r loadSubtripsJkt02, eval = TRUE, echo = FALSE, cache = TRUE}
+# load subtrip data
+# @@@ load from database "pflow"
+dbDisconnect(con)
+dbUnloadDriver(drv)
+drv <- dbDriver("PostgreSQL")
+con <- dbConnect(drv, 
+                 host = "localhost", 
+                 port = "1111", 
+                 user = "postgres", 
+                 password = "postgres", 
+                 dbname = "pflow")
 jkt02.subtrip <- psqlGetTable(con, "jkt02", "subtrip")
+dbDisconnect(con)
+dbUnloadDriver(drv)
+drv <- dbDriver("PostgreSQL")
+con <- dbConnect(drv, 
+                 host = "localhost", 
+                 port = "1111", 
+                 user = "postgres", 
+                 password = "postgres", 
+                 dbname = "postgres")
 # remove unnecessary column (purpose, puid_s, puid_e)
 jkt02.subtrip <- jkt02.subtrip[, c("pid", "tno", "sno", "tmode", "tmodec", 
                                    "activity", "dist", "pdate_s", "pdate_e")]
@@ -727,7 +801,7 @@ The `r format(nrow(jkt02.person), big.mark=",")` people in the sample made a tot
 
 Data set description:
 
-```{r descJkt02Subtrip}
+```{r descJkt02Subtrip, cache = TRUE}
 format(object.size(jkt02.subtrip), units = "auto")
 names(jkt02.subtrip)
 str(jkt02.subtrip)
@@ -737,7 +811,7 @@ levels(jkt02.subtrip$activity)
 table(jkt02.subtrip$activity)
 ```
 
-```{r plotHistJkt02Subtrip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7}
+```{r plotHistJkt02Subtrip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
 plotJkt02TModeC <- ggplot(jkt02.subtrip, aes(tmodec)) +
   geom_bar() +
   scale_y_continuous(labels = comma) + 
@@ -750,9 +824,28 @@ grid.arrange(plotJkt02TModeC,
 
 ### Metro Manila 1996
 
-```{r loadSubtripsMnl96, eval = TRUE, echo = FALSE}
-# load trip data
+```{r loadSubtripsMnl96, eval = TRUE, echo = FALSE, cache = TRUE}
+# load subtrip data
+# @@@ load from database "pflow"
+dbDisconnect(con)
+dbUnloadDriver(drv)
+drv <- dbDriver("PostgreSQL")
+con <- dbConnect(drv, 
+                 host = "localhost", 
+                 port = "1111", 
+                 user = "postgres", 
+                 password = "postgres", 
+                 dbname = "pflow")
 mnl96.subtrip <- psqlGetTable(con, "mnl96", "subtrip")
+dbDisconnect(con)
+dbUnloadDriver(drv)
+drv <- dbDriver("PostgreSQL")
+con <- dbConnect(drv, 
+                 host = "localhost", 
+                 port = "1111", 
+                 user = "postgres", 
+                 password = "postgres", 
+                 dbname = "postgres")
 # remove unnecessary column (purpose, puid_s, puid_e)
 #mnl96.subtrip <- mnl96.subtrip[, c("pid", "tno", "sno", "tmode", "tmodec", 
 #                                   "activity", "dist", "pdate_s", "pdate_e")]
@@ -790,7 +883,7 @@ The `r format(nrow(mnl96.person), big.mark=",")` people in the sample made a tot
 
 Data set description:
 
-```{r descMnl96Subtrip}
+```{r descMnl96Subtrip, cache = TRUE}
 format(object.size(mnl96.subtrip), units = "auto")
 names(mnl96.subtrip)
 str(mnl96.subtrip)
@@ -800,7 +893,7 @@ levels(mnl96.subtrip$activity)
 table(mnl96.subtrip$activity)
 ```
 
-```{r plotHistMnl96Subtrip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7}
+```{r plotHistMnl96Subtrip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
 plotMnl96TModeC <- ggplot(mnl96.subtrip, aes(tmodec)) +
   geom_bar() +
   scale_y_continuous(labels = comma) + 
@@ -813,12 +906,13 @@ grid.arrange(plotMnl96TModeC,
 
 ### Comparison Across Cities
 
-```{r plotHistSubtripTModeCAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10}
+```{r plotHistSubtripTModeCAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10, cache = TRUE}
 grid.arrange(plotDhk09TModeC, plotHni04TModeC, 
              plotJkt02TModeC, plotMnl96TModeC, 
              ncol = 2, 
              main = "Mode of Transportation Group")
 ```
+
 
 
 ## Mobility Behavior
@@ -832,6 +926,127 @@ grid.arrange(plotDhk09TModeC, plotHni04TModeC,
 ### Metro Manila 1996
 
 
+
+## Spatio-Temporal Distribution of People
+
+This section covers the analysis of the distribution of people in all four cities over space and time. For analysis purposes we generated concentric ring buffers in 5km distances from the centers of all four cities (as per the OpenStreetMap data).
+
+### Dhaka 2009
+
+```{r loadSTDistributionDhk09, eval = TRUE, echo = FALSE, cache = TRUE}
+# load spatio-temporal distribution data
+query <- "SELECT buff, date_part('hour', pdate) phour, COUNT(DISTINCT pid) pcount FROM dhk09.point p GROUP BY buff, date_part('hour', pdate) ORDER BY date_part('hour', pdate), buff;"
+dhk09.stdist <- psqlQuery(con, query)
+# factorize buff
+dhk09.stdist$buff <- factor(dhk09.stdist$buff, 
+                           levels = seq(5, 50, 5), 
+                           labels = paste(seq(5, 50, 5), rep("km", 10)))
+```
+
+```{r plotSTDistributionDhk09Absolute, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
+plotDhk09STDistAbs <- ggplot(dhk09.stdist, aes(x = phour, y = pcount)) + 
+  geom_line(aes(color = buff)) + 
+  labs(title = "Dhaka 2009, Spatio-Temporal Distribution of People", 
+       x = "Time", y = "People") + 
+  scale_y_continuous(labels = comma) + 
+  scale_color_discrete(name = "Buffer") + 
+  theme(legend.key = element_blank())
+grid.arrange(plotDhk09STDistAbs, 
+             ncol = 1)
+```
+
+```{r plotSTDistributionDhk09Relative, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
+plotDhk09STDistRel <- ggplot(dhk09.stdist, 
+                             aes(x = phour, y = pcount, 
+                                 fill = buff, width = 1)) + 
+  geom_bar(stat = "identity", position = "fill") + 
+  labs(title = "Dhaka 2009, Spatio-Temporal Distribution of People", 
+       x = "Time", y = "People") + 
+  scale_y_continuous(labels = percent_format()) + 
+  scale_fill_discrete(name = "Buffer") + 
+  theme(legend.key = element_blank())
+grid.arrange(plotDhk09STDistRel, 
+             ncol = 1)
+```
+
+### Hanoi 2004
+
+```{r loadSTDistributionHni04, eval = TRUE, echo = FALSE, cache = TRUE, cache = TRUE}
+# load spatio-temporal distribution data
+query <- "SELECT buff, date_part('hour', pdate) phour, COUNT(DISTINCT pid) pcount FROM hni04.point p GROUP BY buff, date_part('hour', pdate) ORDER BY date_part('hour', pdate), buff;"
+hni04.stdist <- psqlQuery(con, query)
+# factorize buff
+hni04.stdist$buff <- factor(hni04.stdist$buff, 
+                           levels = seq(5, 50, 5), 
+                           labels = paste(seq(5, 50, 5), rep("km", 10)))
+```
+
+```{r plotSTDistributionHni04Absolute, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
+plotHni04STDistAbs <- ggplot(hni04.stdist, aes(x = phour, y = pcount)) + 
+  geom_line(aes(color = buff)) + 
+  labs(title = "Hanoi 2004, Spatio-Temporal Distribution of People", 
+       x = "Time", y = "People") + 
+  scale_y_continuous(labels = comma) + 
+  scale_color_discrete(name = "Buffer") + 
+  theme(legend.key = element_blank())
+grid.arrange(plotHni04STDistAbs, 
+             ncol = 1)
+```
+
+```{r plotSTDistributionHni04Relative, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
+plotHni04STDistRel <- ggplot(hni04.stdist, 
+                             aes(x = phour, y = pcount, 
+                                 fill = buff, width = 1)) + 
+  geom_bar(stat = "identity", position = "fill") + 
+  labs(title = "Hanoi 2004, Spatio-Temporal Distribution of People", 
+       x = "Time", y = "People") + 
+  scale_y_continuous(labels = percent_format()) + 
+  scale_fill_discrete(name = "Buffer") + 
+  theme(legend.key = element_blank())
+grid.arrange(plotHni04STDistRel, 
+             ncol = 1)
+```
+
+### Jakarta 2002
+
+### Metro Manila 1996
+
+### Comparison Across Cities
+
+```{r plotSTDistALlAbs, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 5, cache = TRUE}
+# extract legend after transposing
+legendSTDist <- extractGgplot2Legend(plotDhk09STDistAbs + 
+                                       theme(legend.position="bottom"))
+
+grid.arrange(arrangeGrob(plotDhk09STDistAbs + 
+                           labs(title="Dhaka 2009") + 
+                           theme(legend.position = "none"),
+                         plotHni04STDistAbs + 
+                           labs(title="Hanoi 2004") + 
+                           theme(legend.position = "none"),
+                         nrow=1),
+             legendSTDist, nrow=2,heights=c(10, 1), 
+             main = "Spatio-Temporal Distribution of People")
+```
+
+```{r plotSTDistALlRel, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 5, cache = TRUE}
+# extract legend after transposing
+legendSTDist <- extractGgplot2Legend(plotDhk09STDistRel + 
+                                       theme(legend.position="bottom"))
+
+grid.arrange(arrangeGrob(plotDhk09STDistRel + 
+                           labs(title="Dhaka 2009") + 
+                           theme(legend.position = "none"),
+                         plotHni04STDistRel + 
+                           labs(title="Hanoi 2004") + 
+                           theme(legend.position = "none"),
+                         nrow=1),
+             legendSTDist, nrow=2,heights=c(10, 1), 
+             main = "Spatio-Temporal Distribution of People")
+```
+
+
+
 ## Spatio-Temporal Distribution of Trip Origins
 
 This section covers the analysis of the distribution of the origins of trips in all four cities over space and time. For analysis purposes we generated concentric ring buffers in 5km distances from the centers of all four cities (as per the OpenStreetMap data).
@@ -842,7 +1057,7 @@ This section covers the analysis of the distribution of the origins of trips in 
 
 It's always a good idea to clean up after you're done...
 
-```{r cleanup, eval = TRUE, echo = FALSE, message = FALSE}
+```{r cleanup, eval = TRUE, echo = FALSE, message = FALSE, cache = TRUE}
 ## clean up database connection and database driver
 dbDisconnect(con)
 dbUnloadDriver(drv)
