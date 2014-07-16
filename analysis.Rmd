@@ -389,7 +389,7 @@ con <- dbConnect(drv,
                  user = "postgres", 
                  password = "postgres", 
                  dbname = "pflow")
-query <- "SELECT r.pid, MIN(r.sex) sex, MIN(r.age) age, MIN(r.occup) occup, MIN(r.occupc) occupc, SUM(t.dist) dist FROM mnl96.person r JOIN dhk09.trip t ON r.pid = t.pid GROUP BY r.pid ORDER BY r.pid;"
+query <- "SELECT r.pid, MIN(r.sex) sex, MIN(r.age) age, MIN(r.occup) occup, MIN(r.occupc) occupc, SUM(t.dist) dist FROM mnl96.person r JOIN mnl96.trip t ON r.pid = t.pid GROUP BY r.pid ORDER BY r.pid;"
 mnl96.person <- psqlQuery(con, query)
 dbDisconnect(con)
 dbUnloadDriver(drv)

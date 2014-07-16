@@ -16,104 +16,77 @@ This section covers the descriptive statistics of the four sample populations.
 
 
 
-The data were captured on October 1-2, 2009 with a sample size of 42,111 people.
+The data were captured on October 1-2, 2009 with a sample size of 42,111 people. The personal data occupies 3.5 Mb of memory.
 
 Data set description:
 
 
 ```r
-format(object.size(dhk09.person), units = "auto")
+describe(dhk09.person)
 ```
 
 ```
-## [1] "3.2 Mb"
-```
-
-```r
-names(dhk09.person)
-```
-
-```
-## [1] "pid"    "sex"    "age"    "occup"  "occupc"
-```
-
-```r
-str(dhk09.person)
-```
-
-```
-## 'data.frame':	42111 obs. of  5 variables:
-##  $ pid   : Factor w/ 42114 levels "1","2","3","4",..: 1 2 3 4 5 6 7 8 9 10 ...
-##  $ sex   : Factor w/ 2 levels "Male","Female": 1 2 2 1 1 2 2 1 2 2 ...
-##  $ age   : Ord.factor w/ 18 levels "[0, 5["<"[5, 10["<..: 11 10 5 4 8 6 2 11 10 10 ...
-##  $ occup : Factor w/ 9 levels "Unknown","Government service",..: 3 7 6 6 3 7 6 3 7 7 ...
-##  $ occupc: Factor w/ 6 levels "Blue-collar",..: 2 4 3 3 2 4 3 2 4 4 ...
-```
-
-```r
-levels(dhk09.person$sex)
-```
-
-```
-## [1] "Male"   "Female"
-```
-
-```r
-levels(dhk09.person$age)
-```
-
-```
-##  [1] "[0, 5["    "[5, 10["   "[10, 15["  "[15, 20["  "[20, 25[" 
-##  [6] "[25, 30["  "[30, 35["  "[35, 40["  "[40, 45["  "[45, 50[" 
-## [11] "[50, 55["  "[55, 60["  "[60, 65["  "[65, 70["  "[70, 75[" 
-## [16] "[75, 80["  "[80, 85["  "[85, Inf["
-```
-
-```r
-levels(dhk09.person$occup)
-```
-
-```
-## [1] "Unknown"              "Government service"   "Private service"     
-## [4] "Business"             "Unemployed"           "Student"             
-## [7] "Housewife"            "Agriculture, farming" "Others (specify)"
-```
-
-```r
-levels(dhk09.person$occupc)
-```
-
-```
-## [1] "Blue-collar"             "White-collar"           
-## [3] "Student"                 "Housewife, househusband"
-## [5] "Unemployed, retired"     "Other, unknown"
-```
-
-```r
-with(dhk09.person, table(age, sex))
-```
-
-```
-##            sex
-## age         Male Female
-##   [0, 5[     161    158
-##   [5, 10[   1865   1690
-##   [10, 15[  2359   2208
-##   [15, 20[  2149   2087
-##   [20, 25[  2428   2521
-##   [25, 30[  2455   2706
-##   [30, 35[  2113   2020
-##   [35, 40[  2117   1914
-##   [40, 45[  1760   1378
-##   [45, 50[  1496   1197
-##   [50, 55[  1319    804
-##   [55, 60[   917    446
-##   [60, 65[   714    258
-##   [65, 70[   373    103
-##   [70, 75[   221     48
-##   [75, 80[    74     23
-##   [80, 85[    15      6
-##   [85, Inf[    5      3
+## dhk09.person 
+## 
+##  6  Variables      42111  Observations
+## ---------------------------------------------------------------------------
+## pid 
+##       n missing  unique 
+##   42111       0   42111 
+## 
+## lowest : 1     2     3     4     5    
+## highest: 47486 47489 47491 47492 47493 
+## ---------------------------------------------------------------------------
+## sex 
+##       n missing  unique 
+##   42111       0       2 
+## 
+## Male (22541, 54%), Female (19570, 46%) 
+## ---------------------------------------------------------------------------
+## age 
+##       n missing  unique 
+##   42111       0      18 
+## 
+##           [0, 5[ [5, 10[ [10, 15[ [15, 20[ [20, 25[ [25, 30[ [30, 35[
+## Frequency    319    3555     4567     4236     4949     5161     4133
+## %              1       8       11       10       12       12       10
+##           [35, 40[ [40, 45[ [45, 50[ [50, 55[ [55, 60[ [60, 65[ [65, 70[
+## Frequency     4031     3138     2693     2123     1363      972      476
+## %               10        7        6        5        3        2        1
+##           [70, 75[ [75, 80[ [80, 85[ [85, Inf[
+## Frequency      269       97       21         8
+## %                1        0        0         0
+## ---------------------------------------------------------------------------
+## occup 
+##       n missing  unique 
+##   42111       0       9 
+## 
+## Unknown (865, 2%), Government service (1925, 5%) 
+## Private service (6901, 16%) 
+## Business (6468, 15%), Unemployed (841, 2%) 
+## Student (13861, 33%), Housewife (10571, 25%) 
+## Agriculture, farming (31, 0%) 
+## Others (specify) (648, 2%) 
+## ---------------------------------------------------------------------------
+## occupc 
+##       n missing  unique 
+##   42111       0       6 
+## 
+## Blue-collar (31, 0%), White-collar (15294, 36%) 
+## Student (13861, 33%) 
+## Housewife, househusband (10571, 25%) 
+## Unemployed, retired (841, 2%) 
+## Other, unknown (1513, 4%) 
+## ---------------------------------------------------------------------------
+## dist 
+##       n missing  unique    Mean     .05     .10     .25     .50     .75 
+##   42111       0   41963   11584    1250    1893    3713    7839   15293 
+##     .90     .95 
+##   25342   33859 
+## 
+## lowest :      0.00     14.97     30.46     55.55     61.39
+## highest: 126406.08 126643.55 135625.47 152718.42 182414.31 
+## ---------------------------------------------------------------------------
 ```
 
 ![plot of chunk plotHistDhk09Person](./analysis_files/figure-html/plotHistDhk09Person.png) 
@@ -122,119 +95,87 @@ with(dhk09.person, table(age, sex))
 
 
 
-The data were captured on October 1-2, 2004 with a sample size of 58,018 people.
+The data were captured on October 1-2, 2004 with a sample size of 34,846 people.  The personal data occupies 2.8 Mb of memory.
 
 Data set description:
 
 
 ```r
-format(object.size(hni04.person), units = "auto")
+describe(hni04.person)
 ```
 
 ```
-## [1] "4.2 Mb"
-```
-
-```r
-names(hni04.person)
-```
-
-```
-## [1] "pid"    "sex"    "age"    "occup"  "occupc"
-```
-
-```r
-str(hni04.person)
-```
-
-```
-## 'data.frame':	58018 obs. of  5 variables:
-##  $ pid   : Factor w/ 58018 levels "2","3","4","5",..: 1 2 3 4 5 6 7 8 9 10 ...
-##  $ sex   : Factor w/ 2 levels "Male","Female": 1 1 1 1 1 2 2 1 1 1 ...
-##  $ age   : Ord.factor w/ 18 levels "[0, 5["<"[5, 10["<..: 10 12 7 7 6 6 6 13 5 17 ...
-##  $ occup : Factor w/ 18 levels "[Undocumented_1]",..: 2 3 5 5 8 5 5 14 14 14 ...
-##  $ occupc: Factor w/ 6 levels "Blue-collar",..: 2 2 2 2 1 2 2 5 5 5 ...
-```
-
-```r
-levels(hni04.person$sex)
-```
-
-```
-## [1] "Male"   "Female"
-```
-
-```r
-levels(hni04.person$age)
-```
-
-```
-##  [1] "[0, 5["    "[5, 10["   "[10, 15["  "[15, 20["  "[20, 25[" 
-##  [6] "[25, 30["  "[30, 35["  "[35, 40["  "[40, 45["  "[45, 50[" 
-## [11] "[50, 55["  "[55, 60["  "[60, 65["  "[65, 70["  "[70, 75[" 
-## [16] "[75, 80["  "[80, 85["  "[85, Inf["
-```
-
-```r
-levels(hni04.person$occup)
-```
-
-```
-##  [1] "[Undocumented_1]"                      
-##  [2] "Leader of branches, units"             
-##  [3] "Professional"                          
-##  [4] "Technical and associate professional"  
-##  [5] "Clerical worker"                       
-##  [6] "Service worker, shop, market sales"    
-##  [7] "Skilled agriculture, forestry, fishery"
-##  [8] "Craft and related trades"              
-##  [9] "Plant, machine operator, assembler"    
-## [10] "Elementary occupation"                 
-## [11] "Elementary student"                    
-## [12] "High school & university student"      
-## [13] "Housewife"                             
-## [14] "Jobless, retired"                      
-## [15] "[Undocumented_2]"                      
-## [16] "[Undocumented_3]"                      
-## [17] "[Undocumented_4]"                      
-## [18] "Unknown"
-```
-
-```r
-levels(hni04.person$occupc)
-```
-
-```
-## [1] "Blue-collar"             "White-collar"           
-## [3] "Student"                 "Housewife, househusband"
-## [5] "Unemployed, retired"     "Other, unknown"
-```
-
-```r
-with(hni04.person, table(age, sex))
-```
-
-```
-##            sex
-## age         Male Female
-##   [0, 5[       1      0
-##   [5, 10[    870    818
-##   [10, 15[  1873   1714
-##   [15, 20[  2338   2224
-##   [20, 25[  2970   3204
-##   [25, 30[  2914   3071
-##   [30, 35[  2478   2294
-##   [35, 40[  1684   1632
-##   [40, 45[  1892   1988
-##   [45, 50[  2319   2412
-##   [50, 55[  2133   2174
-##   [55, 60[  1652   2089
-##   [60, 65[  1693   1643
-##   [65, 70[  1644   1343
-##   [70, 75[  1235    981
-##   [75, 80[   709    618
-##   [80, 85[   312    461
-##   [85, Inf[  175    460
+## hni04.person 
+## 
+##  6  Variables      34846  Observations
+## ---------------------------------------------------------------------------
+## pid 
+##       n missing  unique 
+##   34846       0   34846 
+## 
+## lowest : 2     3     4     5     6    
+## highest: 47486 47489 47491 47492 47493 
+## ---------------------------------------------------------------------------
+## sex 
+##       n missing  unique 
+##   34846       0       2 
+## 
+## Male (17343, 50%), Female (17503, 50%) 
+## ---------------------------------------------------------------------------
+## age 
+##       n missing  unique 
+##   34846       0      18 
+## 
+##           [0, 5[ [5, 10[ [10, 15[ [15, 20[ [20, 25[ [25, 30[ [30, 35[
+## Frequency      1    1033     2265     2594     3521     3507     2957
+## %              0       3        7        7       10       10        8
+##           [35, 40[ [40, 45[ [45, 50[ [50, 55[ [55, 60[ [60, 65[ [65, 70[
+## Frequency     1943     2285     2892     2546     2340     2122     1926
+## %                6        7        8        7        7        6        6
+##           [70, 75[ [75, 80[ [80, 85[ [85, Inf[
+## Frequency     1360      803      433       318
+## %                4        2        1         1
+## ---------------------------------------------------------------------------
+## occup 
+##       n missing  unique 
+##   34846       0      18 
+## 
+## [Undocumented_1] (7, 0%) 
+## Leader of branches, units (553, 2%) 
+## Professional (1417, 4%) 
+## Technical and associate professional (1493, 4%) 
+## Clerical worker (5250, 15%) 
+## Service worker, shop, market sales (578, 2%) 
+## Skilled agriculture, forestry, fishery (1802, 5%) 
+## Craft and related trades (1372, 4%) 
+## Plant, machine operator, assembler (569, 2%) 
+## Elementary occupation (1387, 4%) 
+## Elementary student (5391, 15%) 
+## High school & university student (1896, 5%) 
+## Housewife (1012, 3%), Jobless, retired (9642, 28%) 
+## [Undocumented_2] (2253, 6%) 
+## [Undocumented_3] (80, 0%) 
+## [Undocumented_4] (60, 0%), Unknown (84, 0%) 
+## ---------------------------------------------------------------------------
+## occupc 
+##       n missing  unique 
+##   34846       0       6 
+## 
+## Blue-collar (5130, 15%), White-collar (9291, 27%) 
+## Student (7287, 21%) 
+## Housewife, househusband (1012, 3%) 
+## Unemployed, retired (9642, 28%) 
+## Other, unknown (2484, 7%) 
+## ---------------------------------------------------------------------------
+## dist 
+##       n missing  unique    Mean     .05     .10     .25     .50     .75 
+##   34846       0   34754   11522    1289    1938    3774    7880   15211 
+##     .90     .95 
+##   24994   33378 
+## 
+## lowest :      0.00     14.97     30.46     55.55     61.39
+## highest: 126406.08 126643.55 135625.47 152718.42 182414.31 
+## ---------------------------------------------------------------------------
 ```
 
 ![plot of chunk plotHistHni04Person](./analysis_files/figure-html/plotHistHni04Person.png) 
@@ -243,120 +184,83 @@ with(hni04.person, table(age, sex))
 
 
 
-The data were captured on October 1-2, 2002 with a sample size of 297,043 people.
+The data were captured on October 1-2, 2002 with a sample size of 36,713 people.  The personal data occupies 2.9 Mb of memory.
 
 Data set description:
 
 
 ```r
-format(object.size(jkt02.person), units = "auto")
+describe(jkt02.person)
 ```
 
 ```
-## [1] "21.5 Mb"
-```
-
-```r
-names(jkt02.person)
-```
-
-```
-## [1] "pid"    "sex"    "age"    "occup"  "occupc"
-```
-
-```r
-str(jkt02.person)
-```
-
-```
-## 'data.frame':	297043 obs. of  5 variables:
-##  $ pid   : Factor w/ 297043 levels "1","2","3","4",..: 1 2 3 4 5 6 7 8 9 10 ...
-##  $ sex   : Factor w/ 2 levels "Male","Female": 1 2 1 1 2 1 2 2 1 2 ...
-##  $ age   : Ord.factor w/ 18 levels "[0, 5["<"[5, 10["<..: 8 7 3 14 6 6 5 2 11 10 ...
-##  $ occup : Factor w/ 19 levels "Unknown","Professor, manager, director, etc.",..: 3 1 1 6 17 5 1 1 11 8 ...
-##  $ occupc: Factor w/ 6 levels "Blue-collar",..: 2 6 6 2 1 3 6 6 1 2 ...
-```
-
-```r
-levels(jkt02.person$sex)
-```
-
-```
-## [1] "Male"   "Female"
-```
-
-```r
-levels(jkt02.person$age)
-```
-
-```
-##  [1] "[0, 5["    "[5, 10["   "[10, 15["  "[15, 20["  "[20, 25[" 
-##  [6] "[25, 30["  "[30, 35["  "[35, 40["  "[40, 45["  "[45, 50[" 
-## [11] "[50, 55["  "[55, 60["  "[60, 65["  "[65, 70["  "[70, 75[" 
-## [16] "[75, 80["  "[80, 85["  "[85, Inf["
-```
-
-```r
-levels(jkt02.person$occup)
-```
-
-```
-##  [1] "Unknown"                                  
-##  [2] "Professor, manager, director, etc."       
-##  [3] "Industry owner, retail owner, etc."       
-##  [4] "Engineer, doctor, accountant, pilot, etc."
-##  [5] "Teacher, lecturer"                        
-##  [6] "Administration staff"                     
-##  [7] "Technician"                               
-##  [8] "Waitress"                                 
-##  [9] "Vedor, salesman, etc."                    
-## [10] "Handyman (carpenter, jewelry)"            
-## [11] "Construction, station, port, warehouse"   
-## [12] "Laborer"                                  
-## [13] "Public transport driver"                  
-## [14] "Private driver"                           
-## [15] "Housekeeper, office boy, gardener, etc."  
-## [16] "Farmer, fisherman, etc."                  
-## [17] "Security guard"                           
-## [18] "Others"                                   
-## [19] "Unknown_2"
-```
-
-```r
-levels(jkt02.person$occupc)
-```
-
-```
-## [1] "Blue-collar"             "White-collar"           
-## [3] "Student"                 "Housewife, househusband"
-## [5] "Unemployed, retired"     "Other, unknown"
-```
-
-```r
-with(jkt02.person, table(age, sex))
-```
-
-```
-##            sex
-## age          Male Female
-##   [0, 5[        0      0
-##   [5, 10[   12373  12164
-##   [10, 15[  15586  12744
-##   [15, 20[  15736  17201
-##   [20, 25[  16262  20321
-##   [25, 30[  21772  21490
-##   [30, 35[  16349  12023
-##   [35, 40[  14546  11973
-##   [40, 45[  11686   9937
-##   [45, 50[  10988   8045
-##   [50, 55[   8619   5582
-##   [55, 60[   3855   2624
-##   [60, 65[   4462   2276
-##   [65, 70[   3219   1564
-##   [70, 75[   1863    788
-##   [75, 80[    192     59
-##   [80, 85[     67    425
-##   [85, Inf[     8    244
+## jkt02.person 
+## 
+##  6  Variables      36713  Observations
+## ---------------------------------------------------------------------------
+## pid 
+##       n missing  unique 
+##   36713       0   36713 
+## 
+## lowest : 1     2     3     4     6    
+## highest: 47486 47489 47491 47492 47493 
+## ---------------------------------------------------------------------------
+## sex 
+##       n missing  unique 
+##   36713       0       2 
+## 
+## Male (19196, 52%), Female (17517, 48%) 
+## ---------------------------------------------------------------------------
+## age 
+##       n missing  unique 
+##   36713       0      17 
+## 
+##           [5, 10[ [10, 15[ [15, 20[ [20, 25[ [25, 30[ [30, 35[ [35, 40[
+## Frequency    2964     3489     4190     4502     5135     3671     3400
+## %               8       10       11       12       14       10        9
+##           [40, 45[ [45, 50[ [50, 55[ [55, 60[ [60, 65[ [65, 70[ [70, 75[
+## Frequency     2722     2431     1769      732      783      532      243
+## %                7        7        5        2        2        1        1
+##           [75, 80[ [80, 85[ [85, Inf[
+## Frequency       45       58        47
+## %                0        0         0
+## ---------------------------------------------------------------------------
+## occup 
+##       n missing  unique 
+##   36713       0      18 
+## 
+## Unknown (20723, 56%) 
+## Professor, manager, director, etc. (940, 3%) 
+## Industry owner, retail owner, etc. (1110, 3%) 
+## Engineer, doctor, accountant, pilot, etc. (1340, 4%) 
+## Teacher, lecturer (940, 3%) 
+## Administration staff (2679, 7%) 
+## Technician (909, 2%), Waitress (1778, 5%) 
+## Vedor, salesman, etc. (1594, 4%) 
+## Handyman (carpenter, jewelry) (1206, 3%) 
+## Construction, station, port, warehouse (441, 1%) 
+## Laborer (190, 1%), Public transport driver (186, 1%) 
+## Private driver (751, 2%) 
+## Housekeeper, office boy, gardener, etc. (559, 2%) 
+## Farmer, fisherman, etc. (5, 0%) 
+## Security guard (666, 2%), Others (696, 2%) 
+## ---------------------------------------------------------------------------
+## occupc 
+##       n missing  unique 
+##   36713       0       4 
+## 
+## Blue-collar (4913, 13%), White-collar (9441, 26%) 
+## Student (940, 3%), Other, unknown (21419, 58%) 
+## ---------------------------------------------------------------------------
+## dist 
+##       n missing  unique    Mean     .05     .10     .25     .50     .75 
+##   36713       0   36604   11592    1262    1904    3717    7841   15313 
+##     .90     .95 
+##   25394   34016 
+## 
+## lowest :      0.00     14.97     30.46     55.55     61.39
+## highest: 124771.38 126406.08 126643.55 135625.47 182414.31 
+## ---------------------------------------------------------------------------
 ```
 
 ![plot of chunk plotHistJkt02Person](./analysis_files/figure-html/plotHistJkt02Person.png) 
@@ -380,105 +284,77 @@ with(jkt02.person, table(age, sex))
 ## [1] TRUE
 ```
 
-The data were captured on October 1-2, 1996 with a sample size of 189,335 people.
+The data were captured on October 1-2, 1996 with a sample size of 39,383 people.  The personal data occupies 3.2 Mb of memory.
 
 Data set description:
 
 
 ```r
-format(object.size(mnl96.person), units = "auto")
+describe(mnl96.person)
 ```
 
 ```
-## [1] "13.7 Mb"
-```
-
-```r
-names(mnl96.person)
-```
-
-```
-## [1] "pid"    "sex"    "age"    "occup"  "occupc"
-```
-
-```r
-str(mnl96.person)
-```
-
-```
-## 'data.frame':	189335 obs. of  5 variables:
-##  $ pid   : Factor w/ 189335 levels "1","2","3","4",..: 1 2 3 4 5 6 7 8 9 10 ...
-##  $ sex   : Factor w/ 2 levels "Male","Female": 1 2 1 2 2 1 1 1 2 2 ...
-##  $ age   : Ord.factor w/ 18 levels "[0, 5["<"[5, 10["<..: 8 8 3 3 2 10 4 3 3 4 ...
-##  $ occup : Factor w/ 15 levels "Executive","Professional",..: 8 12 10 10 10 5 11 11 10 11 ...
-##  $ occupc: Factor w/ 6 levels "Blue-collar",..: 2 4 3 3 3 2 3 3 3 3 ...
-```
-
-```r
-levels(mnl96.person$sex)
-```
-
-```
-## [1] "Male"   "Female"
-```
-
-```r
-levels(mnl96.person$age)
-```
-
-```
-##  [1] "[0, 5["    "[5, 10["   "[10, 15["  "[15, 20["  "[20, 25[" 
-##  [6] "[25, 30["  "[30, 35["  "[35, 40["  "[40, 45["  "[45, 50[" 
-## [11] "[50, 55["  "[55, 60["  "[60, 65["  "[65, 70["  "[70, 75[" 
-## [16] "[75, 80["  "[80, 85["  "[85, Inf["
-```
-
-```r
-levels(mnl96.person$occup)
-```
-
-```
-##  [1] "Executive"    "Professional" "Technician"   "Clerical"    
-##  [5] "Service"      "Farmer"       "Trade"        "Operator"    
-##  [9] "Laborer"      "Pupil"        "Student"      "Housewife"   
-## [13] "Jobless"      "Others"       "Unknown"
-```
-
-```r
-levels(mnl96.person$occupc)
-```
-
-```
-## [1] "Blue-collar"             "White-collar"           
-## [3] "Student"                 "Housewife, househusband"
-## [5] "Unemployed, retired"     "Other, unknown"
-```
-
-```r
-with(mnl96.person, table(age, sex))
-```
-
-```
-##            sex
-## age          Male Female
-##   [0, 5[     1291   1326
-##   [5, 10[   11284  10841
-##   [10, 15[  10748  10962
-##   [15, 20[  10389  11931
-##   [20, 25[   9118  11265
-##   [25, 30[   8397  10601
-##   [30, 35[   7498   9573
-##   [35, 40[   6993   8669
-##   [40, 45[   5940   7486
-##   [45, 50[   5137   6032
-##   [50, 55[   3855   4419
-##   [55, 60[   2728   3223
-##   [60, 65[   2077   2328
-##   [65, 70[   1357   1586
-##   [70, 75[    522    616
-##   [75, 80[    249    348
-##   [80, 85[    109    222
-##   [85, Inf[    76    139
+## mnl96.person 
+## 
+##  6  Variables      39383  Observations
+## ---------------------------------------------------------------------------
+## pid 
+##       n missing  unique 
+##   39383       0   39383 
+## 
+## lowest : 1     2     3     4     5    
+## highest: 47484 47486 47489 47491 47492 
+## ---------------------------------------------------------------------------
+## sex 
+##       n missing  unique 
+##   39383       0       2 
+## 
+## Male (18087, 46%), Female (21296, 54%) 
+## ---------------------------------------------------------------------------
+## age 
+##       n missing  unique 
+##   39383       0      18 
+## 
+##           [0, 5[ [5, 10[ [10, 15[ [15, 20[ [20, 25[ [25, 30[ [30, 35[
+## Frequency    508    4237     4408     4947     4471     3891     3301
+## %              1      11       11       13       11       10        8
+##           [35, 40[ [40, 45[ [45, 50[ [50, 55[ [55, 60[ [60, 65[ [65, 70[
+## Frequency     3089     2780     2384     1816     1306     1025      710
+## %                8        7        6        5        3        3        2
+##           [70, 75[ [75, 80[ [80, 85[ [85, Inf[
+## Frequency      281      123       73        33
+## %                1        0        0         0
+## ---------------------------------------------------------------------------
+## occup 
+##       n missing  unique 
+##   39383       0      14 
+## 
+##           Executive Professional Technician Clerical Service Farmer Trade
+## Frequency      4564         1304        808     1202    2366     18   661
+## %                12            3          2        3       6      0     2
+##           Operator Laborer Pupil Student Housewife Jobless Others
+## Frequency     1051    2894  6773    5962      5920    4482   1378
+## %                3       7    17      15        15      11      3
+## ---------------------------------------------------------------------------
+## occupc 
+##       n missing  unique 
+##   39383       0       6 
+## 
+## Blue-collar (3720, 9%), White-collar (11148, 28%) 
+## Student (12735, 32%) 
+## Housewife, househusband (5920, 15%) 
+## Unemployed, retired (4482, 11%) 
+## Other, unknown (1378, 3%) 
+## ---------------------------------------------------------------------------
+## dist 
+##       n missing  unique    Mean     .05     .10     .25     .50     .75 
+##   39383       0   39248   11535    1250    1893    3722    7836   15223 
+##     .90     .95 
+##   25093   33714 
+## 
+## lowest :      0.00     14.97     30.46     55.55     61.39
+## highest: 124771.38 126643.55 135625.47 152718.42 182414.31 
+## ---------------------------------------------------------------------------
 ```
 
 ![plot of chunk plotHistMnl96Person](./analysis_files/figure-html/plotHistMnl96Person.png) 
@@ -499,8 +375,11 @@ with(mnl96.person, table(age, sex))
 
 #### Occupation Group
 
-![plot of chunk plotHistPersonOccupcAll](./analysis_files/figure-html/plotHistPersonOccupcAll.png) 
+![plot of chunk plotHistPersonOccupCAll](./analysis_files/figure-html/plotHistPersonOccupCAll.png) 
 
+#### Distance Traveled
+
+![plot of chunk plotHistPersonDistAll](./analysis_files/figure-html/plotHistPersonDistAll1.png) ![plot of chunk plotHistPersonDistAll](./analysis_files/figure-html/plotHistPersonDistAll2.png) ![plot of chunk plotHistPersonDistAll](./analysis_files/figure-html/plotHistPersonDistAll3.png) 
 
 
 ## Sample Trips
@@ -509,63 +388,84 @@ with(mnl96.person, table(age, sex))
 
 
 
-The 42,111 people in the sample made a total of 251,796 trips.
+The 42,111 people in the sample made a total of 105,121 non-stationary trips. The trip data occupies 5.9 Mb of memory.
 
 Data set description:
 
 
 ```r
-format(object.size(dhk09.trip), units = "auto")
+describe(dhk09.trip)
 ```
 
 ```
-## [1] "10.9 Mb"
-```
-
-```r
-names(dhk09.trip)
-```
-
-```
-## [1] "pid"      "tno"      "activity" "dist"     "pdate_s"  "pdate_e"
-```
-
-```r
-str(dhk09.trip)
-```
-
-```
-## 'data.frame':	251796 obs. of  6 variables:
-##  $ pid     : Factor w/ 42114 levels "1","2","3","4",..: 1 1 1 1 2 2 3 3 4 4 ...
-##  $ tno     : Factor w/ 21 levels "1","2","3","4",..: 2 4 6 8 2 4 2 4 2 4 ...
-##  $ activity: Factor w/ 7 levels "Home","Work",..: 2 1 5 1 4 1 3 1 3 1 ...
-##  $ dist    : num  8467 8469 424 427 2550 ...
-##  $ pdate_s : POSIXct, format: "2009-10-01 08:00:00" "2009-10-01 17:00:00" ...
-##  $ pdate_e : POSIXct, format: "2009-10-01 09:30:00" "2009-10-01 18:29:00" ...
-```
-
-```r
-levels(dhk09.trip$activity)
-```
-
-```
-## [1] "Home"               "Work"               "Education"         
-## [4] "Shopping"           "Social, recreation" "Errand"            
-## [7] "Other, unknown"
-```
-
-```r
-table(dhk09.trip$activity)
-```
-
-```
+## dhk09.trip 
 ## 
-##               Home               Work          Education 
-##             132400              47051              26879 
-##           Shopping Social, recreation             Errand 
-##              12883              13524               3698 
-##     Other, unknown 
-##              15166
+##  6  Variables      105121  Observations
+## ---------------------------------------------------------------------------
+## pid 
+##       n missing  unique 
+##  105121       0   42098 
+## 
+## lowest : 1     2     3     4     5    
+## highest: 47486 47489 47491 47492 47493 
+## ---------------------------------------------------------------------------
+## tno 
+##       n missing  unique 
+##  105121       0      18 
+## 
+##           1     2   3     4   5     6   7    8  9   10 11  12 13 14 15 16
+## Frequency 2 42096 356 41689 184 10873 202 7850 63 1311 27 374  7 58  2 21
+## %         0    40   0    40   0    10   0    7  0    1  0   0  0  0  0  0
+##           18 20
+## Frequency  4  2
+## %          0  0
+## ---------------------------------------------------------------------------
+## activity 
+##       n missing  unique 
+##  105121       0       7 
+## 
+##            Home  Work Education Shopping Social, recreation Errand
+## Frequency 45257 23676     13455     6455               6775   1851
+## %            43    23        13        6                  6      2
+##           Other, unknown
+## Frequency           7652
+## %                      7
+## ---------------------------------------------------------------------------
+## dist 
+##       n missing  unique    Mean     .05     .10     .25     .50     .75 
+##  105121       0  103368    4641   500.1   765.3  1511.2  3064.1  6039.5 
+##     .90     .95 
+## 10120.5 13780.7 
+## 
+## lowest :     4.232     5.451     7.485     7.485     8.853
+## highest: 56457.580 58704.836 61913.059 62614.951 66284.393 
+## ---------------------------------------------------------------------------
+## pdate_s 
+##                   n             missing              unique 
+##              105121                   0                 424 
+##                Mean                 .05                 .10 
+## 2009-10-01 12:05:45 2009-10-01 06:00:00 2009-10-01 07:00:00 
+##                 .25                 .50                 .75 
+## 2009-10-01 08:10:00 2009-10-01 11:30:00 2009-10-01 16:00:00 
+##                 .90                 .95 
+## 2009-10-01 18:45:00 2009-10-01 20:00:00 
+## 
+## lowest : 2009-10-01 00:00:00 2009-10-01 00:21:00 2009-10-01 00:31:00 2009-10-01 00:32:00 2009-10-01 00:33:00
+## highest: 2009-10-01 23:20:00 2009-10-01 23:25:00 2009-10-01 23:29:00 2009-10-01 23:35:00 2009-10-01 23:39:00 
+## ---------------------------------------------------------------------------
+## pdate_e 
+##                   n             missing              unique 
+##              105121                   0                1069 
+##                Mean                 .05                 .10 
+## 2009-10-01 12:43:30 2009-10-01 06:30:00 2009-10-01 07:30:00 
+##                 .25                 .50                 .75 
+## 2009-10-01 09:00:00 2009-10-01 12:06:00 2009-10-01 16:28:00 
+##                 .90                 .95 
+## 2009-10-01 19:27:00 2009-10-01 20:39:00 
+## 
+## lowest : 2009-10-01 01:00:00 2009-10-01 01:04:00 2009-10-01 01:05:00 2009-10-01 01:07:00 2009-10-01 01:09:00
+## highest: 2009-10-01 23:47:00 2009-10-01 23:49:00 2009-10-01 23:50:00 2009-10-01 23:54:00 2009-10-02 06:00:00 
+## ---------------------------------------------------------------------------
 ```
 
 ![plot of chunk plotHistDhk09Trip](./analysis_files/figure-html/plotHistDhk09Trip.png) 
@@ -575,63 +475,79 @@ table(dhk09.trip$activity)
 
 
 
-The 58,018 people in the sample made a total of 301,281 trips.
+The 34,846 people in the sample made a total of 122,530 non-stationary trips. The trip data occupies 6.5 Mb of memory.
 
 Data set description:
 
 
 ```r
-format(object.size(hni04.trip), units = "auto")
+describe(hni04.trip)
 ```
 
 ```
-## [1] "13.4 Mb"
-```
-
-```r
-names(hni04.trip)
-```
-
-```
-## [1] "pid"      "tno"      "activity" "dist"     "pdate_s"  "pdate_e"
-```
-
-```r
-str(hni04.trip)
-```
-
-```
-## 'data.frame':	301281 obs. of  6 variables:
-##  $ pid     : Factor w/ 58018 levels "2","3","4","5",..: 3 3 3 3 5 5 5 6 6 7 ...
-##  $ tno     : Factor w/ 29 levels "1","2","3","4",..: 2 4 6 8 2 4 6 2 4 2 ...
-##  $ activity: Factor w/ 7 levels "Home","Work",..: 2 1 4 1 2 5 1 2 1 2 ...
-##  $ dist    : num  2415 2812 1245 1098 2937 ...
-##  $ pdate_s : POSIXct, format: "2004-10-01 07:00:00" "2004-10-01 17:00:00" ...
-##  $ pdate_e : POSIXct, format: "2004-10-01 07:20:00" "2004-10-01 17:30:00" ...
-```
-
-```r
-levels(hni04.trip$activity)
-```
-
-```
-## [1] "Home"               "Work"               "Education"         
-## [4] "Shopping"           "Social, recreation" "Errand"            
-## [7] "Other, unknown"
-```
-
-```r
-table(hni04.trip$activity)
-```
-
-```
+## hni04.trip 
 ## 
-##               Home               Work          Education 
-##             156085              55745              27244 
-##           Shopping Social, recreation             Errand 
-##              16095               9665              20701 
-##     Other, unknown 
-##                258
+##  6  Variables      122530  Observations
+## ---------------------------------------------------------------------------
+## pid 
+##       n missing  unique 
+##  122530       0   42908 
+## 
+## lowest : 2     4     6     7     8    
+## highest: 75912 75913 75914 75915 75918 
+## ---------------------------------------------------------------------------
+## tno 
+##       n missing  unique 
+##  122530       0      28 
+## 
+## lowest : 1  2  3  4  5 , highest: 24 25 26 27 28 
+## ---------------------------------------------------------------------------
+## activity 
+##       n missing  unique 
+##  122502      28       7 
+## 
+##            Home  Work Education Shopping Social, recreation Errand
+## Frequency 56799 27966     13628     8065               4903  11011
+## %            46    23        11        7                  4      9
+##           Other, unknown
+## Frequency            130
+## %                      0
+## ---------------------------------------------------------------------------
+## dist 
+##       n missing  unique    Mean     .05     .10     .25     .50     .75 
+##  122530       0   76956    3908   327.2   540.9  1160.5  2609.3  5098.8 
+##     .90     .95 
+##  8570.0 11436.6 
+## 
+## lowest :     9.199     9.202     9.207     9.220     9.221
+## highest: 49427.900 51578.803 59683.450 82004.481 97926.501 
+## ---------------------------------------------------------------------------
+## pdate_s 
+##                   n             missing              unique 
+##              122530                   0                 434 
+##                Mean                 .05                 .10 
+## 2004-10-01 11:53:06 2004-10-01 06:15:00 2004-10-01 06:45:00 
+##                 .25                 .50                 .75 
+## 2004-10-01 07:30:00 2004-10-01 11:20:00 2004-10-01 16:30:00 
+##                 .90                 .95 
+## 2004-10-01 17:55:00 2004-10-01 19:30:00 
+## 
+## lowest : 2004-10-01 00:00:00 2004-10-01 01:00:00 2004-10-01 01:15:00 2004-10-01 01:30:00 2004-10-01 02:00:00
+## highest: 2004-10-01 23:20:00 2004-10-01 23:25:00 2004-10-01 23:30:00 2004-10-01 23:40:00 2004-10-01 23:45:00 
+## ---------------------------------------------------------------------------
+## pdate_e 
+##                   n             missing              unique 
+##              122530                   0                 788 
+##                Mean                 .05                 .10 
+## 2004-10-01 12:11:44 2004-10-01 06:40:00 2004-10-01 07:00:00 
+##                 .25                 .50                 .75 
+## 2004-10-01 07:45:00 2004-10-01 11:40:00 2004-10-01 16:50:00 
+##                 .90                 .95 
+## 2004-10-01 18:10:00 2004-10-01 19:45:00 
+## 
+## lowest : 2004-10-01 00:05:00 2004-10-01 00:15:00 2004-10-01 01:10:00 2004-10-01 01:15:00 2004-10-01 01:20:00
+## highest: 2004-10-01 23:40:00 2004-10-01 23:45:00 2004-10-01 23:50:00 2004-10-01 23:55:00 2004-10-01 23:59:00 
+## ---------------------------------------------------------------------------
 ```
 
 ![plot of chunk plotHistHni04Trip](./analysis_files/figure-html/plotHistHni04Trip.png) 
@@ -640,64 +556,76 @@ table(hni04.trip$activity)
 
 
 
-
-The 297,043 people in the sample made a total of 1,788,607 trips.
+The 36,713 people in the sample made a total of 746,149 non-stationary trips. The trip data occupies 41.5 Mb of memory.
 
 Data set description:
 
 
 ```r
-format(object.size(jkt02.trip), units = "auto")
+describe(jkt02.trip)
 ```
 
 ```
-## [1] "77.3 Mb"
-```
-
-```r
-names(jkt02.trip)
-```
-
-```
-## [1] "pid"      "tno"      "activity" "dist"     "pdate_s"  "pdate_e"
-```
-
-```r
-str(jkt02.trip)
-```
-
-```
-## 'data.frame':	1788607 obs. of  6 variables:
-##  $ pid     : Factor w/ 297043 levels "1","2","3","4",..: 2 2 3 3 3 4 4 5 5 6 ...
-##  $ tno     : Factor w/ 33 levels "1","2","3","4",..: 2 4 2 4 6 2 4 2 4 2 ...
-##  $ activity: Factor w/ 7 levels "Home","Work",..: 7 4 7 3 1 2 1 2 1 2 ...
-##  $ dist    : num  976 2851 7098 4004 3959 ...
-##  $ pdate_s : POSIXct, format: "2002-10-01 07:00:00" "2002-10-01 15:30:00" ...
-##  $ pdate_e : POSIXct, format: "2002-10-01 07:15:00" "2002-10-01 15:45:00" ...
-```
-
-```r
-levels(jkt02.trip$activity)
-```
-
-```
-## [1] "Home"               "Work"               "Education"         
-## [4] "Shopping"           "Social, recreation" "Errand"            
-## [7] "Other, unknown"
-```
-
-```r
-table(jkt02.trip$activity)
-```
-
-```
+## jkt02.trip 
 ## 
-##               Home               Work          Education 
-##             965732             304304             215303 
-##           Shopping Social, recreation             Errand 
-##             106896                  0             155493 
-##     Other, unknown 
-##              40227
+##  6  Variables      746149  Observations
+## ---------------------------------------------------------------------------
+## pid 
+##       n missing  unique 
+##  746149       0  297042 
+## 
+## lowest : 1      2      3      4      6     
+## highest: 416994 417004 417009 417027 417029 
+## ---------------------------------------------------------------------------
+## tno 
+##       n missing  unique 
+##  746149       0      26 
+## 
+## lowest : 1  2  3  4  5 , highest: 24 26 28 30 32 
+## ---------------------------------------------------------------------------
+## activity 
+##       n missing  unique 
+##  746149       0       6 
+## 
+##             Home   Work Education Shopping Errand Other, unknown
+## Frequency 334970 152190    107652    53452  77765          20120
+## %             45     20        14        7     10              3
+## ---------------------------------------------------------------------------
+## dist 
+##       n missing  unique    Mean     .05     .10     .25     .50     .75 
+##  746149       0  714595   14836   781.8  1328.5  3619.3 11679.2 22135.0 
+##     .90     .95 
+## 32850.5 41483.7 
+## 
+## lowest : 1.827e+00 2.715e+00 2.891e+00 2.895e+00 2.901e+00
+## highest: 1.123e+05 1.134e+05 1.146e+05 1.152e+05 1.240e+05 
+## ---------------------------------------------------------------------------
+## pdate_s 
+##                   n             missing              unique 
+##              746149                   0                 984 
+##                Mean                 .05                 .10 
+## 2002-10-01 11:42:47 2002-10-01 06:00:00 2002-10-01 06:30:00 
+##                 .25                 .50                 .75 
+## 2002-10-01 07:15:00 2002-10-01 11:50:00 2002-10-01 16:00:00 
+##                 .90                 .95 
+## 2002-10-01 17:50:00 2002-10-01 19:05:00 
+## 
+## lowest : 2002-10-01 00:00:00 2002-10-01 00:08:00 2002-10-01 00:09:00 2002-10-01 00:30:00 2002-10-01 01:00:00
+## highest: 2002-10-01 23:40:00 2002-10-01 23:45:00 2002-10-01 23:50:00 2002-10-01 23:55:00 2002-10-01 23:57:00 
+## ---------------------------------------------------------------------------
+## pdate_e 
+##                   n             missing              unique 
+##              746149                   0                1206 
+##                Mean                 .05                 .10 
+## 2002-10-01 12:13:39 2002-10-01 06:40:00 2002-10-01 06:50:00 
+##                 .25                 .50                 .75 
+## 2002-10-01 08:00:00 2002-10-01 12:05:00 2002-10-01 16:15:00 
+##                 .90                 .95 
+## 2002-10-01 18:30:00 2002-10-01 19:58:00 
+## 
+## lowest : 2002-10-01 00:02:00 2002-10-01 00:05:00 2002-10-01 00:10:00 2002-10-01 00:15:00 2002-10-01 00:20:00
+## highest: 2002-10-01 23:50:00 2002-10-01 23:54:00 2002-10-01 23:55:00 2002-10-01 23:58:00 2002-10-01 23:59:00 
+## ---------------------------------------------------------------------------
 ```
 
 ![plot of chunk plotHistJkt02Trip](./analysis_files/figure-html/plotHistJkt02Trip.png) 
@@ -721,61 +649,48 @@ table(jkt02.trip$activity)
 ## [1] TRUE
 ```
 
-The 189,335 people in the sample made a total of 836,529 trips.
+The 39,383 people in the sample made a total of 324,312 non-stationary trips. The trip data occupies 13.9 Mb of memory.
 
 Data set description:
 
 
 ```r
-format(object.size(mnl96.trip), units = "auto")
+describe(mnl96.trip)
 ```
 
 ```
-## [1] "26.1 Mb"
-```
-
-```r
-names(mnl96.trip)
-```
-
-```
-## [1] "pid"      "tno"      "activity" "dist"
-```
-
-```r
-str(mnl96.trip)
-```
-
-```
-## 'data.frame':	836529 obs. of  4 variables:
-##  $ pid     : Factor w/ 189335 levels "1","2","3","4",..: 1 1 1 1 1 2 3 3 3 3 ...
-##  $ tno     : Factor w/ 40 levels "1","2","3","4",..: 1 2 3 4 5 1 1 2 3 4 ...
-##  $ activity: Factor w/ 7 levels "Home","Work",..: 7 2 7 1 7 1 7 3 7 1 ...
-##  $ dist    : num  NA NA NA NA NA NA NA NA NA NA ...
-```
-
-```r
-levels(mnl96.trip$activity)
-```
-
-```
-## [1] "Home"               "Work"               "Education"         
-## [4] "Shopping"           "Social, recreation" "Errand"            
-## [7] "Other, unknown"
-```
-
-```r
-table(mnl96.trip$activity)
-```
-
-```
+## mnl96.trip 
 ## 
-##               Home               Work          Education 
-##             196537              69837              57787 
-##           Shopping Social, recreation             Errand 
-##              21957              12575               7427 
-##     Other, unknown 
-##             470409
+##  4  Variables      324312  Observations
+## ---------------------------------------------------------------------------
+## pid 
+##       n missing  unique 
+##  324312       0  144786 
+## 
+## lowest : 1      3      4      5      6     
+## highest: 203517 203518 203519 203520 203521 
+## ---------------------------------------------------------------------------
+## tno 
+##       n missing  unique 
+##  324312       0      38 
+## 
+## lowest : 1  2  3  4  5 , highest: 34 35 36 37 39 
+## ---------------------------------------------------------------------------
+## activity 
+##       n missing  unique 
+##  324312       0       7 
+## 
+##             Home  Work Education Shopping Social, recreation Errand
+## Frequency 152507 69545     57706    21903              12531   7397
+## %             47    21        18        7                  4      2
+##           Other, unknown
+## Frequency           2723
+## %                      1
+## ---------------------------------------------------------------------------
+## 
+## Variables with all observations missing:
+## 
+## [1] dist
 ```
 
 ![plot of chunk plotHistMnl96Trip](./analysis_files/figure-html/plotHistMnl96Trip.png) 
@@ -792,88 +707,115 @@ table(mnl96.trip$activity)
 
 
 
-The 42,111 people in the sample made a total of 314,029 subtrips. 46.7% of these are actually stationarity events, which reduces the true number of subtrips to 167,354.
+The 42,111 people in the sample made a total of 314,029 subtrips. 46.7% of these are actually stationarity events, which reduces the true number of subtrips to 167,354. The subtrip data occupies 5.9 Mb of memory.
 
 Data set description:
 
 
 ```r
-format(object.size(dhk09.subtrip), units = "auto")
+describe(dhk09.subtrip)
 ```
 
 ```
-## [1] "10.6 Mb"
-```
-
-```r
-names(dhk09.subtrip)
-```
-
-```
-## [1] "pid"      "tno"      "sno"      "tmode"    "tmodec"   "activity"
-## [7] "dist"     "pdate_s"  "pdate_e"
-```
-
-```r
-str(dhk09.subtrip)
-```
-
-```
-## 'data.frame':	167354 obs. of  9 variables:
-##  $ pid     : Factor w/ 42114 levels "1","2","3","4",..: 25 25 26 26 27 27 28 28 28 28 ...
-##  $ tno     : Factor w/ 21 levels "1","2","3","4",..: 8 8 2 4 2 4 2 4 6 8 ...
-##  $ sno     : Factor w/ 5 levels "1","2","3","4",..: 1 2 1 1 1 1 1 1 1 1 ...
-##  $ tmode   : Factor w/ 22 levels "Walking","Bicycle",..: 1 15 1 1 1 1 6 6 6 6 ...
-##  $ tmodec  : Factor w/ 9 levels "Walking","Bicycle",..: 1 4 1 1 1 1 5 5 5 5 ...
-##  $ activity: Factor w/ 7 levels "Home","Work",..: 1 1 3 1 3 1 2 7 7 1 ...
-##  $ dist    : num  2189 1318 1177 1177 869 ...
-##  $ pdate_s : POSIXct, format: "2009-10-01 21:00:00" "2009-10-01 21:10:00" ...
-##  $ pdate_e : POSIXct, format: "2009-10-01 21:10:00" "2009-10-01 21:20:00" ...
-```
-
-```r
-levels(dhk09.subtrip$tmodec)
-```
-
-```
-## [1] "Walking"    "Bicycle"    "Motorcycle" "Taxi"       "Car"       
-## [6] "Truck"      "Bus"        "Railway"    "Boat"
-```
-
-```r
-table(dhk09.subtrip$tmodec)
-```
-
-```
+## dhk09.subtrip 
 ## 
-##    Walking    Bicycle Motorcycle       Taxi        Car      Truck 
-##      65527        410       1529      60471       7563         57 
-##        Bus    Railway       Boat 
-##      31797          0          0
-```
-
-```r
-levels(dhk09.subtrip$activity)
-```
-
-```
-## [1] "Home"               "Work"               "Education"         
-## [4] "Shopping"           "Social, recreation" "Errand"            
-## [7] "Other, unknown"
-```
-
-```r
-table(dhk09.subtrip$activity)
-```
-
-```
+##  9  Variables      167354  Observations
+## ---------------------------------------------------------------------------
+## pid 
+##       n missing  unique 
+##  167354       0   42098 
 ## 
-##               Home               Work          Education 
-##              70455              40388              19804 
-##           Shopping Social, recreation             Errand 
-##              10308              12183               3227 
-##     Other, unknown 
-##              10989
+## lowest : 1     2     3     4     5    
+## highest: 47486 47489 47491 47492 47493 
+## ---------------------------------------------------------------------------
+## tno 
+##       n missing  unique 
+##  167354       0      18 
+## 
+##           1     2   3     4   5     6   7     8   9   10 11  12 13 14 15
+## Frequency 6 68427 586 64701 254 18095 274 12311 101 1913 42 534  8 67  2
+## %         0    41   0    39   0    11   0     7   0    1  0   0  0  0  0
+##           16 18 20
+## Frequency 26  5  2
+## %          0  0  0
+## ---------------------------------------------------------------------------
+## sno 
+##       n missing  unique 
+##  167354       0       5 
+## 
+##                1     2     3    4   5
+## Frequency 105121 44055 16012 2009 157
+## %             63    26    10    1   0
+## ---------------------------------------------------------------------------
+## tmode 
+##       n missing  unique 
+##  167354       0      18 
+## 
+## Walking (65527, 39%), Bicycle (410, 0%) 
+## Motorcycle (1529, 1%), CNG, mishuk (5684, 3%) 
+## Auto temp (2163, 1%), Car (5348, 3%) 
+## Microbus, jeep (465, 0%) 
+## Minibus, bus (private) (10785, 6%) 
+## Staff bus (908, 1%), School, college bus (686, 0%) 
+## Truck (57, 0%), Auto (private) (52, 0%) 
+## School van (1345, 1%), AC bus (56, 0%) 
+## Rickshaw (54514, 33%), Taxi (273, 0%) 
+## Bus (BRTC) (587, 0%), Bus (not BRTC) (16965, 10%) 
+## ---------------------------------------------------------------------------
+## tmodec 
+##       n missing  unique 
+##  167354       0       7 
+## 
+##           Walking Bicycle Motorcycle  Taxi  Car Truck   Bus
+## Frequency   65527     410       1529 60471 7563    57 31797
+## %              39       0          1    36    5     0    19
+## ---------------------------------------------------------------------------
+## activity 
+##       n missing  unique 
+##  167354       0       7 
+## 
+##            Home  Work Education Shopping Social, recreation Errand
+## Frequency 70455 40388     19804    10308              12183   3227
+## %            42    24        12        6                  7      2
+##           Other, unknown
+## Frequency          10989
+## %                      7
+## ---------------------------------------------------------------------------
+## dist 
+##       n missing  unique    Mean     .05     .10     .25     .50     .75 
+##  167354       0  154776    2915   426.9   636.7  1153.6  2060.8  3550.9 
+##     .90     .95 
+##  5873.1  8358.5 
+## 
+## lowest :     3.640     4.232     5.451     7.485     7.485
+## highest: 50500.481 50500.493 52381.155 58704.836 66284.393 
+## ---------------------------------------------------------------------------
+## pdate_s 
+##                   n             missing              unique 
+##              167354                   0                1295 
+##                Mean                 .05                 .10 
+## 2009-10-01 12:16:52 2009-10-01 06:00:00 2009-10-01 07:00:00 
+##                 .25                 .50                 .75 
+## 2009-10-01 08:30:00 2009-10-01 11:44:00 2009-10-01 16:00:00 
+##                 .90                 .95 
+## 2009-10-01 19:00:00 2009-10-01 20:00:00 
+## 
+## lowest : 2009-10-01 00:00:00 2009-10-01 00:20:00 2009-10-01 00:21:00 2009-10-01 00:31:00 2009-10-01 00:32:00
+## highest: 2009-10-01 23:30:00 2009-10-01 23:35:00 2009-10-01 23:37:00 2009-10-01 23:39:00 2009-10-02 01:30:00 
+## ---------------------------------------------------------------------------
+## pdate_e 
+##                   n             missing              unique 
+##              167354                   0                1326 
+##                Mean                 .05                 .10 
+## 2009-10-01 12:40:36 2009-10-01 06:18:00 2009-10-01 07:29:00 
+##                 .25                 .50                 .75 
+## 2009-10-01 08:52:00 2009-10-01 12:06:00 2009-10-01 16:29:00 
+##                 .90                 .95 
+## 2009-10-01 19:20:00 2009-10-01 20:30:00 
+## 
+## lowest : 2009-10-01 00:20:00 2009-10-01 00:40:00 2009-10-01 00:59:00 2009-10-01 01:00:00 2009-10-01 01:03:00
+## highest: 2009-10-01 23:49:00 2009-10-01 23:50:00 2009-10-01 23:54:00 2009-10-02 01:30:00 2009-10-02 06:00:00 
+## ---------------------------------------------------------------------------
 ```
 
 ![plot of chunk plotHistDhk09Subtrip](./analysis_files/figure-html/plotHistDhk09Subtrip.png) 
@@ -882,88 +824,108 @@ table(dhk09.subtrip$activity)
 
 
 
-The 58,018 people in the sample made a total of 302,813 subtrips. 59.0% of these are actually stationarity events, which reduces the true number of subtrips to 124,062.
+The 34,846 people in the sample made a total of 302,813 subtrips. 59.0% of these are actually stationarity events, which reduces the true number of subtrips to 124,062. The subtrip data occupies 6.5 Mb of memory.
 
 Data set description:
 
 
 ```r
-format(object.size(hni04.subtrip), units = "auto")
+describe(hni04.subtrip)
 ```
 
 ```
-## [1] "9.3 Mb"
-```
-
-```r
-names(hni04.subtrip)
-```
-
-```
-## [1] "pid"      "tno"      "sno"      "tmode"    "tmodec"   "activity"
-## [7] "dist"     "pdate_s"  "pdate_e"
-```
-
-```r
-str(hni04.subtrip)
-```
-
-```
-## 'data.frame':	124062 obs. of  9 variables:
-##  $ pid     : Factor w/ 58018 levels "2","3","4","5",..: 1 1 3 3 3 3 5 5 5 6 ...
-##  $ tno     : Factor w/ 29 levels "1","2","3","4",..: 2 4 2 4 6 8 2 4 6 2 ...
-##  $ sno     : Factor w/ 4 levels "1","2","3","4": 1 1 1 1 1 1 1 1 1 1 ...
-##  $ tmode   : Factor w/ 21 levels "Walking","Bicycle",..: 3 3 3 3 3 3 3 3 3 4 ...
-##  $ tmodec  : Factor w/ 9 levels "Walking","Bicycle",..: 3 3 3 3 3 3 3 3 3 3 ...
-##  $ activity: Factor w/ 7 levels "Home","Work",..: 2 1 2 1 4 1 2 5 1 2 ...
-##  $ dist    : num  10674 11336 2415 2812 1245 ...
-##  $ pdate_s : POSIXct, format: "2004-10-01 06:45:00" "2004-10-01 18:00:00" ...
-##  $ pdate_e : POSIXct, format: "2004-10-01 08:00:00" "2004-10-01 19:00:00" ...
-```
-
-```r
-levels(hni04.subtrip$tmodec)
-```
-
-```
-## [1] "Walking"    "Bicycle"    "Motorcycle" "Taxi"       "Car"       
-## [6] "Truck"      "Bus"        "Railway"    "Boat"
-```
-
-```r
-table(hni04.subtrip$tmodec)
-```
-
-```
+## hni04.subtrip 
 ## 
-##    Walking    Bicycle Motorcycle       Taxi        Car      Truck 
-##      35301      26091      56399        970       1177        302 
-##        Bus    Railway       Boat 
-##       3822          0          0
-```
-
-```r
-levels(hni04.subtrip$activity)
-```
-
-```
-## [1] "Home"               "Work"               "Education"         
-## [4] "Shopping"           "Social, recreation" "Errand"            
-## [7] "Other, unknown"
-```
-
-```r
-table(hni04.subtrip$activity)
-```
-
-```
+##  9  Variables      124062  Observations
+## ---------------------------------------------------------------------------
+## pid 
+##       n missing  unique 
+##  124062       0   42908 
 ## 
-##               Home               Work          Education 
-##              57542              28254              13994 
-##           Shopping Social, recreation             Errand 
-##               8093               4920              11097 
-##     Other, unknown 
-##                134
+## lowest : 2     4     6     7     8    
+## highest: 75912 75913 75914 75915 75918 
+## ---------------------------------------------------------------------------
+## tno 
+##       n missing  unique 
+##  124062       0      28 
+## 
+## lowest : 1  2  3  4  5 , highest: 24 25 26 27 28 
+## ---------------------------------------------------------------------------
+## sno 
+##       n missing  unique 
+##  124062       0       4 
+## 
+## 1 (122530, 99%), 2 (1264, 1%), 3 (134, 0%), 4 (134, 0%) 
+## ---------------------------------------------------------------------------
+## tmode 
+##       n missing  unique 
+##  124062       0      15 
+## 
+## Walking (35301, 28%), Bicycle (26091, 21%) 
+## Motorcycle (driver) (49217, 40%) 
+## Motorcycle (passenger) (7182, 6%) 
+## Car (driver) (599, 0%) 
+## Car (passenger, not taxi) (578, 0%) 
+## Minibus (<=25 pax) (326, 0%) 
+## Standard bus (>25 pax) (2983, 2%) 
+## Cyclo (47, 0%), Xe om (736, 1%), Taxi (187, 0%) 
+## Tourist bus (68, 0%), Company bus (331, 0%) 
+## School bus (114, 0%), Truck (302, 0%) 
+## ---------------------------------------------------------------------------
+## tmodec 
+##       n missing  unique 
+##  124062       0       7 
+## 
+##           Walking Bicycle Motorcycle Taxi  Car Truck  Bus
+## Frequency   35301   26091      56399  970 1177   302 3822
+## %              28      21         45    1    1     0    3
+## ---------------------------------------------------------------------------
+## activity 
+##       n missing  unique 
+##  124034      28       7 
+## 
+##            Home  Work Education Shopping Social, recreation Errand
+## Frequency 57542 28254     13994     8093               4920  11097
+## %            46    23        11        7                  4      9
+##           Other, unknown
+## Frequency            134
+## %                      0
+## ---------------------------------------------------------------------------
+## dist 
+##       n missing  unique    Mean     .05     .10     .25     .50     .75 
+##  124062       0   78095    3860   326.6   537.6  1151.4  2588.8  5060.6 
+##     .90     .95 
+##  8466.1 11274.8 
+## 
+## lowest :     6.231     9.199     9.202     9.207     9.220
+## highest: 46313.503 47065.393 47140.065 49427.900 51578.803 
+## ---------------------------------------------------------------------------
+## pdate_s 
+##                   n             missing              unique 
+##              124062                   0                 624 
+##                Mean                 .05                 .10 
+## 2004-10-01 11:53:13 2004-10-01 06:15:00 2004-10-01 06:40:00 
+##                 .25                 .50                 .75 
+## 2004-10-01 07:30:00 2004-10-01 11:25:00 2004-10-01 16:30:00 
+##                 .90                 .95 
+## 2004-10-01 17:55:00 2004-10-01 19:30:00 
+## 
+## lowest : 2004-10-01 00:00:00 2004-10-01 01:00:00 2004-10-01 01:15:00 2004-10-01 01:30:00 2004-10-01 02:00:00
+## highest: 2004-10-01 23:20:00 2004-10-01 23:25:00 2004-10-01 23:30:00 2004-10-01 23:40:00 2004-10-01 23:45:00 
+## ---------------------------------------------------------------------------
+## pdate_e 
+##                   n             missing              unique 
+##              124062                   0                 873 
+##                Mean                 .05                 .10 
+## 2004-10-01 12:11:37 2004-10-01 06:35:00 2004-10-01 07:00:00 
+##                 .25                 .50                 .75 
+## 2004-10-01 07:45:00 2004-10-01 11:40:00 2004-10-01 16:50:00 
+##                 .90                 .95 
+## 2004-10-01 18:10:00 2004-10-01 19:45:00 
+## 
+## lowest : 2004-10-01 00:05:00 2004-10-01 00:15:00 2004-10-01 01:10:00 2004-10-01 01:15:00 2004-10-01 01:20:00
+## highest: 2004-10-01 23:40:00 2004-10-01 23:45:00 2004-10-01 23:50:00 2004-10-01 23:55:00 2004-10-01 23:59:00 
+## ---------------------------------------------------------------------------
 ```
 
 ![plot of chunk plotHistHni04Subtrip](./analysis_files/figure-html/plotHistHni04Subtrip.png) 
@@ -987,7 +949,7 @@ table(hni04.subtrip$activity)
 ## [1] TRUE
 ```
 
-The 297,043 people in the sample made a total of 2,101,280 subtrips. 49.6% of these are actually stationarity events, which reduces the true number of subtrips to 1,058,822.
+The 36,713 people in the sample made a total of 2,101,280 subtrips. 49.6% of these are actually stationarity events, which reduces the true number of subtrips to 1,058,822.
 
 Data set description:
 
@@ -1092,7 +1054,7 @@ table(jkt02.subtrip$activity)
 ## [1] TRUE
 ```
 
-The 189,335 people in the sample made a total of 1,077,258 subtrips. 47.5% of these are actually stationarity events, which reduces the true number of subtrips to 565,041.
+The 39,383 people in the sample made a total of 1,077,258 subtrips. 47.5% of these are actually stationarity events, which reduces the true number of subtrips to 565,041.
 
 Data set description:
 
@@ -1182,18 +1144,6 @@ table(mnl96.subtrip$activity)
 
 
 
-## Mobility Behavior
-
-### Dhaka 2009
-
-### Hanoi 2004
-
-### Jakarta 2002
-
-### Metro Manila 1996
-
-
-
 ## Spatio-Temporal Distribution of People
 
 This section covers the analysis of the distribution of people in all four cities over space and time. For analysis purposes we generated concentric ring buffers in 5km distances from the centers of all four cities (as per the OpenStreetMap data).
@@ -1202,17 +1152,13 @@ This section covers the analysis of the distribution of people in all four citie
 
 
 
-![plot of chunk plotSTDistributionDhk09Absolute](./analysis_files/figure-html/plotSTDistributionDhk09Absolute.png) 
-
-![plot of chunk plotSTDistributionDhk09Relative](./analysis_files/figure-html/plotSTDistributionDhk09Relative.png) 
+![plot of chunk plotSTDistributionDhk09](./analysis_files/figure-html/plotSTDistributionDhk09.png) 
 
 ### Hanoi 2004
 
 
 
-![plot of chunk plotSTDistributionHni04Absolute](./analysis_files/figure-html/plotSTDistributionHni04Absolute.png) 
-
-![plot of chunk plotSTDistributionHni04Relative](./analysis_files/figure-html/plotSTDistributionHni04Relative.png) 
+![plot of chunk plotSTDistributionHni04](./analysis_files/figure-html/plotSTDistributionHni04.png) 
 
 ### Jakarta 2002
 
@@ -1220,9 +1166,7 @@ This section covers the analysis of the distribution of people in all four citie
 
 ### Comparison Across Cities
 
-![plot of chunk plotSTDistALlAbs](./analysis_files/figure-html/plotSTDistALlAbs.png) 
-
-![plot of chunk plotSTDistALlRel](./analysis_files/figure-html/plotSTDistALlRel.png) 
+![plot of chunk plotSTDistAll](./analysis_files/figure-html/plotSTDistAll.png) 
 
 
 
