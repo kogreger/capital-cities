@@ -35,6 +35,7 @@ source("ggplot2Helper.R")
 ## initialize ggplot and style presets
 theme_set(theme_bw())
 gradientAge <- c(220, 350)
+gradientDistance <- c(220, 350)
 ```
 
 ```{r loadVariableLabels, eval = TRUE, echo = FALSE, message = FALSE, cache = TRUE}
@@ -578,11 +579,13 @@ describe(dhk09.trip)
 ```
 
 ```{r plotHistDhk09Trip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
-plotDhk09Activity <- ggplot(dhk09.trip, aes(activity)) +
+plotDhk09Activity <- ggplot(dhk09.trip, aes(activity, fill = activity)) +
   geom_bar() +
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(limits = labelsActivity[, 2]) + 
-  labs(title = "Dhaka 2009, Activity", x = "Activity", y = "Count")
+  scale_fill_brewer(palette = "Set1", name = "Activity", drop = FALSE) + 
+  labs(title = "Dhaka 2009, Activity", x = "Activity", y = "Count") + 
+  theme(legend.position = "none")
 grid.arrange(plotDhk09Activity, 
              ncol = 1)
 ```
@@ -616,11 +619,13 @@ describe(hni04.trip)
 ```
 
 ```{r plotHistHni04Trip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
-plotHni04Activity <- ggplot(hni04.trip, aes(activity)) +
+plotHni04Activity <- ggplot(hni04.trip, aes(activity, fill = activity)) +
   geom_bar() +
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(limits = labelsActivity[, 2]) + 
-  labs(title = "Hanoi 2004, Activity", x = "Activity", y = "Count")
+  scale_fill_brewer(palette = "Set1", name = "Activity", drop = FALSE) + 
+  labs(title = "Hanoi 2004, Activity", x = "Activity", y = "Count") + 
+  theme(legend.position = "none")
 grid.arrange(plotHni04Activity, 
              ncol = 1)
 ```
@@ -653,11 +658,13 @@ describe(jkt02.trip)
 ```
 
 ```{r plotHistJkt02Trip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
-plotJkt02Activity <- ggplot(jkt02.trip, aes(activity)) +
+plotJkt02Activity <- ggplot(jkt02.trip, aes(activity, fill = activity)) +
   geom_bar() +
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(limits = labelsActivity[, 2]) + 
-  labs(title = "Jakarta 2002, Activity", x = "Activity", y = "Count")
+  scale_fill_brewer(palette = "Set1", name = "Activity", drop = FALSE) + 
+  labs(title = "Jakarta 2002, Activity", x = "Activity", y = "Count") + 
+  theme(legend.position = "none")
 grid.arrange(plotJkt02Activity, 
              ncol = 1)
 ```
@@ -710,11 +717,13 @@ describe(mnl96.trip)
 ```
 
 ```{r plotHistMnl96Trip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
-plotMnl96Activity <- ggplot(mnl96.trip, aes(activity)) +
+plotMnl96Activity <- ggplot(mnl96.trip, aes(activity, fill = activity)) +
   geom_bar() +
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(limits = labelsActivity[, 2]) + 
-  labs(title = "Metro Manila 1996, Activity", x = "Activity", y = "Count")
+  scale_fill_brewer(palette = "Set1", name = "Activity", drop = FALSE) + 
+  labs(title = "Metro Manila 1996, Activity", x = "Activity", y = "Count") + 
+  theme(legend.position = "none")
 grid.arrange(plotMnl96Activity, 
              ncol = 1)
 ```
@@ -777,12 +786,15 @@ describe(dhk09.subtrip)
 ```
 
 ```{r plotHistDhk09Subtrip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
-plotDhk09TModeC <- ggplot(dhk09.subtrip, aes(tmodec)) +
+plotDhk09TModeC <- ggplot(dhk09.subtrip, aes(tmodec, fill = tmodec)) +
   geom_bar() +
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(limits = labelsTModeC[c(1:9), 2]) + 
+  scale_fill_brewer(palette = "Set1", name = "Mode of Transportation", 
+                    drop = FALSE) + 
   labs(title = "Dhaka 2009, Mode of Transportation", 
-       x = "Mode of Transportation", y = "Count")
+       x = "Mode of Transportation", y = "Count") + 
+  theme(legend.position = "none")
 grid.arrange(plotDhk09TModeC, 
              ncol = 1)
 ```
@@ -832,12 +844,15 @@ describe(hni04.subtrip)
 ```
 
 ```{r plotHistHni04Subtrip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
-plotHni04TModeC <- ggplot(hni04.subtrip, aes(tmodec)) +
+plotHni04TModeC <- ggplot(hni04.subtrip, aes(tmodec, fill = tmodec)) +
   geom_bar() +
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(limits = labelsTModeC[c(1:9), 2]) + 
+  scale_fill_brewer(palette = "Set1", name = "Mode of Transportation", 
+                    drop = FALSE) + 
   labs(title = "Hanoi 2004, Mode of Transportation", 
-       x = "Mode of Transportation", y = "Count")
+       x = "Mode of Transportation", y = "Count") + 
+  theme(legend.position = "none")
 grid.arrange(plotHni04TModeC, 
              ncol = 1)
 ```
@@ -912,12 +927,15 @@ table(jkt02.subtrip$activity)
 ```
 
 ```{r plotHistJkt02Subtrip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
-plotJkt02TModeC <- ggplot(jkt02.subtrip, aes(tmodec)) +
+plotJkt02TModeC <- ggplot(jkt02.subtrip, aes(tmodec, fill = tmodec)) +
   geom_bar() +
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(limits = labelsTModeC[c(1:9), 2]) + 
+  scale_fill_brewer(palette = "Set1", name = "Mode of Transportation", 
+                    drop = FALSE) + 
   labs(title = "Jakarta 2002, Mode of Transportation", 
-       x = "Mode of Transportation", y = "Count")
+       x = "Mode of Transportation", y = "Count") + 
+  theme(legend.position = "none")
 grid.arrange(plotJkt02TModeC, 
              ncol = 1)
 ```
@@ -994,12 +1012,15 @@ table(mnl96.subtrip$activity)
 ```
 
 ```{r plotHistMnl96Subtrip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
-plotMnl96TModeC <- ggplot(mnl96.subtrip, aes(tmodec)) +
+plotMnl96TModeC <- ggplot(mnl96.subtrip, aes(tmodec, fill = tmodec)) +
   geom_bar() +
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(limits = labelsTModeC[c(1:9), 2]) + 
+  scale_fill_brewer(palette = "Set1", name = "Mode of Transportation", 
+                    drop = FALSE) + 
   labs(title = "Metro Manila 1996, Mode of Transportation", 
-       x = "Mode of Transportation", y = "Count")
+       x = "Mode of Transportation", y = "Count") + 
+  theme(legend.position = "none")
 grid.arrange(plotMnl96TModeC, 
              ncol = 1)
 ```
@@ -1012,18 +1033,6 @@ grid.arrange(plotDhk09TModeC, plotHni04TModeC,
              ncol = 2, 
              main = "Mode of Transportation Group")
 ```
-
-
-
-## Mobility Behavior
-
-### Dhaka 2009
-
-### Hanoi 2004
-
-### Jakarta 2002
-
-### Metro Manila 1996
 
 
 
@@ -1043,29 +1052,15 @@ dhk09.stdist$buff <- factor(dhk09.stdist$buff,
                            labels = paste(seq(5, 50, 5), rep("km", 10)))
 ```
 
-```{r plotSTDistributionDhk09Absolute, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
-plotDhk09STDistAbs <- ggplot(dhk09.stdist, aes(x = phour, y = pcount)) + 
+```{r plotSTDistributionDhk09, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
+plotDhk09STDist <- ggplot(dhk09.stdist, aes(x = phour, y = pcount)) + 
   geom_line(aes(color = buff)) + 
   labs(title = "Dhaka 2009, Spatio-Temporal Distribution of People", 
        x = "Time", y = "People") + 
   scale_y_continuous(labels = comma) + 
-  scale_color_discrete(name = "Buffer") + 
+  scale_color_discrete(h = gradientDistance, name = "Buffer", drop = FALSE) + 
   theme(legend.key = element_blank())
-grid.arrange(plotDhk09STDistAbs, 
-             ncol = 1)
-```
-
-```{r plotSTDistributionDhk09Relative, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
-plotDhk09STDistRel <- ggplot(dhk09.stdist, 
-                             aes(x = phour, y = pcount, 
-                                 fill = buff, width = 1)) + 
-  geom_bar(stat = "identity", position = "fill") + 
-  labs(title = "Dhaka 2009, Spatio-Temporal Distribution of People", 
-       x = "Time", y = "People") + 
-  scale_y_continuous(labels = percent_format()) + 
-  scale_fill_discrete(name = "Buffer") + 
-  theme(legend.key = element_blank())
-grid.arrange(plotDhk09STDistRel, 
+grid.arrange(plotDhk09STDist, 
              ncol = 1)
 ```
 
@@ -1081,29 +1076,15 @@ hni04.stdist$buff <- factor(hni04.stdist$buff,
                            labels = paste(seq(5, 50, 5), rep("km", 10)))
 ```
 
-```{r plotSTDistributionHni04Absolute, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
-plotHni04STDistAbs <- ggplot(hni04.stdist, aes(x = phour, y = pcount)) + 
+```{r plotSTDistributionHni04, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
+plotHni04STDist <- ggplot(hni04.stdist, aes(x = phour, y = pcount)) + 
   geom_line(aes(color = buff)) + 
   labs(title = "Hanoi 2004, Spatio-Temporal Distribution of People", 
        x = "Time", y = "People") + 
   scale_y_continuous(labels = comma) + 
-  scale_color_discrete(name = "Buffer") + 
+  scale_color_discrete(h = gradientDistance, name = "Buffer", drop = FALSE) + 
   theme(legend.key = element_blank())
-grid.arrange(plotHni04STDistAbs, 
-             ncol = 1)
-```
-
-```{r plotSTDistributionHni04Relative, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
-plotHni04STDistRel <- ggplot(hni04.stdist, 
-                             aes(x = phour, y = pcount, 
-                                 fill = buff, width = 1)) + 
-  geom_bar(stat = "identity", position = "fill") + 
-  labs(title = "Hanoi 2004, Spatio-Temporal Distribution of People", 
-       x = "Time", y = "People") + 
-  scale_y_continuous(labels = percent_format()) + 
-  scale_fill_discrete(name = "Buffer") + 
-  theme(legend.key = element_blank())
-grid.arrange(plotHni04STDistRel, 
+grid.arrange(plotHni04STDist, 
              ncol = 1)
 ```
 
@@ -1113,31 +1094,15 @@ grid.arrange(plotHni04STDistRel,
 
 ### Comparison Across Cities
 
-```{r plotSTDistALlAbs, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 5, cache = TRUE}
+```{r plotSTDistAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 5, cache = TRUE}
 # extract legend after transposing
-legendSTDist <- extractGgplot2Legend(plotDhk09STDistAbs + 
+legendSTDist <- extractGgplot2Legend(plotDhk09STDist + 
                                        theme(legend.position="bottom"))
 
-grid.arrange(arrangeGrob(plotDhk09STDistAbs + 
+grid.arrange(arrangeGrob(plotDhk09STDist + 
                            labs(title="Dhaka 2009") + 
                            theme(legend.position = "none"),
-                         plotHni04STDistAbs + 
-                           labs(title="Hanoi 2004") + 
-                           theme(legend.position = "none"),
-                         nrow=1),
-             legendSTDist, nrow=2,heights=c(10, 1), 
-             main = "Spatio-Temporal Distribution of People")
-```
-
-```{r plotSTDistALlRel, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 5, cache = TRUE}
-# extract legend after transposing
-legendSTDist <- extractGgplot2Legend(plotDhk09STDistRel + 
-                                       theme(legend.position="bottom"))
-
-grid.arrange(arrangeGrob(plotDhk09STDistRel + 
-                           labs(title="Dhaka 2009") + 
-                           theme(legend.position = "none"),
-                         plotHni04STDistRel + 
+                         plotHni04STDist + 
                            labs(title="Hanoi 2004") + 
                            theme(legend.position = "none"),
                          nrow=1),
