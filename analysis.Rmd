@@ -1,9 +1,19 @@
-# Capital Cities (Urban Mobility)
+---
+output:
+  html_document:
+    keep_md: yes
+    number_sections: yes
+    toc: yes
+---
+
+Capital Cities (Urban Mobility)
+===============================
 
 ```{r initialization, eval = TRUE, echo = FALSE, message = FALSE, cache = TRUE}
 ## initialize and load required packages
 library(ggplot2)
 library(gridExtra)
+library(Hmisc)
 library(RColorBrewer)
 library(RPostgreSQL)
 library(scales)
@@ -22,9 +32,9 @@ con <- dbConnect(drv,
 source("psqlHelper.R")
 source("ggplot2Helper.R")
 
-## initialize ggplot
+## initialize ggplot and style presets
 theme_set(theme_bw())
-colHni04 <- "#e41a1c"
+gradientAge <- c(220, 350)
 ```
 
 ```{r loadVariableLabels, eval = TRUE, echo = FALSE, message = FALSE, cache = TRUE}
@@ -57,10 +67,9 @@ This section covers the descriptive statistics of the four sample populations.
 ### Dhaka 2009
 
 ```{r loadDhk09Person, eval = TRUE, echo = FALSE, cache = TRUE}
-# load person data
-dhk09.person <- psqlGetTable(con, "dhk09", "person")
-# remove unnecessary columns (padd, magfac, magfac2)
-dhk09.person <- dhk09.person[, c("pid", "sex", "age", "occup", "occupc")]
+# load person data incl. total trip distance
+query <- "SELECT r.pid, MIN(r.sex) sex, MIN(r.age) age, MIN(r.occup) occup, MIN(r.occupc) occupc, SUM(t.dist) dist FROM dhk09.person r JOIN dhk09.trip t ON r.pid = t.pid GROUP BY r.pid ORDER BY r.pid;"
+dhk09.person <- psqlQuery(con, query)
 # factorize pid
 dhk09.person$pid <- factor(dhk09.person$pid)
 # remove NA sex (=0) and factorize
@@ -83,19 +92,12 @@ dhk09.person$occupc <- factor(dhk09.person$occupc,
                               labels = labelsOccupC[, 2])
 ```
 
-The data were captured on October 1-2, 2009 with a sample size of `r format(nrow(dhk09.person), big.mark=",")` people.
+The data were captured on October 1-2, 2009 with a sample size of `r format(nrow(dhk09.person), big.mark=",")` people. The personal data occupies `r format(object.size(dhk09.person), units = "auto")` of memory.
 
 Data set description:
 
 ```{r descDhk09Person, cache = TRUE}
-format(object.size(dhk09.person), units = "auto")
-names(dhk09.person)
-str(dhk09.person)
-levels(dhk09.person$sex)
-levels(dhk09.person$age)
-levels(dhk09.person$occup)
-levels(dhk09.person$occupc)
-with(dhk09.person, table(age, sex))
+describe(dhk09.person)
 ```
 
 ```{r plotHistDhk09Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28, cache = TRUE}
@@ -103,40 +105,75 @@ plotDhk09Sex <- ggplot(dhk09.person, aes(sex, fill = sex)) +
   geom_bar() + 
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsSex[, 2]) + 
-  scale_fill_brewer(palette = "Set1") + 
+  scale_fill_brewer(palette = "Set1", drop = FALSE) + 
   labs(title = "Dhaka 2009, Sex", x = "Sex", y = "Count") + 
   theme(legend.position = "none")
-plotDhk09Age <- ggplot(dhk09.person, aes(age)) +
+plotDhk09Age <- ggplot(dhk09.person, aes(age, fill = age)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsAge[, 2]) + 
+  scale_fill_discrete(h = gradientAge, drop = FALSE) + 
   labs(title = "Dhaka 2009, Age", x = "Age", y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+  theme(legend.position = "none")
 plotDhk09Occup <- ggplot(dhk09.person, aes(occup)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsDhk09Occup[, 2]) +
   labs(title = "Dhaka 2009, Occupation", x = "Occupation", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-plotDhk09OccupC <- ggplot(dhk09.person, aes(occupc)) +
+plotDhk09OccupC <- ggplot(dhk09.person, aes(occupc, fill = occupc)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
-  scale_x_discrete(limits = labelsOccupC[, 2]) +
+  scale_x_discrete(limits = labelsOccupC[, 2]) + 
+  scale_fill_brewer(palette = "Set1", drop = FALSE) + 
   labs(title = "Dhaka 2009, Occupation Group", 
        x = "Occupation Group", 
        y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+  theme(legend.position = "none")
+plotDhk09DistSex <- ggplot(dhk09.person, aes(dist / 1000, fill = sex)) +
+  geom_density(alpha = .3, color = NA) +
+  scale_y_continuous(labels = comma) +
+  scale_x_continuous(labels = comma) +
+  scale_fill_brewer(palette = "Set1", name = "Sex", drop = FALSE) + 
+  labs(title = "Dhaka 2009, Distance Traveled", 
+       x = "Distance [km]", 
+       y = "Density") +
+  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+        legend.key = element_blank())
+plotDhk09DistAge <- ggplot(dhk09.person, aes(dist / 1000, fill = age)) +
+  geom_density(alpha = .3, color = NA) +
+  scale_y_continuous(labels = comma) +
+  scale_x_continuous(labels = comma) +
+  scale_fill_discrete(h = gradientAge, name = "Age", drop = FALSE) + 
+  labs(title = "Dhaka 2009, Distance Traveled", 
+       x = "Distance [km]", 
+       y = "Density") +
+  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+        legend.key = element_blank()) + 
+  guides(fill = guide_legend(ncol = 2))
+plotDhk09DistOccupC <- ggplot(dhk09.person, aes(dist / 1000, fill = occupc)) +
+  geom_density(alpha = .3, color = NA) +
+  scale_y_continuous(labels = comma) +
+  scale_x_continuous(labels = comma) +
+  scale_fill_brewer(palette = "Set1", name = "Occupation Group", drop = FALSE) + 
+  labs(title = "Dhaka 2009, Distance Traveled", 
+       x = "Distance [km]", 
+       y = "Density") +
+  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+        legend.key = element_blank())
 grid.arrange(plotDhk09Sex, plotDhk09Age, plotDhk09Occup, plotDhk09OccupC, 
+             plotDhk09DistSex, plotDhk09DistAge, plotDhk09DistOccupC, 
              ncol = 1)
 ```
 
 ### Hanoi 2004
 
 ```{r loadHni04Person, eval = TRUE, echo = FALSE, cache = TRUE}
-# load person data
-hni04.person <- psqlGetTable(con, "hni04", "person")
-# remove unnecessary columns (padd, magfac, magfac2)
-hni04.person <- hni04.person[, c("pid", "sex", "age", "occup", "occupc")]
+# load person data incl. total trip distance
+query <- "SELECT r.pid, MIN(r.sex) sex, MIN(r.age) age, MIN(r.occup) occup, MIN(r.occupc) occupc, SUM(t.dist) dist FROM hni04.person r JOIN dhk09.trip t ON r.pid = t.pid GROUP BY r.pid ORDER BY r.pid;"
+hni04.person <- psqlQuery(con, query)
 # factorize pid
 hni04.person$pid <- factor(hni04.person$pid)
 # factorize sex
@@ -158,60 +195,88 @@ hni04.person$occupc <- factor(hni04.person$occupc,
                               labels = labelsOccupC[, 2])
 ```
 
-The data were captured on October 1-2, 2004 with a sample size of `r format(nrow(hni04.person), big.mark=",")` people.
+The data were captured on October 1-2, 2004 with a sample size of `r format(nrow(hni04.person), big.mark=",")` people.  The personal data occupies `r format(object.size(hni04.person), units = "auto")` of memory.
 
 Data set description:
 
 ```{r descHni04Person, cache = TRUE}
-format(object.size(hni04.person), units = "auto")
-names(hni04.person)
-str(hni04.person)
-levels(hni04.person$sex)
-levels(hni04.person$age)
-levels(hni04.person$occup)
-levels(hni04.person$occupc)
-with(hni04.person, table(age, sex))
+describe(hni04.person)
 ```
 
 ```{r plotHistHni04Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28, cache = TRUE}
-plotHni04Sex <- ggplot(dhk09.person, aes(sex, fill = sex)) +
+plotHni04Sex <- ggplot(hni04.person, aes(sex, fill = sex)) +
   geom_bar() + 
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsSex[, 2]) + 
-  scale_fill_brewer(palette = "Set1") + 
+  scale_fill_brewer(palette = "Set1", drop = FALSE) + 
   labs(title = "Hanoi 2004, Sex", x = "Sex", y = "Count") + 
   theme(legend.position = "none")
-plotHni04Age <- ggplot(hni04.person, aes(age)) +
+plotHni04Age <- ggplot(hni04.person, aes(age, fill = age)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
-  scale_x_discrete(limits = labelsAge[, 2]) +
+  scale_x_discrete(limits = labelsAge[, 2]) + 
+  scale_fill_discrete(h = gradientAge, drop = FALSE) + 
   labs(title = "Hanoi 2004, Age", x = "Age", y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+  theme(legend.position = "none")
 plotHni04Occup <- ggplot(hni04.person, aes(occup)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsHni04Occup[, 2]) +
   labs(title = "Hanoi 2004, Occupation", x = "Occupation", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-plotHni04OccupC <- ggplot(hni04.person, aes(occupc)) +
+plotHni04OccupC <- ggplot(hni04.person, aes(occupc, fill = occupc)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
-  scale_x_discrete(limits = labelsOccupC[, 2]) +
+  scale_x_discrete(limits = labelsOccupC[, 2]) + 
+  scale_fill_brewer(palette = "Set1", drop = FALSE) + 
   labs(title = "Hanoi 2004, Occupation Group", 
        x = "Occupation Group", 
        y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+  theme(legend.position = "none")
+plotHni04DistSex <- ggplot(hni04.person, aes(dist / 1000, fill = sex)) +
+  geom_density(alpha = .3, color = NA) +
+  scale_y_continuous(labels = comma) +
+  scale_x_continuous(labels = comma) +
+  scale_fill_brewer(palette = "Set1", name = "Sex", drop = FALSE) + 
+  labs(title = "Hanoi 2004, Distance Traveled", 
+       x = "Distance [km]", 
+       y = "Density") +
+  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+        legend.key = element_blank())
+plotHni04DistAge <- ggplot(hni04.person, aes(dist / 1000, fill = age)) +
+  geom_density(alpha = .3, color = NA) +
+  scale_y_continuous(labels = comma) +
+  scale_x_continuous(labels = comma) +
+  scale_fill_discrete(h = gradientAge, name = "Age", drop = FALSE) + 
+  labs(title = "Hanoi 2004, Distance Traveled", 
+       x = "Distance [km]", 
+       y = "Density") +
+  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+        legend.key = element_blank()) + 
+  guides(fill = guide_legend(ncol = 2))
+plotHni04DistOccupC <- ggplot(hni04.person, aes(dist / 1000, fill = occupc)) +
+  geom_density(alpha = .3, color = NA) +
+  scale_y_continuous(labels = comma) +
+  scale_x_continuous(labels = comma) +
+  scale_fill_brewer(palette = "Set1", name = "Occupation Group", drop = FALSE) + 
+  labs(title = "Hanoi 2004, Distance Traveled", 
+       x = "Distance [km]", 
+       y = "Density") +
+  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+        legend.key = element_blank())
 grid.arrange(plotHni04Sex, plotHni04Age, plotHni04Occup, plotHni04OccupC, 
+             plotHni04DistSex, plotHni04DistAge, plotHni04DistOccupC, 
              ncol = 1)
 ```
 
 ### Jakarta 2002
 
 ```{r loadJkt02Person, eval = TRUE, echo = FALSE, cache = TRUE}
-# load person data
-jkt02.person <- psqlGetTable(con, "jkt02", "person")
-# remove unnecessary columns (padd, magfac, magfac2)
-jkt02.person <- jkt02.person[, c("pid", "sex", "age", "occup", "occupc")]
+# load person data incl. total trip distance
+query <- "SELECT r.pid, MIN(r.sex) sex, MIN(r.age) age, MIN(r.occup) occup, MIN(r.occupc) occupc, SUM(t.dist) dist FROM jkt02.person r JOIN dhk09.trip t ON r.pid = t.pid GROUP BY r.pid ORDER BY r.pid;"
+jkt02.person <- psqlQuery(con, query)
 # factorize pid
 jkt02.person$pid <- factor(jkt02.person$pid)
 # factorize sex
@@ -233,57 +298,86 @@ jkt02.person$occupc <- factor(jkt02.person$occupc,
                               labels = labelsOccupC[, 2])
 ```
 
-The data were captured on October 1-2, 2002 with a sample size of `r format(nrow(jkt02.person), big.mark=",")` people.
+The data were captured on October 1-2, 2002 with a sample size of `r format(nrow(jkt02.person), big.mark=",")` people.  The personal data occupies `r format(object.size(jkt02.person), units = "auto")` of memory.
 
 Data set description:
 
 ```{r descJkt02Person, cache = TRUE}
-format(object.size(jkt02.person), units = "auto")
-names(jkt02.person)
-str(jkt02.person)
-levels(jkt02.person$sex)
-levels(jkt02.person$age)
-levels(jkt02.person$occup)
-levels(jkt02.person$occupc)
-with(jkt02.person, table(age, sex))
+describe(jkt02.person)
 ```
 
 ```{r plotHistJkt02Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28, cache = TRUE}
-plotJkt02Sex <- ggplot(dhk09.person, aes(sex, fill = sex)) +
+plotJkt02Sex <- ggplot(jkt02.person, aes(sex, fill = sex)) +
   geom_bar() + 
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsSex[, 2]) + 
-  scale_fill_brewer(palette = "Set1") + 
+  scale_fill_brewer(palette = "Set1", drop = FALSE) + 
   labs(title = "Jakarta 2002, Sex", x = "Sex", y = "Count") + 
   theme(legend.position = "none")
-plotJkt02Age <- ggplot(jkt02.person, aes(age)) +
+plotJkt02Age <- ggplot(jkt02.person, aes(age, fill = age)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
-  scale_x_discrete(limits = labelsAge[, 2]) +
+  scale_x_discrete(limits = labelsAge[, 2]) + 
+  scale_fill_discrete(h = gradientAge, drop = FALSE) + 
   labs(title = "Jakarta 2002, Age", x = "Age", y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+  theme(legend.position = "none")
 plotJkt02Occup <- ggplot(jkt02.person, aes(occup)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsJkt02Occup[, 2]) +
   labs(title = "Jakarta 2002, Occupation", x = "Occupation", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-plotJkt02OccupC <- ggplot(jkt02.person, aes(occupc)) +
+plotJkt02OccupC <- ggplot(jkt02.person, aes(occupc, fill = occupc)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
-  scale_x_discrete(limits = labelsOccupC[, 2]) +
+  scale_x_discrete(limits = labelsOccupC[, 2]) + 
+  scale_fill_brewer(palette = "Set1", drop = FALSE) + 
   labs(title = "Jakarta 2002, Occupation Group", 
        x = "Occupation Group", 
        y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+  theme(legend.position = "none")
+plotJkt02DistSex <- ggplot(jkt02.person, aes(dist / 1000, fill = sex)) +
+  geom_density(alpha = .3, color = NA) +
+  scale_y_continuous(labels = comma) +
+  scale_x_continuous(labels = comma) +
+  scale_fill_brewer(palette = "Set1", name = "Sex", drop = FALSE) + 
+  labs(title = "Jakarta 2001, Distance Traveled", 
+       x = "Distance [km]", 
+       y = "Density") +
+  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+        legend.key = element_blank())
+plotJkt02DistAge <- ggplot(jkt02.person, aes(dist / 1000, fill = age)) +
+  geom_density(alpha = .3, color = NA) +
+  scale_y_continuous(labels = comma) +
+  scale_x_continuous(labels = comma) +
+  scale_fill_discrete(h = gradientAge, name = "Age", drop = FALSE) + 
+  labs(title = "Jakarta 2001, Distance Traveled", 
+       x = "Distance [km]", 
+       y = "Density") +
+  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+        legend.key = element_blank()) + 
+  guides(fill = guide_legend(ncol = 2))
+plotJkt02DistOccupC <- ggplot(jkt02.person, aes(dist / 1000, fill = occupc)) +
+  geom_density(alpha = .3, color = NA) +
+  scale_y_continuous(labels = comma) +
+  scale_x_continuous(labels = comma) +
+  scale_fill_brewer(palette = "Set1", name = "Occupation Group", drop = FALSE) + 
+  labs(title = "Jakarta 2001, Distance Traveled", 
+       x = "Distance [km]", 
+       y = "Density") +
+  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+        legend.key = element_blank())
 grid.arrange(plotJkt02Sex, plotJkt02Age, plotJkt02Occup, plotJkt02OccupC, 
+             plotJkt02DistSex, plotJkt02DistAge, plotJkt02DistOccupC, 
              ncol = 1)
 ```
 
 ### Metro Manila 1996
 
 ```{r loadMnl96Person, eval = TRUE, echo = FALSE, cache = TRUE}
-# load person data
+# load person data incl. total trip distance
 # @@@ load from database "pflow"
 dbDisconnect(con)
 dbUnloadDriver(drv)
@@ -294,7 +388,8 @@ con <- dbConnect(drv,
                  user = "postgres", 
                  password = "postgres", 
                  dbname = "pflow")
-mnl96.person <- psqlGetTable(con, "mnl96", "person")
+query <- "SELECT r.pid, MIN(r.sex) sex, MIN(r.age) age, MIN(r.occup) occup, MIN(r.occupc) occupc, SUM(t.dist) dist FROM mnl96.person r JOIN dhk09.trip t ON r.pid = t.pid GROUP BY r.pid ORDER BY r.pid;"
+mnl96.person <- psqlQuery(con, query)
 dbDisconnect(con)
 dbUnloadDriver(drv)
 drv <- dbDriver("PostgreSQL")
@@ -304,8 +399,6 @@ con <- dbConnect(drv,
                  user = "postgres", 
                  password = "postgres", 
                  dbname = "postgres")
-# remove unnecessary columns (padd, magfac, magfac2)
-mnl96.person <- mnl96.person[, c("pid", "sex", "age", "occup", "occupc")]
 # factorize pid
 mnl96.person$pid <- factor(mnl96.person$pid)
 # factorize sex
@@ -327,50 +420,79 @@ mnl96.person$occupc <- factor(mnl96.person$occupc,
                               labels = labelsOccupC[, 2])
 ```
 
-The data were captured on October 1-2, 1996 with a sample size of `r format(nrow(mnl96.person), big.mark=",")` people.
+The data were captured on October 1-2, 1996 with a sample size of `r format(nrow(mnl96.person), big.mark=",")` people.  The personal data occupies `r format(object.size(mnl96.person), units = "auto")` of memory.
 
 Data set description:
 
 ```{r descMnl96Person, cache = TRUE}
-format(object.size(mnl96.person), units = "auto")
-names(mnl96.person)
-str(mnl96.person)
-levels(mnl96.person$sex)
-levels(mnl96.person$age)
-levels(mnl96.person$occup)
-levels(mnl96.person$occupc)
-with(mnl96.person, table(age, sex))
+describe(mnl96.person)
 ```
 
 ```{r plotHistMnl96Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28, cache = TRUE}
-plotMnl96Sex <- ggplot(dhk09.person, aes(sex, fill = sex)) +
+plotMnl96Sex <- ggplot(mnl96.person, aes(sex, fill = sex)) +
   geom_bar() + 
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsSex[, 2]) + 
-  scale_fill_brewer(palette = "Set1") + 
+  scale_fill_brewer(palette = "Set1", drop = FALSE) + 
   labs(title = "Metro Manila 1996, Sex", x = "Sex", y = "Count") + 
   theme(legend.position = "none")
-plotMnl96Age <- ggplot(mnl96.person, aes(age)) +
+plotMnl96Age <- ggplot(mnl96.person, aes(age, fill = age)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
-  scale_x_discrete(limits = labelsAge[, 2]) +
+  scale_x_discrete(limits = labelsAge[, 2]) + 
+  scale_fill_discrete(h = gradientAge, drop = FALSE) + 
   labs(title = "Metro Manila 1996, Age", x = "Age", y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+  theme(legend.position = "none")
 plotMnl96Occup <- ggplot(mnl96.person, aes(occup)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsMnl96Occup[, 2]) +
   labs(title = "Metro Manila 1996, Occupation", x = "Occupation", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-plotMnl96OccupC <- ggplot(mnl96.person, aes(occupc)) +
+plotMnl96OccupC <- ggplot(mnl96.person, aes(occupc, fill = occupc)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
-  scale_x_discrete(limits = labelsOccupC[, 2]) +
+  scale_x_discrete(limits = labelsOccupC[, 2]) + 
+  scale_fill_brewer(palette = "Set1", drop = FALSE) + 
   labs(title = "Metro Manila 1996, Occupation Group", 
        x = "Occupation Group", 
        y = "Count") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+  theme(legend.position = "none")
+plotMnl96DistSex <- ggplot(mnl96.person, aes(dist / 1000, fill = sex)) +
+  geom_density(alpha = .3, color = NA) +
+  scale_y_continuous(labels = comma) +
+  scale_x_continuous(labels = comma) +
+  scale_fill_brewer(palette = "Set1", name = "Sex", drop = FALSE) + 
+  labs(title = "Metro Manila 1996, Distance Traveled", 
+       x = "Distance [km]", 
+       y = "Density") +
+  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+        legend.key = element_blank())
+plotMnl96DistAge <- ggplot(mnl96.person, aes(dist / 1000, fill = age)) +
+  geom_density(alpha = .3, color = NA) +
+  scale_y_continuous(labels = comma) +
+  scale_x_continuous(labels = comma) +
+  scale_fill_discrete(h = gradientAge, name = "Age", drop = FALSE) + 
+  labs(title = "Metro Manila 1996, Distance Traveled", 
+       x = "Distance [km]", 
+       y = "Density") +
+  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+        legend.key = element_blank()) + 
+  guides(fill = guide_legend(ncol = 2))
+plotMnl96DistOccupC <- ggplot(mnl96.person, aes(dist / 1000, fill = occupc)) +
+  geom_density(alpha = .3, color = NA) +
+  scale_y_continuous(labels = comma) +
+  scale_x_continuous(labels = comma) +
+  scale_fill_brewer(palette = "Set1", name = "Occupation Group", drop = FALSE) + 
+  labs(title = "Metro Manila 1996, Distance Traveled", 
+       x = "Distance [km]", 
+       y = "Density") +
+  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+        legend.key = element_blank())
 grid.arrange(plotMnl96Sex, plotMnl96Age, plotMnl96Occup, plotMnl96OccupC, 
+             plotMnl96DistSex, plotMnl96DistAge, plotMnl96DistOccupC, 
              ncol = 1)
 ```
 
@@ -402,12 +524,28 @@ grid.arrange(plotDhk09Occup, plotHni04Occup, plotJkt02Occup, plotMnl96Occup,
 
 #### Occupation Group
 
-```{r plotHistPersonOccupcAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10, cache = TRUE}
+```{r plotHistPersonOccupCAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10, cache = TRUE}
 grid.arrange(plotDhk09OccupC, plotHni04OccupC, plotJkt02OccupC, plotMnl96OccupC, 
              ncol = 2, 
              main = "Occupation Group")
 ```
 
+#### Distance Traveled
+
+```{r plotHistPersonDistAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10, cache = TRUE}
+grid.arrange(plotDhk09DistSex, plotHni04DistSex, 
+             plotJkt02DistSex, plotMnl96DistSex, 
+             ncol = 2, 
+             main = "Distance Traveled, by Sex")
+grid.arrange(plotDhk09DistAge, plotHni04DistAge, 
+             plotJkt02DistAge, plotMnl96DistAge, 
+             ncol = 2, 
+             main = "Distance Traveled, by Age")
+grid.arrange(plotDhk09DistOccupC, plotHni04DistOccupC, 
+             plotJkt02DistOccupC, plotMnl96DistOccupC, 
+             ncol = 2, 
+             main = "Distance Traveled, by Occupation Group")
+```
 
 
 ## Sample Trips
@@ -416,8 +554,8 @@ grid.arrange(plotDhk09OccupC, plotHni04OccupC, plotJkt02OccupC, plotMnl96OccupC,
 
 ```{r loadTripsDhk09, eval = TRUE, echo = FALSE, cache = TRUE}
 # load trip data
-# @@@ should be changed to exclude stationarity events
-dhk09.trip <- psqlGetTable(con, "dhk09", "trip")
+query <- "WITH non_stationary AS (SELECT pid, tno FROM dhk09.subtrip WHERE tmodec != 97 GROUP BY pid, tno) SELECT t.* FROM dhk09.trip t JOIN non_stationary s ON t.pid = s.pid AND t.tno = s.tno ORDER BY t.pid, t.tno;"
+dhk09.trip <- psqlQuery(con, query)
 # remove unnecessary column (purpose, puid_s, puid_e)
 dhk09.trip <- dhk09.trip[, c("pid", "tno", "activity", "dist", 
                              "pdate_s", "pdate_e")]
@@ -429,20 +567,14 @@ dhk09.trip$tno <- factor(dhk09.trip$tno)
 dhk09.trip$activity <- factor(dhk09.trip$activity, 
                               levels = c(1:6, 99), 
                               labels = labelsActivity[, 2])
-# merge trip data with person data
-#dhk09.trip.person <- merge(dhk09.trip, dhk09.person, by="pid")
 ```
 
-The `r format(nrow(dhk09.person), big.mark=",")` people in the sample made a total of `r format(nrow(dhk09.trip), big.mark=",")` trips.
+The `r format(nrow(dhk09.person), big.mark=",")` people in the sample made a total of `r format(nrow(dhk09.trip), big.mark=",")` non-stationary trips. The trip data occupies `r format(object.size(dhk09.trip), units = "auto")` of memory.
 
 Data set description:
 
 ```{r descDhk09Trip, cache = TRUE}
-format(object.size(dhk09.trip), units = "auto")
-names(dhk09.trip)
-str(dhk09.trip)
-levels(dhk09.trip$activity)
-table(dhk09.trip$activity)
+describe(dhk09.trip)
 ```
 
 ```{r plotHistDhk09Trip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
@@ -459,8 +591,8 @@ grid.arrange(plotDhk09Activity,
 
 ```{r loadTripsHni04, eval = TRUE, echo = FALSE, cache = TRUE}
 # load trip data
-# @@@ should be changed to exclude stationarity events
-hni04.trip <- psqlGetTable(con, "hni04", "trip")
+query <- "WITH non_stationary AS (SELECT pid, tno FROM hni04.subtrip WHERE tmodec != 97 GROUP BY pid, tno) SELECT t.* FROM hni04.trip t JOIN non_stationary s ON t.pid = s.pid AND t.tno = s.tno ORDER BY t.pid, t.tno;"
+hni04.trip <- psqlQuery(con, query)
 # remove unnecessary column (purpose, puid_s, puid_e)
 hni04.trip <- hni04.trip[, c("pid", "tno", "activity", "dist", 
                              "pdate_s", "pdate_e")]
@@ -472,21 +604,15 @@ hni04.trip$tno <- factor(hni04.trip$tno)
 hni04.trip$activity <- factor(hni04.trip$activity, 
                               levels = c(1:6, 99), 
                               labels = labelsActivity[, 2])
-# merge trip data with person data
-#hni04.trip.person <- merge(hni04.trip, hni04.person, by="pid")
 ```
 
 
-The `r format(nrow(hni04.person), big.mark=",")` people in the sample made a total of `r format(nrow(hni04.trip), big.mark=",")` trips.
+The `r format(nrow(hni04.person), big.mark=",")` people in the sample made a total of `r format(nrow(hni04.trip), big.mark=",")` non-stationary trips. The trip data occupies `r format(object.size(hni04.trip), units = "auto")` of memory.
 
 Data set description:
 
 ```{r descHni04Trip, cache = TRUE}
-format(object.size(hni04.trip), units = "auto")
-names(hni04.trip)
-str(hni04.trip)
-levels(hni04.trip$activity)
-table(hni04.trip$activity)
+describe(hni04.trip)
 ```
 
 ```{r plotHistHni04Trip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
@@ -503,8 +629,8 @@ grid.arrange(plotHni04Activity,
 
 ```{r loadTripsJkt02, eval = TRUE, echo = FALSE, cache = TRUE}
 # load trip data
-# @@@ should be changed to exclude stationarity events
-jkt02.trip <- psqlGetTable(con, "jkt02", "trip")
+query <- "WITH non_stationary AS (SELECT pid, tno FROM jkt02.subtrip WHERE tmodec != 97 GROUP BY pid, tno) SELECT t.* FROM jkt02.trip t JOIN non_stationary s ON t.pid = s.pid AND t.tno = s.tno ORDER BY t.pid, t.tno;"
+jkt02.trip <- psqlQuery(con, query)
 # remove unnecessary column (purpose, puid_s, puid_e)
 jkt02.trip <- jkt02.trip[, c("pid", "tno", "activity", "dist", 
                              "pdate_s", "pdate_e")]
@@ -516,21 +642,14 @@ jkt02.trip$tno <- factor(jkt02.trip$tno)
 jkt02.trip$activity <- factor(jkt02.trip$activity, 
                               levels = c(1:6, 99), 
                               labels = labelsActivity[, 2])
-# merge trip data with person data
-#jkt02.trip.person <- merge(jkt02.trip, jkt02.person, by="pid")
 ```
 
-
-The `r format(nrow(jkt02.person), big.mark=",")` people in the sample made a total of `r format(nrow(jkt02.trip), big.mark=",")` trips.
+The `r format(nrow(jkt02.person), big.mark=",")` people in the sample made a total of `r format(nrow(jkt02.trip), big.mark=",")` non-stationary trips. The trip data occupies `r format(object.size(jkt02.trip), units = "auto")` of memory.
 
 Data set description:
 
 ```{r descJkt02Trip, cache = TRUE}
-format(object.size(jkt02.trip), units = "auto")
-names(jkt02.trip)
-str(jkt02.trip)
-levels(jkt02.trip$activity)
-table(jkt02.trip$activity)
+describe(jkt02.trip)
 ```
 
 ```{r plotHistJkt02Trip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
@@ -557,9 +676,8 @@ con <- dbConnect(drv,
                  user = "postgres", 
                  password = "postgres", 
                  dbname = "pflow")
-
-# @@@ should be changed to exclude stationarity events
-mnl96.trip <- psqlGetTable(con, "mnl96", "trip")
+query <- "WITH non_stationary AS (SELECT pid, tno FROM mnl96.subtrip WHERE tmodec != 97 GROUP BY pid, tno) SELECT t.* FROM mnl96.trip t JOIN non_stationary s ON t.pid = s.pid AND t.tno = s.tno ORDER BY t.pid, t.tno;"
+mnl96.trip <- psqlQuery(con, query)
 dbDisconnect(con)
 dbUnloadDriver(drv)
 drv <- dbDriver("PostgreSQL")
@@ -581,20 +699,14 @@ mnl96.trip$tno <- factor(mnl96.trip$tno)
 mnl96.trip$activity <- factor(mnl96.trip$activity, 
                               levels = c(1:6, 99), 
                               labels = labelsActivity[, 2])
-# merge trip data with person data
-#mnl96.trip.person <- merge(mnl96.trip, mnl96.person, by="pid")
 ```
 
-The `r format(nrow(mnl96.person), big.mark=",")` people in the sample made a total of `r format(nrow(mnl96.trip), big.mark=",")` trips.
+The `r format(nrow(mnl96.person), big.mark=",")` people in the sample made a total of `r format(nrow(mnl96.trip), big.mark=",")` non-stationary trips. The trip data occupies `r format(object.size(mnl96.trip), units = "auto")` of memory.
 
 Data set description:
 
 ```{r descMnl96Trip, cache = TRUE}
-format(object.size(mnl96.trip), units = "auto")
-names(mnl96.trip)
-str(mnl96.trip)
-levels(mnl96.trip$activity)
-table(mnl96.trip$activity)
+describe(mnl96.trip)
 ```
 
 ```{r plotHistMnl96Trip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
@@ -656,18 +768,12 @@ dhk09.subtrip$activity <- factor(dhk09.subtrip$activity,
 #dhk09.subtrip.person <- merge(dhk09.subtrip, dhk09.person, by="pid")
 ```
 
-The `r format(nrow(dhk09.person), big.mark=",")` people in the sample made a total of `r format(dhk09.subtrip.subtrips, big.mark=",")` subtrips. `r format(dhk09.subtrip.stationary / (dhk09.subtrip.subtrips / 100), digits = 1, nsmall = 1)`% of these are actually stationarity events, which reduces the true number of subtrips to `r format(nrow(dhk09.subtrip), big.mark=",")`.
+The `r format(nrow(dhk09.person), big.mark=",")` people in the sample made a total of `r format(dhk09.subtrip.subtrips, big.mark=",")` subtrips. `r format(dhk09.subtrip.stationary / (dhk09.subtrip.subtrips / 100), digits = 1, nsmall = 1)`% of these are actually stationarity events, which reduces the true number of subtrips to `r format(nrow(dhk09.subtrip), big.mark=",")`. The subtrip data occupies `r format(object.size(dhk09.trip), units = "auto")` of memory.
 
 Data set description:
 
 ```{r descDhk09Subtrip, cache = TRUE}
-format(object.size(dhk09.subtrip), units = "auto")
-names(dhk09.subtrip)
-str(dhk09.subtrip)
-levels(dhk09.subtrip$tmodec)
-table(dhk09.subtrip$tmodec)
-levels(dhk09.subtrip$activity)
-table(dhk09.subtrip$activity)
+describe(dhk09.subtrip)
 ```
 
 ```{r plotHistDhk09Subtrip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
@@ -717,18 +823,12 @@ hni04.subtrip$activity <- factor(hni04.subtrip$activity,
 #hni04.subtrip.person <- merge(hni04.subtrip, hni04.person, by="pid")
 ```
 
-The `r format(nrow(hni04.person), big.mark=",")` people in the sample made a total of `r format(hni04.subtrip.subtrips, big.mark=",")` subtrips. `r format(hni04.subtrip.stationary / (hni04.subtrip.subtrips / 100), digits = 1, nsmall = 1)`% of these are actually stationarity events, which reduces the true number of subtrips to `r format(nrow(hni04.subtrip), big.mark=",")`.
+The `r format(nrow(hni04.person), big.mark=",")` people in the sample made a total of `r format(hni04.subtrip.subtrips, big.mark=",")` subtrips. `r format(hni04.subtrip.stationary / (hni04.subtrip.subtrips / 100), digits = 1, nsmall = 1)`% of these are actually stationarity events, which reduces the true number of subtrips to `r format(nrow(hni04.subtrip), big.mark=",")`. The subtrip data occupies `r format(object.size(hni04.trip), units = "auto")` of memory.
 
 Data set description:
 
 ```{r descHni04Subtrip, cache = TRUE}
-format(object.size(hni04.subtrip), units = "auto")
-names(hni04.subtrip)
-str(hni04.subtrip)
-levels(hni04.subtrip$tmodec)
-table(hni04.subtrip$tmodec)
-levels(hni04.subtrip$activity)
-table(hni04.subtrip$activity)
+describe(hni04.subtrip)
 ```
 
 ```{r plotHistHni04Subtrip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}

@@ -35,6 +35,28 @@ GROUP BY buff, date_part('hour', pdate)
 ORDER BY date_part('hour', pdate), buff;
 
 
+-- analyze total moved distance per person
+SELECT r.pid, MIN(r.sex) sex, MIN(r.age) age, MIN(r.occupc) occupc, SUM(t.dist) dist 
+FROM dhk09.person r 
+JOIN dhk09.trip t ON r.pid = t.pid 
+GROUP BY r.pid 
+ORDER BY r.pid;
+
+
+-- select all non-stationary trips
+WITH non_stationary AS 
+(
+	SELECT pid, tno 
+	FROM dhk09.subtrip 
+	WHERE tmodec != 97 
+	GROUP BY pid, tno
+)
+SELECT t.*  
+FROM dhk09.trip t 
+JOIN non_stationary s ON t.pid = s.pid AND t.tno = s.tno 
+ORDER BY t.pid, t.tno;
+
+
 -- analyze commuting distance, duration, and intermediate stops
 -- purpose needs to be one of 1, 2, 3 - has to be matched to each dataset!
 -- activity of preceding trip needs to be one of 1, 2, 3

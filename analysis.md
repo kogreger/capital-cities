@@ -1,4 +1,6 @@
-# Capital Cities (Urban Mobility)
+
+Capital Cities (Urban Mobility)
+===============================
 
 
 
@@ -114,7 +116,7 @@ with(dhk09.person, table(age, sex))
 ##   [85, Inf[    5      3
 ```
 
-![plot of chunk plotHistDhk09Person](figure/plotHistDhk09Person.png) 
+![plot of chunk plotHistDhk09Person](./analysis_files/figure-html/plotHistDhk09Person.png) 
 
 ### Hanoi 2004
 
@@ -235,7 +237,7 @@ with(hni04.person, table(age, sex))
 ##   [85, Inf[  175    460
 ```
 
-![plot of chunk plotHistHni04Person](figure/plotHistHni04Person.png) 
+![plot of chunk plotHistHni04Person](./analysis_files/figure-html/plotHistHni04Person.png) 
 
 ### Jakarta 2002
 
@@ -357,7 +359,7 @@ with(jkt02.person, table(age, sex))
 ##   [85, Inf[     8    244
 ```
 
-![plot of chunk plotHistJkt02Person](figure/plotHistJkt02Person.png) 
+![plot of chunk plotHistJkt02Person](./analysis_files/figure-html/plotHistJkt02Person.png) 
 
 ### Metro Manila 1996
 
@@ -479,25 +481,25 @@ with(mnl96.person, table(age, sex))
 ##   [85, Inf[    76    139
 ```
 
-![plot of chunk plotHistMnl96Person](figure/plotHistMnl96Person.png) 
+![plot of chunk plotHistMnl96Person](./analysis_files/figure-html/plotHistMnl96Person.png) 
 
 ### Comparison Across Cities
 
 #### Sex
 
-![plot of chunk plotHistPersonSexAll](figure/plotHistPersonSexAll.png) 
+![plot of chunk plotHistPersonSexAll](./analysis_files/figure-html/plotHistPersonSexAll.png) 
 
 #### Age
 
-![plot of chunk plotHistPersonAgeAll](figure/plotHistPersonAgeAll.png) 
+![plot of chunk plotHistPersonAgeAll](./analysis_files/figure-html/plotHistPersonAgeAll.png) 
 
 #### Occupation
 
-![plot of chunk plotHistPersonOccupAll](figure/plotHistPersonOccupAll.png) 
+![plot of chunk plotHistPersonOccupAll](./analysis_files/figure-html/plotHistPersonOccupAll.png) 
 
 #### Occupation Group
 
-![plot of chunk plotHistPersonOccupcAll](figure/plotHistPersonOccupcAll.png) 
+![plot of chunk plotHistPersonOccupcAll](./analysis_files/figure-html/plotHistPersonOccupcAll.png) 
 
 
 
@@ -566,7 +568,7 @@ table(dhk09.trip$activity)
 ##              15166
 ```
 
-![plot of chunk plotHistDhk09Trip](figure/plotHistDhk09Trip.png) 
+![plot of chunk plotHistDhk09Trip](./analysis_files/figure-html/plotHistDhk09Trip.png) 
 
 ### Hanoi 2004
 
@@ -632,7 +634,7 @@ table(hni04.trip$activity)
 ##                258
 ```
 
-![plot of chunk plotHistHni04Trip](figure/plotHistHni04Trip.png) 
+![plot of chunk plotHistHni04Trip](./analysis_files/figure-html/plotHistHni04Trip.png) 
 
 ### Jakarta 2002
 
@@ -698,7 +700,7 @@ table(jkt02.trip$activity)
 ##              40227
 ```
 
-![plot of chunk plotHistJkt02Trip](figure/plotHistJkt02Trip.png) 
+![plot of chunk plotHistJkt02Trip](./analysis_files/figure-html/plotHistJkt02Trip.png) 
 
 ### Metro Manila 1996
 
@@ -776,11 +778,11 @@ table(mnl96.trip$activity)
 ##             470409
 ```
 
-![plot of chunk plotHistMnl96Trip](figure/plotHistMnl96Trip.png) 
+![plot of chunk plotHistMnl96Trip](./analysis_files/figure-html/plotHistMnl96Trip.png) 
 
 ### Comparison Across Cities
 
-![plot of chunk plotHistTripActivityAll](figure/plotHistTripActivityAll.png) 
+![plot of chunk plotHistTripActivityAll](./analysis_files/figure-html/plotHistTripActivityAll.png) 
 
 
 
@@ -874,7 +876,7 @@ table(dhk09.subtrip$activity)
 ##              10989
 ```
 
-![plot of chunk plotHistDhk09Subtrip](figure/plotHistDhk09Subtrip.png) 
+![plot of chunk plotHistDhk09Subtrip](./analysis_files/figure-html/plotHistDhk09Subtrip.png) 
 
 ### Hanoi 2004
 
@@ -964,7 +966,7 @@ table(hni04.subtrip$activity)
 ##                134
 ```
 
-![plot of chunk plotHistHni04Subtrip](figure/plotHistHni04Subtrip.png) 
+![plot of chunk plotHistHni04Subtrip](./analysis_files/figure-html/plotHistHni04Subtrip.png) 
 
 ### Jakarta 2002
 
@@ -1069,7 +1071,7 @@ table(jkt02.subtrip$activity)
 ##                  0
 ```
 
-![plot of chunk plotHistJkt02Subtrip](figure/plotHistJkt02Subtrip.png) 
+![plot of chunk plotHistJkt02Subtrip](./analysis_files/figure-html/plotHistJkt02Subtrip.png) 
 
 ### Metro Manila 1996
 
@@ -1172,11 +1174,11 @@ table(mnl96.subtrip$activity)
 ##                  0
 ```
 
-![plot of chunk plotHistMnl96Subtrip](figure/plotHistMnl96Subtrip.png) 
+![plot of chunk plotHistMnl96Subtrip](./analysis_files/figure-html/plotHistMnl96Subtrip.png) 
 
 ### Comparison Across Cities
 
-![plot of chunk plotHistSubtripTModeCAll](figure/plotHistSubtripTModeCAll.png) 
+![plot of chunk plotHistSubtripTModeCAll](./analysis_files/figure-html/plotHistSubtripTModeCAll.png) 
 
 
 
@@ -1200,17 +1202,17 @@ This section covers the analysis of the distribution of people in all four citie
 
 
 
-![plot of chunk plotSTDistributionDhk09Absolute](figure/plotSTDistributionDhk09Absolute.png) 
+![plot of chunk plotSTDistributionDhk09Absolute](./analysis_files/figure-html/plotSTDistributionDhk09Absolute.png) 
 
-![plot of chunk plotSTDistributionDhk09Relative](figure/plotSTDistributionDhk09Relative.png) 
+![plot of chunk plotSTDistributionDhk09Relative](./analysis_files/figure-html/plotSTDistributionDhk09Relative.png) 
 
 ### Hanoi 2004
 
 
 
-![plot of chunk plotSTDistributionHni04Absolute](figure/plotSTDistributionHni04Absolute.png) 
+![plot of chunk plotSTDistributionHni04Absolute](./analysis_files/figure-html/plotSTDistributionHni04Absolute.png) 
 
-![plot of chunk plotSTDistributionHni04Relative](figure/plotSTDistributionHni04Relative.png) 
+![plot of chunk plotSTDistributionHni04Relative](./analysis_files/figure-html/plotSTDistributionHni04Relative.png) 
 
 ### Jakarta 2002
 
@@ -1218,9 +1220,9 @@ This section covers the analysis of the distribution of people in all four citie
 
 ### Comparison Across Cities
 
-![plot of chunk plotSTDistALlAbs](figure/plotSTDistALlAbs.png) 
+![plot of chunk plotSTDistALlAbs](./analysis_files/figure-html/plotSTDistALlAbs.png) 
 
-![plot of chunk plotSTDistALlRel](figure/plotSTDistALlRel.png) 
+![plot of chunk plotSTDistALlRel](./analysis_files/figure-html/plotSTDistALlRel.png) 
 
 
 

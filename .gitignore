@@ -1,5 +1,7 @@
 .Rproj.user
 .Rhistory
 .RData
-cache/
-*.tif
+analysis_cache/
+analysis_files/
+anim/
+raster/
