@@ -1,4 +1,5 @@
 ---
+title: Capital Cities (Urban Mobility)
 output:
   html_document:
     keep_md: yes
@@ -14,6 +15,7 @@ Capital Cities (Urban Mobility)
 library(ggplot2)
 library(gridExtra)
 library(Hmisc)
+library(plyr)
 library(RColorBrewer)
 library(RPostgreSQL)
 library(scales)
@@ -45,6 +47,7 @@ labelsAge <- read.table("labels_all_age.txt", sep = "\t")
 labelsOccupC <- read.table("labels_all_occupc.txt", sep = "\t")
 labelsActivity <- read.table("labels_all_activity.txt", sep = "\t")
 labelsTModeC <- read.table("labels_all_tmodec.txt", sep = "\t")
+labelsNoon <- read.table("labels_all_noon.txt", sep = "\t")
 labelsDhk09Occup <- read.table("labels_dhk09_occup.txt", sep = "\t")
 labelsHni04Occup <- read.table("labels_hni04_occup.txt", sep = "\t")
 labelsJkt02Occup <- read.table("labels_jkt02_occup.txt", sep = "\t")
@@ -101,7 +104,7 @@ Data set description:
 describe(dhk09.person)
 ```
 
-```{r plotHistDhk09Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28, cache = TRUE}
+```{r plotHistDhk09Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 49, cache = TRUE}
 plotDhk09Sex <- ggplot(dhk09.person, aes(sex, fill = sex)) +
   geom_bar() + 
   scale_y_continuous(labels = comma) +
@@ -141,7 +144,7 @@ plotDhk09DistSex <- ggplot(dhk09.person, aes(dist / 1000, fill = sex)) +
   labs(title = "Dhaka 2009, Distance Traveled", 
        x = "Distance [km]", 
        y = "Density") +
-  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
 plotDhk09DistAge <- ggplot(dhk09.person, aes(dist / 1000, fill = age)) +
   geom_density(alpha = .3, color = NA) +
@@ -151,7 +154,7 @@ plotDhk09DistAge <- ggplot(dhk09.person, aes(dist / 1000, fill = age)) +
   labs(title = "Dhaka 2009, Distance Traveled", 
        x = "Distance [km]", 
        y = "Density") +
-  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank()) + 
   guides(fill = guide_legend(ncol = 2))
 plotDhk09DistOccupC <- ggplot(dhk09.person, aes(dist / 1000, fill = occupc)) +
@@ -162,7 +165,7 @@ plotDhk09DistOccupC <- ggplot(dhk09.person, aes(dist / 1000, fill = occupc)) +
   labs(title = "Dhaka 2009, Distance Traveled", 
        x = "Distance [km]", 
        y = "Density") +
-  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
 grid.arrange(plotDhk09Sex, plotDhk09Age, plotDhk09Occup, plotDhk09OccupC, 
              plotDhk09DistSex, plotDhk09DistAge, plotDhk09DistOccupC, 
@@ -204,7 +207,7 @@ Data set description:
 describe(hni04.person)
 ```
 
-```{r plotHistHni04Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28, cache = TRUE}
+```{r plotHistHni04Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 49, cache = TRUE}
 plotHni04Sex <- ggplot(hni04.person, aes(sex, fill = sex)) +
   geom_bar() + 
   scale_y_continuous(labels = comma) +
@@ -244,7 +247,7 @@ plotHni04DistSex <- ggplot(hni04.person, aes(dist / 1000, fill = sex)) +
   labs(title = "Hanoi 2004, Distance Traveled", 
        x = "Distance [km]", 
        y = "Density") +
-  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
 plotHni04DistAge <- ggplot(hni04.person, aes(dist / 1000, fill = age)) +
   geom_density(alpha = .3, color = NA) +
@@ -254,7 +257,7 @@ plotHni04DistAge <- ggplot(hni04.person, aes(dist / 1000, fill = age)) +
   labs(title = "Hanoi 2004, Distance Traveled", 
        x = "Distance [km]", 
        y = "Density") +
-  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank()) + 
   guides(fill = guide_legend(ncol = 2))
 plotHni04DistOccupC <- ggplot(hni04.person, aes(dist / 1000, fill = occupc)) +
@@ -265,7 +268,7 @@ plotHni04DistOccupC <- ggplot(hni04.person, aes(dist / 1000, fill = occupc)) +
   labs(title = "Hanoi 2004, Distance Traveled", 
        x = "Distance [km]", 
        y = "Density") +
-  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
 grid.arrange(plotHni04Sex, plotHni04Age, plotHni04Occup, plotHni04OccupC, 
              plotHni04DistSex, plotHni04DistAge, plotHni04DistOccupC, 
@@ -307,7 +310,7 @@ Data set description:
 describe(jkt02.person)
 ```
 
-```{r plotHistJkt02Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28, cache = TRUE}
+```{r plotHistJkt02Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 49, cache = TRUE}
 plotJkt02Sex <- ggplot(jkt02.person, aes(sex, fill = sex)) +
   geom_bar() + 
   scale_y_continuous(labels = comma) +
@@ -347,7 +350,7 @@ plotJkt02DistSex <- ggplot(jkt02.person, aes(dist / 1000, fill = sex)) +
   labs(title = "Jakarta 2001, Distance Traveled", 
        x = "Distance [km]", 
        y = "Density") +
-  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
 plotJkt02DistAge <- ggplot(jkt02.person, aes(dist / 1000, fill = age)) +
   geom_density(alpha = .3, color = NA) +
@@ -357,7 +360,7 @@ plotJkt02DistAge <- ggplot(jkt02.person, aes(dist / 1000, fill = age)) +
   labs(title = "Jakarta 2001, Distance Traveled", 
        x = "Distance [km]", 
        y = "Density") +
-  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank()) + 
   guides(fill = guide_legend(ncol = 2))
 plotJkt02DistOccupC <- ggplot(jkt02.person, aes(dist / 1000, fill = occupc)) +
@@ -368,7 +371,7 @@ plotJkt02DistOccupC <- ggplot(jkt02.person, aes(dist / 1000, fill = occupc)) +
   labs(title = "Jakarta 2001, Distance Traveled", 
        x = "Distance [km]", 
        y = "Density") +
-  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
 grid.arrange(plotJkt02Sex, plotJkt02Age, plotJkt02Occup, plotJkt02OccupC, 
              plotJkt02DistSex, plotJkt02DistAge, plotJkt02DistOccupC, 
@@ -429,7 +432,7 @@ Data set description:
 describe(mnl96.person)
 ```
 
-```{r plotHistMnl96Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 28, cache = TRUE}
+```{r plotHistMnl96Person, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 49, cache = TRUE}
 plotMnl96Sex <- ggplot(mnl96.person, aes(sex, fill = sex)) +
   geom_bar() + 
   scale_y_continuous(labels = comma) +
@@ -469,7 +472,7 @@ plotMnl96DistSex <- ggplot(mnl96.person, aes(dist / 1000, fill = sex)) +
   labs(title = "Metro Manila 1996, Distance Traveled", 
        x = "Distance [km]", 
        y = "Density") +
-  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
 plotMnl96DistAge <- ggplot(mnl96.person, aes(dist / 1000, fill = age)) +
   geom_density(alpha = .3, color = NA) +
@@ -479,7 +482,7 @@ plotMnl96DistAge <- ggplot(mnl96.person, aes(dist / 1000, fill = age)) +
   labs(title = "Metro Manila 1996, Distance Traveled", 
        x = "Distance [km]", 
        y = "Density") +
-  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank()) + 
   guides(fill = guide_legend(ncol = 2))
 plotMnl96DistOccupC <- ggplot(mnl96.person, aes(dist / 1000, fill = occupc)) +
@@ -490,7 +493,7 @@ plotMnl96DistOccupC <- ggplot(mnl96.person, aes(dist / 1000, fill = occupc)) +
   labs(title = "Metro Manila 1996, Distance Traveled", 
        x = "Distance [km]", 
        y = "Density") +
-  theme(legend.justification = c(1,1), legend.position = c(1,1), 
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
 grid.arrange(plotMnl96Sex, plotMnl96Age, plotMnl96Occup, plotMnl96OccupC, 
              plotMnl96DistSex, plotMnl96DistAge, plotMnl96DistOccupC, 
@@ -773,8 +776,6 @@ dhk09.subtrip$tmodec <- factor(dhk09.subtrip$tmodec,
 dhk09.subtrip$activity <- factor(dhk09.subtrip$activity, 
                                  levels = c(1:6, 99), 
                                  labels = labelsActivity[, 2])
-# merge subtrip data with person data
-#dhk09.subtrip.person <- merge(dhk09.subtrip, dhk09.person, by="pid")
 ```
 
 The `r format(nrow(dhk09.person), big.mark=",")` people in the sample made a total of `r format(dhk09.subtrip.subtrips, big.mark=",")` subtrips. `r format(dhk09.subtrip.stationary / (dhk09.subtrip.subtrips / 100), digits = 1, nsmall = 1)`% of these are actually stationarity events, which reduces the true number of subtrips to `r format(nrow(dhk09.subtrip), big.mark=",")`. The subtrip data occupies `r format(object.size(dhk09.trip), units = "auto")` of memory.
@@ -831,8 +832,6 @@ hni04.subtrip$tmodec <- factor(hni04.subtrip$tmodec,
 hni04.subtrip$activity <- factor(hni04.subtrip$activity, 
                                  levels = c(1:6, 99), 
                                  labels = labelsActivity[, 2])
-# merge subtrip data with person data
-#hni04.subtrip.person <- merge(hni04.subtrip, hni04.person, by="pid")
 ```
 
 The `r format(nrow(hni04.person), big.mark=",")` people in the sample made a total of `r format(hni04.subtrip.subtrips, big.mark=",")` subtrips. `r format(hni04.subtrip.stationary / (hni04.subtrip.subtrips / 100), digits = 1, nsmall = 1)`% of these are actually stationarity events, which reduces the true number of subtrips to `r format(nrow(hni04.subtrip), big.mark=",")`. The subtrip data occupies `r format(object.size(hni04.trip), units = "auto")` of memory.
@@ -908,8 +907,6 @@ jkt02.subtrip$tmodec <- factor(jkt02.subtrip$tmodec,
 jkt02.subtrip$activity <- factor(jkt02.subtrip$activity, 
                                  levels = c(1:6, 99), 
                                  labels = labelsActivity[, 2])
-# merge subtrip data with person data
-#jkt02.subtrip.person <- merge(jkt02.subtrip, jkt02.person, by="pid")
 ```
 
 The `r format(nrow(jkt02.person), big.mark=",")` people in the sample made a total of `r format(jkt02.subtrip.subtrips, big.mark=",")` subtrips. `r format(jkt02.subtrip.stationary / (jkt02.subtrip.subtrips / 100), digits = 1, nsmall = 1)`% of these are actually stationarity events, which reduces the true number of subtrips to `r format(nrow(jkt02.subtrip), big.mark=",")`.
@@ -993,8 +990,6 @@ mnl96.subtrip$tmodec <- factor(mnl96.subtrip$tmodec,
 mnl96.subtrip$activity <- factor(mnl96.subtrip$activity, 
                                  levels = c(1:6, 99), 
                                  labels = labelsActivity[, 2])
-# merge subtrip data with person data
-#mnl96.subtrip.person <- merge(mnl96.subtrip, mnl96.person, by="pid")
 ```
 
 The `r format(nrow(mnl96.person), big.mark=",")` people in the sample made a total of `r format(mnl96.subtrip.subtrips, big.mark=",")` subtrips. `r format(mnl96.subtrip.stationary / (mnl96.subtrip.subtrips / 100), digits = 1, nsmall = 1)`% of these are actually stationarity events, which reduces the true number of subtrips to `r format(nrow(mnl96.subtrip), big.mark=",")`.
@@ -1036,6 +1031,494 @@ grid.arrange(plotDhk09TModeC, plotHni04TModeC,
 
 
 
+## Commuting Behavior
+
+This section covers the analysis of the commuting behavior in all four cities both in the morning (0:00 - 11:59) and in the evening (12:00 - 23:59) regarding distance, duration, and multi-modality.
+
+### Dhaka 2009
+
+```{r loadCommBehavDhk09, eval = TRUE, echo = FALSE, cache = TRUE}
+# load commuting behavior data
+query <- "WITH subtrip_info AS (SELECT pid, tno, COUNT(sno) subtrips, MAX(tmodec) tmodec FROM dhk09.subtrip GROUP BY pid, tno) SELECT t.pid, t.tno, t.purpose, t.activity, date_part('hour', t.pdate_s) phour_s, s.subtrips, t.dist, t.pdate_s, t.pdate_e, r.sex, r.age, r.occupc FROM dhk09.trip t JOIN subtrip_info s ON t.pid = s.pid AND t.tno = s.tno JOIN dhk09.person r ON t.pid = r.pid WHERE t.purpose IN (1, 2, 3)  AND (SELECT activity FROM dhk09.trip x WHERE x.pid = t.pid AND x.tno = (t.tno - 1)) IN (1, 2, 3) AND s.tmodec != 97 ORDER BY pid, tno;"
+dhk09.commbehav <- psqlQuery(con, query)
+# remove unnecessary column (purpose)
+dhk09.commbehav <- dhk09.commbehav[, c("pid", "tno", "activity", "phour_s", 
+                                       "subtrips", "dist", "pdate_s", "pdate_e", 
+                                       "sex", "age", "occupc")]
+# factorize pid
+dhk09.commbehav$pid <- factor(dhk09.commbehav$pid)
+# factorize tno
+dhk09.commbehav$tno <- factor(dhk09.commbehav$tno)
+# factorize activity
+dhk09.commbehav$activity <- factor(dhk09.commbehav$activity, 
+                                   levels = c(1:6, 99), 
+                                   labels = labelsActivity[, 2])
+# factorize phour_s
+dhk09.commbehav$phour_s <- factor(dhk09.commbehav$phour_s, 
+                                  levels = c(0:23))
+# calculate duration
+dhk09.commbehav$duration <- with(dhk09.commbehav, 
+                                 pdate_e - pdate_s)
+# divide into noon and afternoon
+dhk09.commbehav$noon <- factor(cut(as.numeric(dhk09.commbehav$phour_s), 
+                                   c(0, 12, 24), 
+                                   labels = labelsNoon[, 2]))
+# remove NA sex (=0) and factorize
+dhk09.commbehav <- dhk09.commbehav[dhk09.commbehav$sex != 0, ]
+dhk09.commbehav$sex <- factor(dhk09.commbehav$sex, 
+                              levels = c(1, 2), 
+                              labels = labelsSex[, 2])
+# factorize age (ordered)
+dhk09.commbehav$age <- factor(dhk09.commbehav$age, 
+                              levels = c(0:17), 
+                              ordered = TRUE, 
+                              labels = labelsAge[, 2])
+# factorize occupation class
+dhk09.commbehav$occupc <- factor(dhk09.commbehav$occupc, 
+                                 levels = c(1:5, 99), 
+                                 labels = labelsOccupC[, 2])
+```
+
+Data set description:
+
+```{r descCommBehavDhk09, results = "asis", cache = TRUE}
+dhk09CommBehavSexNoon <- ddply(dhk09.commbehav, c("sex", "noon"), summarize, 
+                               mean_dist = mean(dist), 
+                               mean_duration = mean(duration), 
+                               subtrips = mean(subtrips))
+dhk09CommBehavAgeNoon <- ddply(dhk09.commbehav, c("age", "noon"), summarize, 
+                               mean_dist = mean(dist), 
+                               mean_duration = mean(duration), 
+                               subtrips = mean(subtrips))
+dhk09CommBehavOccupCNoon <- ddply(dhk09.commbehav, c("occupc", "noon"), summarize, 
+                                  mean_dist = mean(dist), 
+                                  mean_duration = mean(duration), 
+                                  subtrips = mean(subtrips))
+print(xtable(dhk09CommBehavSexNoon, type = "html"))
+print(xtable(dhk09CommBehavAgeNoon, type = "html"))
+print(xtable(dhk09CommBehavOccupCNoon, type = "html"))
+```
+
+```{r plotCommBehavDhk09, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
+plotDhk09CommBehavAgeNoon <- ggplot(dhk09CommBehavAgeNoon, 
+                                    aes(age, mean_dist / 1000, color = noon)) +
+  geom_line(aes(group = noon)) +
+  scale_y_continuous(labels = comma) +
+  scale_x_discrete(limits = labelsAge[, 2]) + 
+  scale_color_discrete(h = gradientAge, drop = FALSE) + 
+  labs(title = "Dhaka 2009, Average Commuting Distance by Age", 
+       x = "Age", y = "Average Commuting Distance [km]") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  theme(legend.justification = c(1, 0), legend.position = c(1, 0), 
+        legend.key = element_blank(), legend.title = element_blank())
+plotDhk09CommBehavOccupCNoon <- ggplot(dhk09CommBehavOccupCNoon, 
+                                       aes(occupc, mean_dist / 1000, 
+                                           fill = noon)) +
+  geom_bar(stat = "identity", position = "dodge", aes(group = noon)) +
+  scale_y_continuous(labels = comma) +
+  scale_x_discrete(limits = labelsOccupC[, 2]) + 
+  scale_fill_brewer(palette = "Set1", drop = FALSE) + 
+  labs(title = "Dhaka 2009, Average Commuting Distance by Occupation Group", 
+       x = "Age", y = "Average Commuting Distance [km]") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
+        legend.key = element_blank(), legend.title = element_blank())
+plotDhk09CommTripStartHourAbs <- ggplot(dhk09.commbehav, 
+                                        aes(phour_s, color = activity)) +
+  geom_freqpoly(aes(group = activity)) +
+  scale_y_continuous(labels = comma) + 
+  scale_x_discrete(breaks = seq(0, 24, 3)) +
+  scale_color_brewer(palette = "Set1", name = "Activity") + 
+  labs(title = "Dhaka 2009, Commuting Trips Started per Hour", 
+       x = "Time", 
+       y = "Count") +
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
+        legend.key = element_blank())
+plotDhk09CommTripStartHourRel <- ggplot(dhk09.commbehav, 
+                                        aes(phour_s, fill = activity)) +
+  geom_bar(position = "fill", width = 1) +
+  scale_y_continuous(labels = comma) + 
+  scale_x_discrete(breaks = seq(0, 24, 3)) +
+  scale_fill_brewer(palette = "Set1", name = "Activity") + 
+  labs(title = "Dhaka 2009, Commuting Trips Started per Hour", 
+       x = "Time", 
+       y = "Ratio") +
+  theme(legend.justification = c(1, 0), legend.position = c(1, 0), 
+        legend.key = element_blank())
+grid.arrange(plotDhk09CommBehavAgeNoon, plotDhk09CommBehavOccupCNoon, 
+             plotDhk09CommTripStartHourAbs, plotDhk09CommTripStartHourRel, 
+             ncol = 1)
+```
+
+### Hanoi 2004
+
+```{r loadCommBehavHni04, eval = TRUE, echo = FALSE, cache = TRUE}
+# load commuting behavior data
+query <- "WITH subtrip_info AS (SELECT pid, tno, COUNT(sno) subtrips, MAX(tmodec) tmodec FROM hni04.subtrip GROUP BY pid, tno) SELECT t.pid, t.tno, t.purpose, t.activity, date_part('hour', t.pdate_s) phour_s, s.subtrips, t.dist, t.pdate_s, t.pdate_e, r.sex, r.age, r.occupc FROM hni04.trip t JOIN subtrip_info s ON t.pid = s.pid AND t.tno = s.tno JOIN hni04.person r ON t.pid = r.pid WHERE t.purpose IN (1, 2, 3)  AND (SELECT activity FROM hni04.trip x WHERE x.pid = t.pid AND x.tno = (t.tno - 1)) IN (1, 2, 3) AND s.tmodec != 97 ORDER BY pid, tno;"
+hni04.commbehav <- psqlQuery(con, query)
+# remove unnecessary column (purpose)
+hni04.commbehav <- hni04.commbehav[, c("pid", "tno", "activity", "phour_s", 
+                                       "subtrips", "dist", "pdate_s", "pdate_e", 
+                                       "sex", "age", "occupc")]
+# factorize pid
+hni04.commbehav$pid <- factor(hni04.commbehav$pid)
+# factorize tno
+hni04.commbehav$tno <- factor(hni04.commbehav$tno)
+# factorize activity
+hni04.commbehav$activity <- factor(hni04.commbehav$activity, 
+                                   levels = c(1:6, 99), 
+                                   labels = labelsActivity[, 2])
+# factorize phour_s
+hni04.commbehav$phour_s <- factor(hni04.commbehav$phour_s, 
+                                  levels = c(0:23))
+# calculate duration
+hni04.commbehav$duration <- with(hni04.commbehav, 
+                                 pdate_e - pdate_s)
+# divide into noon and afternoon
+hni04.commbehav$noon <- factor(cut(as.numeric(hni04.commbehav$phour_s), 
+                                   c(0, 12, 24), 
+                                   labels = labelsNoon[, 2]))
+# remove NA sex (=0) and factorize
+hni04.commbehav <- hni04.commbehav[hni04.commbehav$sex != 0, ]
+hni04.commbehav$sex <- factor(hni04.commbehav$sex, 
+                              levels = c(1, 2), 
+                              labels = labelsSex[, 2])
+# factorize age (ordered)
+hni04.commbehav$age <- factor(hni04.commbehav$age, 
+                              levels = c(0:17), 
+                              ordered = TRUE, 
+                              labels = labelsAge[, 2])
+# factorize occupation class
+hni04.commbehav$occupc <- factor(hni04.commbehav$occupc, 
+                                 levels = c(1:5, 99), 
+                                 labels = labelsOccupC[, 2])
+```
+
+Data set description:
+
+```{r descCommBehavHni04, results = "asis", cache = TRUE}
+hni04CommBehavSexNoon <- ddply(hni04.commbehav, c("sex", "noon"), summarize, 
+                               mean_dist = mean(dist), 
+                               mean_duration = mean(duration), 
+                               subtrips = mean(subtrips))
+hni04CommBehavAgeNoon <- ddply(hni04.commbehav, c("age", "noon"), summarize, 
+                               mean_dist = mean(dist), 
+                               mean_duration = mean(duration), 
+                               subtrips = mean(subtrips))
+hni04CommBehavOccupCNoon <- ddply(hni04.commbehav, c("occupc", "noon"), summarize, 
+                                  mean_dist = mean(dist), 
+                                  mean_duration = mean(duration), 
+                                  subtrips = mean(subtrips))
+print(xtable(hni04CommBehavSexNoon, type = "html"))
+print(xtable(hni04CommBehavAgeNoon, type = "html"))
+print(xtable(hni04CommBehavOccupCNoon, type = "html"))
+```
+
+```{r plotCommBehavHni04, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
+plotHni04CommBehavAgeNoon <- ggplot(hni04CommBehavAgeNoon, 
+                                    aes(age, mean_dist / 1000, color = noon)) +
+  geom_line(aes(group = noon)) +
+  scale_y_continuous(labels = comma) +
+  scale_x_discrete(limits = labelsAge[, 2]) + 
+  scale_color_discrete(h = gradientAge, drop = FALSE) + 
+  labs(title = "Hanoi 2004, Average Commuting Distance by Age", 
+       x = "Age", y = "Average Commuting Distance [km]") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  theme(legend.justification = c(1, 0), legend.position = c(1, 0), 
+        legend.key = element_blank(), legend.title = element_blank())
+plotHni04CommBehavOccupCNoon <- ggplot(hni04CommBehavOccupCNoon, 
+                                       aes(occupc, mean_dist / 1000, 
+                                           fill = noon)) +
+  geom_bar(stat = "identity", position = "dodge", aes(group = noon)) +
+  scale_y_continuous(labels = comma) +
+  scale_x_discrete(limits = labelsOccupC[, 2]) + 
+  scale_fill_brewer(palette = "Set1", drop = FALSE) + 
+  labs(title = "Hanoi 2004, Average Commuting Distance by Occupation Group", 
+       x = "Age", y = "Average Commuting Distance [km]") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
+        legend.key = element_blank(), legend.title = element_blank())
+plotHni04CommTripStartHourAbs <- ggplot(hni04.commbehav, 
+                                        aes(phour_s, color = activity)) +
+  geom_freqpoly(aes(group = activity)) +
+  scale_y_continuous(labels = comma) + 
+  scale_x_discrete(breaks = seq(0, 24, 3)) +
+  scale_color_brewer(palette = "Set1", name = "Activity") + 
+  labs(title = "Hanoi 2004, Commuting Trips Started per Hour", 
+       x = "Time", 
+       y = "Count") +
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
+        legend.key = element_blank())
+plotHni04CommTripStartHourRel <- ggplot(hni04.commbehav, 
+                                        aes(phour_s, fill = activity)) +
+  geom_bar(position = "fill", width = 1) +
+  scale_y_continuous(labels = comma) + 
+  scale_x_discrete(breaks = seq(0, 24, 3)) +
+  scale_fill_brewer(palette = "Set1", name = "Activity") + 
+  labs(title = "Hanoi 2004, Commuting Trips Started per Hour", 
+       x = "Time", 
+       y = "Ratio") +
+  theme(legend.justification = c(1, 0), legend.position = c(1, 0), 
+        legend.key = element_blank())
+grid.arrange(plotHni04CommBehavAgeNoon, plotHni04CommBehavOccupCNoon, 
+             plotHni04CommTripStartHourAbs, plotHni04CommTripStartHourRel, 
+             ncol = 1)
+```
+
+### Jakarta 2002
+
+```{r loadCommBehavJkt02, eval = TRUE, echo = FALSE, cache = TRUE}
+# load commuting behavior data
+query <- "WITH subtrip_info AS (SELECT pid, tno, COUNT(sno) subtrips, MAX(tmodec) tmodec FROM jkt02.subtrip GROUP BY pid, tno) SELECT t.pid, t.tno, t.purpose, t.activity, date_part('hour', t.pdate_s) phour_s, s.subtrips, t.dist, t.pdate_s, t.pdate_e, r.sex, r.age, r.occupc FROM jkt02.trip t JOIN subtrip_info s ON t.pid = s.pid AND t.tno = s.tno JOIN jkt02.person r ON t.pid = r.pid WHERE t.purpose IN (1, 2, 6)  AND (SELECT activity FROM jkt02.trip x WHERE x.pid = t.pid AND x.tno = (t.tno - 1)) IN (1, 2, 3) AND s.tmodec != 97 ORDER BY pid, tno;"
+jkt02.commbehav <- psqlQuery(con, query)
+# remove unnecessary column (purpose)
+jkt02.commbehav <- jkt02.commbehav[, c("pid", "tno", "activity", "phour_s", 
+                                       "subtrips", "dist", "pdate_s", "pdate_e", 
+                                       "sex", "age", "occupc")]
+# factorize pid
+jkt02.commbehav$pid <- factor(jkt02.commbehav$pid)
+# factorize tno
+jkt02.commbehav$tno <- factor(jkt02.commbehav$tno)
+# factorize activity
+jkt02.commbehav$activity <- factor(jkt02.commbehav$activity, 
+                                   levels = c(1:6, 99), 
+                                   labels = labelsActivity[, 2])
+# factorize phour_s
+jkt02.commbehav$phour_s <- factor(jkt02.commbehav$phour_s, 
+                                  levels = c(0:23))
+# calculate duration
+jkt02.commbehav$duration <- with(jkt02.commbehav, 
+                                 pdate_e - pdate_s)
+# divide into noon and afternoon
+jkt02.commbehav$noon <- factor(cut(as.numeric(jkt02.commbehav$phour_s), 
+                                   c(0, 12, 24), 
+                                   labels = labelsNoon[, 2]))
+# remove NA sex (=0) and factorize
+jkt02.commbehav <- jkt02.commbehav[jkt02.commbehav$sex != 0, ]
+jkt02.commbehav$sex <- factor(jkt02.commbehav$sex, 
+                              levels = c(1, 2), 
+                              labels = labelsSex[, 2])
+# factorize age (ordered)
+jkt02.commbehav$age <- factor(jkt02.commbehav$age, 
+                              levels = c(0:17), 
+                              ordered = TRUE, 
+                              labels = labelsAge[, 2])
+# factorize occupation class
+jkt02.commbehav$occupc <- factor(jkt02.commbehav$occupc, 
+                                 levels = c(1:5, 99), 
+                                 labels = labelsOccupC[, 2])
+```
+
+Data set description:
+
+```{r descCommBehavJkt02, results = "asis", cache = TRUE}
+jkt02CommBehavSexNoon <- ddply(jkt02.commbehav, c("sex", "noon"), summarize, 
+                               mean_dist = mean(dist), 
+                               mean_duration = mean(duration), 
+                               subtrips = mean(subtrips))
+jkt02CommBehavAgeNoon <- ddply(jkt02.commbehav, c("age", "noon"), summarize, 
+                               mean_dist = mean(dist), 
+                               mean_duration = mean(duration), 
+                               subtrips = mean(subtrips))
+jkt02CommBehavOccupCNoon <- ddply(jkt02.commbehav, c("occupc", "noon"), summarize, 
+                                  mean_dist = mean(dist), 
+                                  mean_duration = mean(duration), 
+                                  subtrips = mean(subtrips))
+print(xtable(jkt02CommBehavSexNoon, type = "html"))
+print(xtable(jkt02CommBehavAgeNoon, type = "html"))
+print(xtable(jkt02CommBehavOccupCNoon, type = "html"))
+```
+
+```{r plotCommBehavJkt02, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
+plotJkt02CommBehavAgeNoon <- ggplot(jkt02CommBehavAgeNoon, 
+                                    aes(age, mean_dist / 1000, color = noon)) +
+  geom_line(aes(group = noon)) +
+  scale_y_continuous(labels = comma) +
+  scale_x_discrete(limits = labelsAge[, 2]) + 
+  scale_color_discrete(h = gradientAge, drop = FALSE) + 
+  labs(title = "Jakarta 2002, Average Commuting Distance by Age", 
+       x = "Age", y = "Average Commuting Distance [km]") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  theme(legend.justification = c(1, 0), legend.position = c(1, 0), 
+        legend.key = element_blank(), legend.title = element_blank())
+plotJkt02CommBehavOccupCNoon <- ggplot(jkt02CommBehavOccupCNoon, 
+                                       aes(occupc, mean_dist / 1000, 
+                                           fill = noon)) +
+  geom_bar(stat = "identity", position = "dodge", aes(group = noon)) +
+  scale_y_continuous(labels = comma) +
+  scale_x_discrete(limits = labelsOccupC[, 2]) + 
+  scale_fill_brewer(palette = "Set1", drop = FALSE) + 
+  labs(title = "Jakarta 2002, Average Commuting Distance by Occupation Group", 
+       x = "Age", y = "Average Commuting Distance [km]") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
+        legend.key = element_blank(), legend.title = element_blank())
+plotJkt02CommTripStartHourAbs <- ggplot(jkt02.commbehav, 
+                                        aes(phour_s, color = activity)) +
+  geom_freqpoly(aes(group = activity)) +
+  scale_y_continuous(labels = comma) + 
+  scale_x_discrete(breaks = seq(0, 24, 3)) +
+  scale_color_brewer(palette = "Set1", name = "Activity") + 
+  labs(title = "Jakarta 2002, Commuting Trips Started per Hour", 
+       x = "Time", 
+       y = "Count") +
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
+        legend.key = element_blank())
+plotJkt02CommTripStartHourRel <- ggplot(jkt02.commbehav, 
+                                        aes(phour_s, fill = activity)) +
+  geom_bar(position = "fill", width = 1) +
+  scale_y_continuous(labels = comma) + 
+  scale_x_discrete(breaks = seq(0, 24, 3)) +
+  scale_fill_brewer(palette = "Set1", name = "Activity") + 
+  labs(title = "Jakarta 2002, Commuting Trips Started per Hour", 
+       x = "Time", 
+       y = "Ratio") +
+  theme(legend.justification = c(1, 0), legend.position = c(1, 0), 
+        legend.key = element_blank())
+grid.arrange(plotJkt02CommBehavAgeNoon, plotJkt02CommBehavOccupCNoon, 
+             plotJkt02CommTripStartHourAbs, plotJkt02CommTripStartHourRel, 
+             ncol = 1)
+```
+
+### Metro Manila 1996
+```{r loadCommBehavMnl96, eval = TRUE, echo = FALSE, cache = TRUE}
+# @@@ preprocess data in database first - load dummy data for now
+mnl96.commbehav <- dhk09.commbehav[activity == "", ]
+# # load commuting behavior data
+# query <- "WITH subtrip_info AS (SELECT pid, tno, COUNT(sno) subtrips, MAX(tmodec) tmodec FROM mnl96.subtrip GROUP BY pid, tno) SELECT t.pid, t.tno, t.purpose, t.activity, date_part('hour', t.pdate_s) phour_s, s.subtrips, t.dist, t.pdate_s, t.pdate_e, r.sex, r.age, r.occupc FROM mnl96.trip t JOIN subtrip_info s ON t.pid = s.pid AND t.tno = s.tno JOIN mnl96.person r ON t.pid = r.pid WHERE t.purpose IN (1, 2, 6)  AND (SELECT activity FROM mnl96.trip x WHERE x.pid = t.pid AND x.tno = (t.tno - 1)) IN (1, 2, 3) AND s.tmodec != 97 ORDER BY pid, tno;"
+# mnl96.commbehav <- psqlQuery(con, query)
+# # remove unnecessary column (purpose)
+# mnl96.commbehav <- mnl96.commbehav[, c("pid", "tno", "activity", "phour_s", 
+#                                        "subtrips", "dist", "pdate_s", "pdate_e", 
+#                                        "sex", "age", "occupc")]
+# # factorize pid
+# mnl96.commbehav$pid <- factor(mnl96.commbehav$pid)
+# # factorize tno
+# mnl96.commbehav$tno <- factor(mnl96.commbehav$tno)
+# # factorize activity
+# mnl96.commbehav$activity <- factor(mnl96.commbehav$activity, 
+#                                    levels = c(1:6, 99), 
+#                                    labels = labelsActivity[, 2])
+# # factorize phour_s
+# mnl96.commbehav$phour_s <- factor(mnl96.commbehav$phour_s, 
+#                                   levels = c(0:23))
+# # calculate duration
+# mnl96.commbehav$duration <- with(mnl96.commbehav, 
+#                                  pdate_e - pdate_s)
+# # divide into noon and afternoon
+# mnl96.commbehav$noon <- factor(cut(as.numeric(mnl96.commbehav$phour_s), 
+#                                    c(0, 12, 24), 
+#                                    labels = labelsNoon[, 2]))
+# # remove NA sex (=0) and factorize
+# mnl96.commbehav <- mnl96.commbehav[mnl96.commbehav$sex != 0, ]
+# mnl96.commbehav$sex <- factor(mnl96.commbehav$sex, 
+#                               levels = c(1, 2), 
+#                               labels = labelsSex[, 2])
+# # factorize age (ordered)
+# mnl96.commbehav$age <- factor(mnl96.commbehav$age, 
+#                               levels = c(0:17), 
+#                               ordered = TRUE, 
+#                               labels = labelsAge[, 2])
+# # factorize occupation class
+# mnl96.commbehav$occupc <- factor(mnl96.commbehav$occupc, 
+#                                  levels = c(1:5, 99), 
+#                                  labels = labelsOccupC[, 2])
+```
+
+Data set description:
+
+```{r descCommBehavMnl96, results = "asis", cache = TRUE}
+# mnl96CommBehavSexNoon <- ddply(mnl96.commbehav, c("sex", "noon"), summarize, 
+#                                mean_dist = mean(dist), 
+#                                mean_duration = mean(duration), 
+#                                subtrips = mean(subtrips))
+# mnl96CommBehavAgeNoon <- ddply(mnl96.commbehav, c("age", "noon"), summarize, 
+#                                mean_dist = mean(dist), 
+#                                mean_duration = mean(duration), 
+#                                subtrips = mean(subtrips))
+# mnl96CommBehavOccupCNoon <- ddply(mnl96.commbehav, c("occupc", "noon"), summarize, 
+#                                   mean_dist = mean(dist), 
+#                                   mean_duration = mean(duration), 
+#                                   subtrips = mean(subtrips))
+# print(xtable(mnl96CommBehavSexNoon, type = "html"))
+# print(xtable(mnl96CommBehavAgeNoon, type = "html"))
+# print(xtable(mnl96CommBehavOccupCNoon, type = "html"))
+```
+
+```{r plotCommBehavMnl96, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
+plotMnl96CommBehavAgeNoon <- ggplot(mnl96CommBehavAgeNoon, 
+                                    aes(age, mean_dist / 1000, color = noon)) +
+  geom_line(aes(group = noon)) +
+  scale_y_continuous(labels = comma) +
+  scale_x_discrete(limits = labelsAge[, 2]) + 
+  scale_color_discrete(h = gradientAge, drop = FALSE) + 
+  labs(title = "Metro Manila 1996, Average Commuting Distance by Age", 
+       x = "Age", y = "Average Commuting Distance [km]") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  theme(legend.justification = c(1, 0), legend.position = c(1, 0), 
+        legend.key = element_blank(), legend.title = element_blank())
+plotMnl96CommBehavOccupCNoon <- ggplot(mnl96CommBehavOccupCNoon, 
+                                       aes(occupc, mean_dist / 1000, 
+                                           fill = noon)) +
+  geom_bar(stat = "identity", position = "dodge", aes(group = noon)) +
+  scale_y_continuous(labels = comma) +
+  scale_x_discrete(limits = labelsOccupC[, 2]) + 
+  scale_fill_brewer(palette = "Set1", drop = FALSE) + 
+  labs(title = "Metro Manila 1996, Average Commuting Distance by Occupation Group", 
+       x = "Age", y = "Average Commuting Distance [km]") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
+        legend.key = element_blank(), legend.title = element_blank())
+plotMnl96CommTripStartHourAbs <- ggplot(mnl96.commbehav, 
+                                        aes(phour_s, color = activity)) +
+  geom_freqpoly(aes(group = activity)) +
+  scale_y_continuous(labels = comma) + 
+  scale_x_discrete(breaks = seq(0, 24, 3)) +
+  scale_color_brewer(palette = "Set1", name = "Activity") + 
+  labs(title = "Metro Manila 1996, Commuting Trips Started per Hour", 
+       x = "Time", 
+       y = "Count") +
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
+        legend.key = element_blank())
+plotMnl96CommTripStartHourRel <- ggplot(mnl96.commbehav, 
+                                        aes(phour_s, fill = activity)) +
+  geom_bar(position = "fill", width = 1) +
+  scale_y_continuous(labels = comma) + 
+  scale_x_discrete(breaks = seq(0, 24, 3)) +
+  scale_fill_brewer(palette = "Set1", name = "Activity") + 
+  labs(title = "Metro Manila 1996, Commuting Trips Started per Hour", 
+       x = "Time", 
+       y = "Ratio") +
+  theme(legend.justification = c(1, 0), legend.position = c(1, 0), 
+        legend.key = element_blank())
+grid.arrange(plotMnl96CommBehavAgeNoon, plotMnl96CommBehavOccupCNoon, 
+             plotMnl96CommTripStartHourAbs, plotMnl96CommTripStartHourRel, 
+             ncol = 1)
+```
+
+### Comparison Across Cities
+
+```{r plotCommBehavAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 5, cache = TRUE}
+grid.arrange(plotDhk09CommBehavAgeNoon, plotHni04CommBehavAgeNoon, 
+             plotJkt02CommBehavAgeNoon, plotMnl96CommBehavAgeNoon, 
+             ncol = 2, 
+             main = "Average Commuting Distance by Age")
+grid.arrange(plotDhk09CommBehavOccupCNoon, plotHni04CommBehavOccupCNoon, 
+             plotJkt02CommBehavOccupCNoon, plotMnl96CommBehavOccupCNoon, 
+             ncol = 2, 
+             main = "Average Commuting Distance by Occupation Group")
+grid.arrange(plotDhk09CommTripStartHourAbs, plotHni04CommTripStartHourAbs, 
+             plotJkt02CommTripStartHourAbs, plotMnl96CommTripStartHourAbs, 
+             ncol = 2, 
+             main = "Commuting Trips Started per Hour")
+grid.arrange(plotDhk09CommTripStartHourRel, plotHni04CommTripStartHourRel, 
+             plotJkt02CommTripStartHourRel, plotMnl96CommTripStartHourRel, 
+             ncol = 2, 
+             main = "Commuting Trips Started per Hour")
+```
+
+
+
 ## Spatio-Temporal Distribution of People
 
 This section covers the analysis of the distribution of people in all four cities over space and time. For analysis purposes we generated concentric ring buffers in 5km distances from the centers of all four cities (as per the OpenStreetMap data).
@@ -1058,6 +1541,7 @@ plotDhk09STDist <- ggplot(dhk09.stdist, aes(x = phour, y = pcount)) +
   labs(title = "Dhaka 2009, Spatio-Temporal Distribution of People", 
        x = "Time", y = "People") + 
   scale_y_continuous(labels = comma) + 
+  scale_x_discrete(breaks = seq(0, 24, 3)) +
   scale_color_discrete(h = gradientDistance, name = "Buffer", drop = FALSE) + 
   theme(legend.key = element_blank())
 grid.arrange(plotDhk09STDist, 
@@ -1082,6 +1566,7 @@ plotHni04STDist <- ggplot(hni04.stdist, aes(x = phour, y = pcount)) +
   labs(title = "Hanoi 2004, Spatio-Temporal Distribution of People", 
        x = "Time", y = "People") + 
   scale_y_continuous(labels = comma) + 
+  scale_x_discrete(breaks = seq(0, 24, 3)) +
   scale_color_discrete(h = gradientDistance, name = "Buffer", drop = FALSE) + 
   theme(legend.key = element_blank())
 grid.arrange(plotHni04STDist, 

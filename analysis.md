@@ -1,3 +1,4 @@
+# Capital Cities (Urban Mobility)
 
 Capital Cities (Urban Mobility)
 ===============================
@@ -1206,6 +1207,230 @@ table(mnl96.subtrip$activity)
 ### Comparison Across Cities
 
 ![plot of chunk plotHistSubtripTModeCAll](./analysis_files/figure-html/plotHistSubtripTModeCAll.png) 
+
+
+
+## Commuting Behavior
+
+This section covers the analysis of the commuting behavior in all four cities both in the morning (0:00 - 11:59) and in the evening (12:00 - 23:59) regarding distance, duration, and multi-modality.
+
+### Dhaka 2009
+
+
+
+Data set description:
+
+
+```r
+dhk09CommBehavSexNoon <- ddply(dhk09.commbehav, c("sex", "noon"), summarize, 
+                               mean_dist = mean(dist), 
+                               mean_duration = mean(duration), 
+                               subtrips = mean(subtrips))
+dhk09CommBehavAgeNoon <- ddply(dhk09.commbehav, c("age", "noon"), summarize, 
+                               mean_dist = mean(dist), 
+                               mean_duration = mean(duration), 
+                               subtrips = mean(subtrips))
+dhk09CommBehavOccupCNoon <- ddply(dhk09.commbehav, c("occupc", "noon"), summarize, 
+                                  mean_dist = mean(dist), 
+                                  mean_duration = mean(duration), 
+                                  subtrips = mean(subtrips))
+print(xtable(dhk09CommBehavSexNoon, type = "html"))
+```
+
+```
+## Warning: class of 'x' was discarded
+```
+
+% latex table generated in R 3.1.0 by xtable 1.7-3 package
+% Thu Jul 17 19:10:42 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllrrr}
+  \hline
+ & sex & noon & mean\_dist & mean\_duration & subtrips \\ 
+  \hline
+1 & Male & 00:00 - 11:59 & 4795.30 & 36.27 & 1.64 \\ 
+  2 & Male & 12:00 - 23:59 & 5170.82 & 42.12 & 1.65 \\ 
+  3 & Female & 00:00 - 11:59 & 3621.71 & 30.39 & 1.44 \\ 
+  4 & Female & 12:00 - 23:59 & 4040.06 & 36.69 & 1.46 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+```r
+print(xtable(dhk09CommBehavAgeNoon, type = "html"))
+```
+
+```
+## Warning: class of 'x' was discarded
+```
+
+% latex table generated in R 3.1.0 by xtable 1.7-3 package
+% Thu Jul 17 19:10:42 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllrrr}
+  \hline
+ & age & noon & mean\_dist & mean\_duration & subtrips \\ 
+  \hline
+1 & [0, 5[ & 00:00 - 11:59 & 2970.32 & 22.97 & 1.30 \\ 
+  2 & [0, 5[ & 12:00 - 23:59 & 3770.52 & 27.38 & 1.31 \\ 
+  3 & [5, 10[ & 00:00 - 11:59 & 2393.65 & 21.71 & 1.18 \\ 
+  4 & [5, 10[ & 12:00 - 23:59 & 2700.40 & 25.60 & 1.20 \\ 
+  5 & [10, 15[ & 00:00 - 11:59 & 2696.21 & 24.25 & 1.27 \\ 
+  6 & [10, 15[ & 12:00 - 23:59 & 2704.71 & 26.34 & 1.23 \\ 
+  7 & [15, 20[ & 00:00 - 11:59 & 4102.80 & 33.53 & 1.62 \\ 
+  8 & [15, 20[ & 12:00 - 23:59 & 4130.08 & 36.36 & 1.56 \\ 
+  9 & [20, 25[ & 00:00 - 11:59 & 5481.99 & 41.96 & 1.88 \\ 
+  10 & [20, 25[ & 12:00 - 23:59 & 5816.35 & 47.40 & 1.90 \\ 
+  11 & [25, 30[ & 00:00 - 11:59 & 5402.64 & 39.41 & 1.74 \\ 
+  12 & [25, 30[ & 12:00 - 23:59 & 5808.49 & 47.14 & 1.75 \\ 
+  13 & [30, 35[ & 00:00 - 11:59 & 5534.42 & 40.65 & 1.73 \\ 
+  14 & [30, 35[ & 12:00 - 23:59 & 6021.21 & 48.58 & 1.73 \\ 
+  15 & [35, 40[ & 00:00 - 11:59 & 5486.78 & 39.54 & 1.72 \\ 
+  16 & [35, 40[ & 12:00 - 23:59 & 5787.74 & 46.69 & 1.69 \\ 
+  17 & [40, 45[ & 00:00 - 11:59 & 5508.28 & 39.57 & 1.71 \\ 
+  18 & [40, 45[ & 12:00 - 23:59 & 5862.41 & 45.98 & 1.68 \\ 
+  19 & [45, 50[ & 00:00 - 11:59 & 5373.47 & 41.33 & 1.74 \\ 
+  20 & [45, 50[ & 12:00 - 23:59 & 5922.69 & 48.51 & 1.72 \\ 
+  21 & [50, 55[ & 00:00 - 11:59 & 5513.04 & 41.02 & 1.73 \\ 
+  22 & [50, 55[ & 12:00 - 23:59 & 6056.89 & 48.18 & 1.74 \\ 
+  23 & [55, 60[ & 00:00 - 11:59 & 6048.95 & 45.05 & 1.72 \\ 
+  24 & [55, 60[ & 12:00 - 23:59 & 6081.35 & 51.24 & 1.70 \\ 
+  25 & [60, 65[ & 00:00 - 11:59 & 5519.11 & 38.74 & 1.68 \\ 
+  26 & [60, 65[ & 12:00 - 23:59 & 5956.94 & 43.78 & 1.69 \\ 
+  27 & [65, 70[ & 00:00 - 11:59 & 5032.82 & 45.95 & 1.64 \\ 
+  28 & [65, 70[ & 12:00 - 23:59 & 5705.57 & 49.25 & 1.64 \\ 
+  29 & [70, 75[ & 00:00 - 11:59 & 5815.85 & 44.26 & 1.59 \\ 
+  30 & [70, 75[ & 12:00 - 23:59 & 5672.92 & 47.53 & 1.59 \\ 
+  31 & [75, 80[ & 00:00 - 11:59 & 5758.00 & 47.45 & 1.59 \\ 
+  32 & [75, 80[ & 12:00 - 23:59 & 4536.15 & 48.00 & 1.57 \\ 
+  33 & [80, 85[ & 00:00 - 11:59 & 3570.68 & 30.00 & 1.00 \\ 
+  34 & [80, 85[ & 12:00 - 23:59 & 3570.68 & 30.00 & 1.00 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+```r
+print(xtable(dhk09CommBehavOccupCNoon, type = "html"))
+```
+
+```
+## Warning: class of 'x' was discarded
+```
+
+% latex table generated in R 3.1.0 by xtable 1.7-3 package
+% Thu Jul 17 19:10:42 2014
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllrrr}
+  \hline
+ & occupc & noon & mean\_dist & mean\_duration & subtrips \\ 
+  \hline
+1 & Blue-collar & 00:00 - 11:59 & 15250.89 & 58.15 & 1.92 \\ 
+  2 & Blue-collar & 12:00 - 23:59 & 19279.66 & 67.90 & 2.10 \\ 
+  3 & White-collar & 00:00 - 11:59 & 5351.49 & 39.22 & 1.71 \\ 
+  4 & White-collar & 12:00 - 23:59 & 5784.54 & 46.57 & 1.70 \\ 
+  5 & Student & 00:00 - 11:59 & 3451.67 & 29.30 & 1.43 \\ 
+  6 & Student & 12:00 - 23:59 & 3790.14 & 33.64 & 1.46 \\ 
+  7 & Housewife, househusband & 00:00 - 11:59 & 4749.95 & 38.29 & 1.68 \\ 
+  8 & Housewife, househusband & 12:00 - 23:59 & 5303.80 & 46.16 & 1.67 \\ 
+  9 & Unemployed, retired & 00:00 - 11:59 & 5557.43 & 43.83 & 1.77 \\ 
+  10 & Unemployed, retired & 12:00 - 23:59 & 6119.65 & 45.85 & 1.93 \\ 
+  11 & Other, unknown & 00:00 - 11:59 & 4212.61 & 31.78 & 1.52 \\ 
+  12 & Other, unknown & 12:00 - 23:59 & 4809.52 & 42.66 & 1.58 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+![plot of chunk plotCommBehavDhk09](./analysis_files/figure-html/plotCommBehavDhk09.png) 
+
+### Hanoi 2004
+
+
+
+Data set description:
+
+
+```r
+print(xtable(ddply(hni04.commbehav, c("sex", "noon"), summarize, 
+                   mean_dist = mean(dist), 
+                   mean_duration = mean(duration), 
+                   subtrips = mean(subtrips))), 
+      type = "html")
+```
+
+```
+## Warning: class of 'x' was discarded
+```
+
+```
+## <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
+## <!-- Thu Jul 17 19:11:02 2014 -->
+## <TABLE border=1>
+## <TR> <TH>  </TH> <TH> sex </TH> <TH> noon </TH> <TH> mean_dist </TH> <TH> mean_duration </TH> <TH> subtrips </TH>  </TR>
+##   <TR> <TD align="right"> 1 </TD> <TD> Male </TD> <TD> noon </TD> <TD align="right"> 4607.51 </TD> <TD align="right"> 19.54 </TD> <TD align="right"> 1.02 </TD> </TR>
+##   <TR> <TD align="right"> 2 </TD> <TD> Male </TD> <TD> afternoon </TD> <TD align="right"> 4655.49 </TD> <TD align="right"> 20.67 </TD> <TD align="right"> 1.02 </TD> </TR>
+##   <TR> <TD align="right"> 3 </TD> <TD> Female </TD> <TD> noon </TD> <TD align="right"> 4062.93 </TD> <TD align="right"> 19.18 </TD> <TD align="right"> 1.02 </TD> </TR>
+##   <TR> <TD align="right"> 4 </TD> <TD> Female </TD> <TD> afternoon </TD> <TD align="right"> 4069.47 </TD> <TD align="right"> 20.11 </TD> <TD align="right"> 1.02 </TD> </TR>
+##    </TABLE>
+```
+
+![plot of chunk plotCommBehavHni04](./analysis_files/figure-html/plotCommBehavHni04.png) 
+
+### Jakarta 2002
+
+
+
+Data set description:
+
+
+```r
+print(xtable(ddply(jkt02.commbehav, c("sex", "noon"), summarize, 
+                   mean_dist = mean(dist), 
+                   mean_duration = mean(duration), 
+                   subtrips = mean(subtrips))), 
+      type = "html")
+```
+
+```
+## Warning: class of 'x' was discarded
+```
+
+```
+## <!-- html table generated in R 3.1.0 by xtable 1.7-3 package -->
+## <!-- Thu Jul 17 19:12:26 2014 -->
+## <TABLE border=1>
+## <TR> <TH>  </TH> <TH> sex </TH> <TH> noon </TH> <TH> mean_dist </TH> <TH> mean_duration </TH> <TH> subtrips </TH>  </TR>
+##   <TR> <TD align="right"> 1 </TD> <TD> Male </TD> <TD> noon </TD> <TD align="right"> 10032.60 </TD> <TD align="right"> 35.33 </TD> <TD align="right"> 1.49 </TD> </TR>
+##   <TR> <TD align="right"> 2 </TD> <TD> Male </TD> <TD> afternoon </TD> <TD align="right"> 22473.76 </TD> <TD align="right"> 38.37 </TD> <TD align="right"> 1.52 </TD> </TR>
+##   <TR> <TD align="right"> 3 </TD> <TD> Female </TD> <TD> noon </TD> <TD align="right"> 9517.82 </TD> <TD align="right"> 32.23 </TD> <TD align="right"> 1.52 </TD> </TR>
+##   <TR> <TD align="right"> 4 </TD> <TD> Female </TD> <TD> afternoon </TD> <TD align="right"> 22091.35 </TD> <TD align="right"> 35.92 </TD> <TD align="right"> 1.61 </TD> </TR>
+##    </TABLE>
+```
+
+![plot of chunk plotCommBehavJkt02](./analysis_files/figure-html/plotCommBehavJkt02.png) 
+
+### Metro Manila 1996
+
+
+
+Data set description:
+
+
+```r
+# print(xtable(ddply(mnl96.commbehav, c("sex", "noon"), summarize, 
+#                    mean_dist = mean(dist), 
+#                    mean_duration = mean(duration), 
+#                    subtrips = mean(subtrips))), 
+#       type = "html")
+```
+
+![plot of chunk plotCommBehavMnl96](./analysis_files/figure-html/plotCommBehavMnl96.png) 
+
+### Comparison Across Cities
+
+![plot of chunk plotCommBehavAll](./analysis_files/figure-html/plotCommBehavAll1.png) ![plot of chunk plotCommBehavAll](./analysis_files/figure-html/plotCommBehavAll2.png) 
 
 
 

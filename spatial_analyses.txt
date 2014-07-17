@@ -57,19 +57,20 @@ JOIN non_stationary s ON t.pid = s.pid AND t.tno = s.tno
 ORDER BY t.pid, t.tno;
 
 
--- analyze commuting distance, duration, and intermediate stops
--- purpose needs to be one of 1, 2, 3 - has to be matched to each dataset!
+-- analyze commuting distance, duration, and intermediate stops including socio-demographic attributes
+-- purpose needs to be one of 1, 2, 3 (1, 2, 6 for jkt02!)
 -- activity of preceding trip needs to be one of 1, 2, 3
 -- mode of transportation of trips' subtrips must not contain 97
-WITH subtrip_info AS
+WITH subtrip_info AS 
 (
-	SELECT pid, tno, COUNT(sno) subtrips, MAX(tmodec) tmodec
+	SELECT pid, tno, COUNT(sno) subtrips, MAX(tmodec) tmodec 
 	FROM dhk09.subtrip 
 	GROUP BY pid, tno
-)
-SELECT t.pid, t.tno, t.purpose, t.activity, t.pdate_s, s.subtrips, t.dist, (t.pdate_e - t.pdate_s) duration  
+) 
+SELECT t.pid, t.tno, t.purpose, t.activity, date_part('hour', t.pdate_s) phour_s, s.subtrips, t.dist, t.pdate_s, t.pdate_e, r.sex, r.age, r.occupc 
 FROM dhk09.trip t 
 JOIN subtrip_info s ON t.pid = s.pid AND t.tno = s.tno 
+JOIN dhk09.person r ON t.pid = r.pid 
 WHERE t.purpose IN (1, 2, 3)  AND 
 (
 	SELECT activity 
@@ -77,6 +78,3 @@ WHERE t.purpose IN (1, 2, 3)  AND
 	WHERE x.pid = t.pid AND x.tno = (t.tno - 1)
 ) IN (1, 2, 3) AND s.tmodec != 97 
 ORDER BY pid, tno;
-
-
-"#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00"
