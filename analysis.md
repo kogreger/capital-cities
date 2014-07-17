@@ -284,7 +284,7 @@ describe(jkt02.person)
 ## [1] TRUE
 ```
 
-The data were captured on October 1-2, 1996 with a sample size of 39,383 people.  The personal data occupies 3.2 Mb of memory.
+The data were captured on October 1-2, 1996 with a sample size of 189,335 people.  The personal data occupies 15.2 Mb of memory.
 
 Data set description:
 
@@ -296,65 +296,90 @@ describe(mnl96.person)
 ```
 ## mnl96.person 
 ## 
-##  6  Variables      39383  Observations
+##  6  Variables      189335  Observations
 ## ---------------------------------------------------------------------------
 ## pid 
 ##       n missing  unique 
-##   39383       0   39383 
+##  189335       0  189335 
 ## 
-## lowest : 1     2     3     4     5    
-## highest: 47484 47486 47489 47491 47492 
+## lowest : 1      2      3      4      5     
+## highest: 203517 203518 203519 203520 203521 
 ## ---------------------------------------------------------------------------
 ## sex 
 ##       n missing  unique 
-##   39383       0       2 
+##  189335       0       2 
 ## 
-## Male (18087, 46%), Female (21296, 54%) 
+## Male (87768, 46%), Female (101567, 54%) 
 ## ---------------------------------------------------------------------------
 ## age 
 ##       n missing  unique 
-##   39383       0      18 
+##  189335       0      18 
 ## 
 ##           [0, 5[ [5, 10[ [10, 15[ [15, 20[ [20, 25[ [25, 30[ [30, 35[
-## Frequency    508    4237     4408     4947     4471     3891     3301
-## %              1      11       11       13       11       10        8
+## Frequency   2617   22125    21710    22320    20383    18998    17071
+## %              1      12       11       12       11       10        9
 ##           [35, 40[ [40, 45[ [45, 50[ [50, 55[ [55, 60[ [60, 65[ [65, 70[
-## Frequency     3089     2780     2384     1816     1306     1025      710
-## %                8        7        6        5        3        3        2
+## Frequency    15662    13426    11169     8274     5951     4405     2943
+## %                8        7        6        4        3        2        2
 ##           [70, 75[ [75, 80[ [80, 85[ [85, Inf[
-## Frequency      281      123       73        33
+## Frequency     1138      597      331       215
 ## %                1        0        0         0
 ## ---------------------------------------------------------------------------
 ## occup 
 ##       n missing  unique 
-##   39383       0      14 
+##  189335       0      14 
 ## 
 ##           Executive Professional Technician Clerical Service Farmer Trade
-## Frequency      4564         1304        808     1202    2366     18   661
-## %                12            3          2        3       6      0     2
+## Frequency     18292         5933       3661     5065   10885   1309  5608
+## %                10            3          2        3       6      1     3
 ##           Operator Laborer Pupil Student Housewife Jobless Others
-## Frequency     1051    2894  6773    5962      5920    4482   1378
-## %                3       7    17      15        15      11      3
+## Frequency     7034   13639 35029   25624     30402   19559   7295
+## %                4       7    19      14        16      10      4
 ## ---------------------------------------------------------------------------
 ## occupc 
 ##       n missing  unique 
-##   39383       0       6 
+##  189335       0       6 
 ## 
-## Blue-collar (3720, 9%), White-collar (11148, 28%) 
-## Student (12735, 32%) 
-## Housewife, househusband (5920, 15%) 
-## Unemployed, retired (4482, 11%) 
-## Other, unknown (1378, 3%) 
+## Blue-collar (18609, 10%) 
+## White-collar (52817, 28%), Student (60653, 32%) 
+## Housewife, househusband (30402, 16%) 
+## Unemployed, retired (19559, 10%) 
+## Other, unknown (7295, 4%) 
 ## ---------------------------------------------------------------------------
-## dist 
-##       n missing  unique    Mean     .05     .10     .25     .50     .75 
-##   39383       0   39248   11535    1250    1893    3722    7836   15223 
-##     .90     .95 
-##   25093   33714 
 ## 
-## lowest :      0.00     14.97     30.46     55.55     61.39
-## highest: 124771.38 126643.55 135625.47 152718.42 182414.31 
-## ---------------------------------------------------------------------------
+## Variables with all observations missing:
+## 
+## [1] dist
+```
+
+
+```
+## Warning: Removed 87768 rows containing non-finite values (stat_density).
+## Warning: Removed 101567 rows containing non-finite values (stat_density).
+## Warning: Removed 2617 rows containing non-finite values (stat_density).
+## Warning: Removed 22125 rows containing non-finite values (stat_density).
+## Warning: Removed 21710 rows containing non-finite values (stat_density).
+## Warning: Removed 22320 rows containing non-finite values (stat_density).
+## Warning: Removed 20383 rows containing non-finite values (stat_density).
+## Warning: Removed 18998 rows containing non-finite values (stat_density).
+## Warning: Removed 17071 rows containing non-finite values (stat_density).
+## Warning: Removed 15662 rows containing non-finite values (stat_density).
+## Warning: Removed 13426 rows containing non-finite values (stat_density).
+## Warning: Removed 11169 rows containing non-finite values (stat_density).
+## Warning: Removed 8274 rows containing non-finite values (stat_density).
+## Warning: Removed 5951 rows containing non-finite values (stat_density).
+## Warning: Removed 4405 rows containing non-finite values (stat_density).
+## Warning: Removed 2943 rows containing non-finite values (stat_density).
+## Warning: Removed 1138 rows containing non-finite values (stat_density).
+## Warning: Removed 597 rows containing non-finite values (stat_density).
+## Warning: Removed 331 rows containing non-finite values (stat_density).
+## Warning: Removed 215 rows containing non-finite values (stat_density).
+## Warning: Removed 18609 rows containing non-finite values (stat_density).
+## Warning: Removed 52817 rows containing non-finite values (stat_density).
+## Warning: Removed 60653 rows containing non-finite values (stat_density).
+## Warning: Removed 30402 rows containing non-finite values (stat_density).
+## Warning: Removed 19559 rows containing non-finite values (stat_density).
+## Warning: Removed 7295 rows containing non-finite values (stat_density).
 ```
 
 ![plot of chunk plotHistMnl96Person](./analysis_files/figure-html/plotHistMnl96Person.png) 
@@ -379,7 +404,47 @@ describe(mnl96.person)
 
 #### Distance Traveled
 
-![plot of chunk plotHistPersonDistAll](./analysis_files/figure-html/plotHistPersonDistAll1.png) ![plot of chunk plotHistPersonDistAll](./analysis_files/figure-html/plotHistPersonDistAll2.png) ![plot of chunk plotHistPersonDistAll](./analysis_files/figure-html/plotHistPersonDistAll3.png) 
+
+```
+## Warning: Removed 87768 rows containing non-finite values (stat_density).
+## Warning: Removed 101567 rows containing non-finite values (stat_density).
+```
+
+![plot of chunk plotHistPersonDistAll](./analysis_files/figure-html/plotHistPersonDistAll1.png) 
+
+```
+## Warning: Removed 2617 rows containing non-finite values (stat_density).
+## Warning: Removed 22125 rows containing non-finite values (stat_density).
+## Warning: Removed 21710 rows containing non-finite values (stat_density).
+## Warning: Removed 22320 rows containing non-finite values (stat_density).
+## Warning: Removed 20383 rows containing non-finite values (stat_density).
+## Warning: Removed 18998 rows containing non-finite values (stat_density).
+## Warning: Removed 17071 rows containing non-finite values (stat_density).
+## Warning: Removed 15662 rows containing non-finite values (stat_density).
+## Warning: Removed 13426 rows containing non-finite values (stat_density).
+## Warning: Removed 11169 rows containing non-finite values (stat_density).
+## Warning: Removed 8274 rows containing non-finite values (stat_density).
+## Warning: Removed 5951 rows containing non-finite values (stat_density).
+## Warning: Removed 4405 rows containing non-finite values (stat_density).
+## Warning: Removed 2943 rows containing non-finite values (stat_density).
+## Warning: Removed 1138 rows containing non-finite values (stat_density).
+## Warning: Removed 597 rows containing non-finite values (stat_density).
+## Warning: Removed 331 rows containing non-finite values (stat_density).
+## Warning: Removed 215 rows containing non-finite values (stat_density).
+```
+
+![plot of chunk plotHistPersonDistAll](./analysis_files/figure-html/plotHistPersonDistAll2.png) 
+
+```
+## Warning: Removed 18609 rows containing non-finite values (stat_density).
+## Warning: Removed 52817 rows containing non-finite values (stat_density).
+## Warning: Removed 60653 rows containing non-finite values (stat_density).
+## Warning: Removed 30402 rows containing non-finite values (stat_density).
+## Warning: Removed 19559 rows containing non-finite values (stat_density).
+## Warning: Removed 7295 rows containing non-finite values (stat_density).
+```
+
+![plot of chunk plotHistPersonDistAll](./analysis_files/figure-html/plotHistPersonDistAll3.png) 
 
 
 ## Sample Trips
@@ -649,7 +714,7 @@ describe(jkt02.trip)
 ## [1] TRUE
 ```
 
-The 39,383 people in the sample made a total of 324,312 non-stationary trips. The trip data occupies 13.9 Mb of memory.
+The 189,335 people in the sample made a total of 324,312 non-stationary trips. The trip data occupies 13.9 Mb of memory.
 
 Data set description:
 
@@ -1054,7 +1119,7 @@ table(jkt02.subtrip$activity)
 ## [1] TRUE
 ```
 
-The 39,383 people in the sample made a total of 1,077,258 subtrips. 47.5% of these are actually stationarity events, which reduces the true number of subtrips to 565,041.
+The 189,335 people in the sample made a total of 1,077,258 subtrips. 47.5% of these are actually stationarity events, which reduces the true number of subtrips to 565,041.
 
 Data set description:
 
