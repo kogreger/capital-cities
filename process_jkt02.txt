@@ -475,7 +475,7 @@ SET puid_s =
 -- add column for 5km buffer zone (18ms)
 ALTER TABLE jkt02.point ADD COLUMN buff bigint;
 
--- identify point positions' 5km buffer zone (ms, ~d)
+-- identify point positions' 5km buffer zone (527,676,619ms, ~6.1d)
 UPDATE jkt02.point p 
 SET buff = 
 (

@@ -45,21 +45,19 @@ ALTER TABLE mnl96.point
 -- import persontrip data into database table (9,567,189ms, ~2.7h)
 [[run import-mnl96.sql in PostgreSQL]]
 
----from here---
-
--- create unique point IDs and calculate geometry from lat/lon (2,995,502ms, ~50m)
+-- create unique point IDs and calculate geometry from lat/lon (9,005,714ms, ~150m)
 UPDATE mnl96.point 
 SET puid = id, 
 	geom = ST_SetSRID(ST_MakePoint(longitude, latitude), 4326);
 
--- create table for person data (2,076,273ms, ~34.5m)
+-- create table for person data (2,143,848ms, ~35.7m)
 CREATE TABLE mnl96.person AS 
 SELECT pid, MIN(sex) sex, MIN(age) age, MIN(padd) padd, MIN(occup) occup, MIN(magfac) magfac, MIN(magfac2) magfac2 
 FROM mnl96.point 
 GROUP BY pid 
 ORDER BY pid;
 
--- create table for subtrip data (1,775,151ms, ~29.5m)
+-- create table for subtrip data (ms, ~m)
 CREATE TABLE mnl96.subtrip AS 
 SELECT pid, tno, sno, MIN(tmode) tmode 
 FROM mnl96.point 
@@ -99,14 +97,18 @@ UPDATE mnl96.trip
 SET activity = 
 (
 	SELECT CASE purpose 
-		WHEN 1 THEN 2 
-		WHEN 2 THEN 3 
-		WHEN 3 THEN 4 
+		WHEN 1 THEN 1 
+		WHEN 2 THEN 2 
+		WHEN 3 THEN 3 
 		WHEN 4 THEN 2 
-		WHEN 5 THEN 6 
-		WHEN 6 THEN 1 
-		WHEN 7 THEN 99 
-		WHEN 9 THEN 99 
+		WHEN 5 THEN 2 
+		WHEN 6 THEN 6 
+		WHEN 7 THEN 5 
+		WHEN 8 THEN 5 
+		WHEN 9 THEN 4 
+		WHEN 10 THEN 5 
+		WHEN 11 THEN 6 
+		WHEN 12 THEN 99 
 		WHEN 99 THEN 99 
 	END
 )
@@ -182,22 +184,18 @@ SET occupc =
 	SELECT CASE occup 
 		WHEN 1 THEN 2 
 		WHEN 2 THEN 2 
-		WHEN 3 THEN 2 
+		WHEN 3 THEN 1 
 		WHEN 4 THEN 2 
 		WHEN 5 THEN 2 
 		WHEN 6 THEN 1 
-		WHEN 7 THEN 1 
+		WHEN 7 THEN 2 
 		WHEN 8 THEN 2 
 		WHEN 9 THEN 1 
-		WHEN 10 THEN 1 
-		WHEN 11 THEN 1 
-		WHEN 12 THEN 1 
-		WHEN 13 THEN 1
-		WHEN 14 THEN 1 
-		WHEN 15 THEN 1
-		WHEN 16 THEN 1
-		WHEN 17 THEN 99
-		WHEN 0 THEN 99
+		WHEN 10 THEN 3 
+		WHEN 11 THEN 3 
+		WHEN 12 THEN 4 
+		WHEN 13 THEN 5
+		WHEN 14 THEN 99 
 		WHEN 99 THEN 99 
 	END
 )
@@ -221,26 +219,24 @@ SET tmodec =
 (
 	SELECT CASE tmode 
 		WHEN 1 THEN 1 
-		WHEN 2 THEN 1 
+		WHEN 2 THEN 4 
 		WHEN 3 THEN 2 
 		WHEN 4 THEN 3 
-		WHEN 5 THEN 5 
-		WHEN 6 THEN 5 
-		WHEN 7 THEN 5 
-		WHEN 8 THEN 6 
-		WHEN 9 THEN 8 
-		WHEN 10 THEN 8 
-		WHEN 11 THEN 7 
+		WHEN 5 THEN 3 
+		WHEN 6 THEN 7 
+		WHEN 7 THEN 7 
+		WHEN 8 THEN 7 
+		WHEN 9 THEN 4 
+		WHEN 10 THEN 4 
+		WHEN 11 THEN 5 
 		WHEN 12 THEN 7 
-		WHEN 13 THEN 7 
-		WHEN 14 THEN 7 
-		WHEN 15 THEN 4
-		WHEN 16 THEN 4 
-		WHEN 17 THEN 4 
-		WHEN 18 THEN 4 
-		WHEN 19 THEN 4 
-		WHEN 20 THEN 7 
-		WHEN 21 THEN 99 
+		WHEN 13 THEN 6 
+		WHEN 14 THEN 6 
+		WHEN 15 THEN 6
+		WHEN 16 THEN 8 
+		WHEN 17 THEN 8 
+		WHEN 18 THEN 9 
+		WHEN 19 THEN 99 
 		WHEN 97 THEN 97
 		WHEN 99 THEN 99 
 	END
