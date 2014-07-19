@@ -45,6 +45,7 @@ gradientDistance <- c(220, 350)
 labelsSex <- read.table("labels_all_sex.txt", sep = "\t")
 labelsAge <- read.table("labels_all_age.txt", sep = "\t")
 labelsOccupC <- read.table("labels_all_occupc.txt", sep = "\t")
+labelsOccupC[, 2] <- gsub(" ", "\n", labelsOccupC))
 labelsActivity <- read.table("labels_all_activity.txt", sep = "\t")
 labelsTModeC <- read.table("labels_all_tmodec.txt", sep = "\t")
 labelsNoon <- read.table("labels_all_noon.txt", sep = "\t")
@@ -537,18 +538,58 @@ grid.arrange(plotDhk09OccupC, plotHni04OccupC, plotJkt02OccupC, plotMnl96OccupC,
 #### Distance Traveled
 
 ```{r plotHistPersonDistAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10, cache = TRUE}
-grid.arrange(plotDhk09DistSex, plotHni04DistSex, 
-             plotJkt02DistSex, plotMnl96DistSex, 
-             ncol = 2, 
-             main = "Distance Traveled, by Sex")
-grid.arrange(plotDhk09DistAge, plotHni04DistAge, 
-             plotJkt02DistAge, plotMnl96DistAge, 
-             ncol = 2, 
-             main = "Distance Traveled, by Age")
-grid.arrange(plotDhk09DistOccupC, plotHni04DistOccupC, 
-             plotJkt02DistOccupC, plotMnl96DistOccupC, 
-             ncol = 2, 
-             main = "Distance Traveled, by Occupation Group")
+# extract legends after transposing
+legendDistAge <- extractGgplot2Legend(plotDhk09DistAge + 
+                                        theme(legend.position="bottom") + 
+                                        guides(fill = guide_legend(ncol = 9)))
+legendDistSex <- extractGgplot2Legend(plotDhk09DistSex + 
+                                        theme(legend.position="bottom") + 
+                                        guides(fill = guide_legend(ncol = 2)))
+legendDistOccupC <- extractGgplot2Legend(plotDhk09DistOccupC + 
+                                        theme(legend.position="bottom") + 
+                                        guides(fill = guide_legend(ncol = 6)))
+grid.arrange(arrangeGrob(plotDhk09DistSex + 
+                           labs(title="Dhaka 2009") + 
+                           theme(legend.position = "none"),
+                         plotHni04DistSex + 
+                           labs(title="Hanoi 2004") + 
+                           theme(legend.position = "none"),
+                         plotJkt02DistSex + 
+                           labs(title="Jakarta 2002") + 
+                           theme(legend.position = "none"),
+                         plotMnl96DistSex + 
+                           labs(title="Metro Manila 1996") + 
+                           theme(legend.position = "none"),
+                         main = "Distance Traveled, by Sex", nrow = 2),
+             legendDistSex, heights=c(8, 2))
+grid.arrange(arrangeGrob(plotDhk09DistAge + 
+                           labs(title="Dhaka 2009") + 
+                           theme(legend.position = "none"),
+                         plotHni04DistAge + 
+                           labs(title="Hanoi 2004") + 
+                           theme(legend.position = "none"),
+                         plotJkt02DistAge + 
+                           labs(title="Jakarta 2002") + 
+                           theme(legend.position = "none"),
+                         plotMnl96DistAge + 
+                           labs(title="Metro Manila 1996") + 
+                           theme(legend.position = "none"),
+                         main = "Distance Traveled, by Age", nrow = 2),
+             legendDistAge, heights=c(8, 2))
+grid.arrange(arrangeGrob(plotDhk09DistOccupC + 
+                           labs(title="Dhaka 2009") + 
+                           theme(legend.position = "none"),
+                         plotHni04DistOccupC + 
+                           labs(title="Hanoi 2004") + 
+                           theme(legend.position = "none"),
+                         plotJkt02DistOccupC + 
+                           labs(title="Jakarta 2002") + 
+                           theme(legend.position = "none"),
+                         plotMnl96DistOccupC + 
+                           labs(title="Metro Manila 1996") + 
+                           theme(legend.position = "none"),
+                         main = "Distance Traveled, by Occupation Group", nrow = 2),
+             legendDistOccupC, heights=c(8, 2))
 ```
 
 
@@ -1366,6 +1407,37 @@ grid.arrange(plotJkt02CommBehavAgeNoon, plotJkt02CommBehavOccupCNoon,
 ### Comparison Across Cities
 
 ```{r plotCommBehavAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10, cache = TRUE}
+# extract legends after transposing
+legendCommTripStartHourAbs <- extractGgplot2Legend(plotDhk09CommTripStartHourAbs + 
+                                        theme(legend.position="bottom") + 
+                                        guides(fill = guide_legend(ncol = 3)))
+legendCommTripStartHourRel <- extractGgplot2Legend(plotDhk09CommTripStartHourRel + 
+                                        theme(legend.position="bottom") + 
+                                        guides(fill = guide_legend(ncol = 3)))
+grid.arrange(arrangeGrob(plotDhk09CommTripStartHourAbs + 
+                           labs(title="Dhaka 2009") + 
+                           theme(legend.position = "none"),
+                         plotHni04CommTripStartHourAbs + 
+                           labs(title="Hanoi 2004") + 
+                           theme(legend.position = "none"),
+                         plotJkt02CommTripStartHourAbs + 
+                           labs(title="Jakarta 2002") + 
+                           theme(legend.position = "none"),
+                         main = "Commuting Trips Started per Hour", nrow = 2),
+             legendCommTripStartHourAbs, heights=c(9, 1))
+grid.arrange(arrangeGrob(plotDhk09CommTripStartHourRel + 
+                           labs(title="Dhaka 2009") + 
+                           theme(legend.position = "none"),
+                         plotHni04CommTripStartHourRel + 
+                           labs(title="Hanoi 2004") + 
+                           theme(legend.position = "none"),
+                         plotJkt02CommTripStartHourRel + 
+                           labs(title="Jakarta 2002") + 
+                           theme(legend.position = "none"),
+                         main = "Commuting Trips Started per Hour", nrow = 2),
+             legendCommTripStartHourRel, heights=c(9, 1))
+
+
 grid.arrange(plotDhk09CommBehavAgeNoon, plotHni04CommBehavAgeNoon, 
              plotJkt02CommBehavAgeNoon, ncol = 2, 
              main = "Average Commuting Distance by Age")

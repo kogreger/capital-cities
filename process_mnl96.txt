@@ -57,21 +57,21 @@ FROM mnl96.point
 GROUP BY pid 
 ORDER BY pid;
 
--- create table for subtrip data (ms, ~m)
+-- create table for subtrip data (4,630,995ms, ~1.3h)
 CREATE TABLE mnl96.subtrip AS 
 SELECT pid, tno, sno, MIN(tmode) tmode 
 FROM mnl96.point 
 GROUP BY pid, tno, sno 
 ORDER BY pid, tno, sno;
 
--- create table for trip data (1,084,979ms, ~18m)
+-- create table for trip data (5,194,922ms, ~1.4h)
 CREATE TABLE mnl96.trip AS 
 SELECT pid, tno, MIN(purpose) purpose
 FROM mnl96.point 
 GROUP BY pid, tno 
 ORDER BY pid, tno;
 
--- clean-up point data table (~1.5s)
+-- clean-up point data table (~1.4s)
 ALTER TABLE mnl96.point 
 DROP COLUMN longitude, 
 DROP COLUMN latitude, 
@@ -84,7 +84,7 @@ DROP COLUMN tmode,
 DROP COLUMN magfac, 
 DROP COLUMN magfac2;
 
--- add activity to trip data (6,719ms, ~7s)
+-- add activity to trip data (9,858ms, ~10s)
 -- 1 home
 -- 2 work
 -- 3 education
@@ -113,7 +113,7 @@ SET activity =
 	END
 )
 
--- add activity to subtrip data (shortened significantly by creating indices beforehand: 14,315,754ms, ~4h)
+-- add activity to subtrip data (shortened significantly by creating indices beforehand: 76,589ms, ~77s)
 -- assumed home at start of day unless data says otherwise
 ALTER TABLE mnl96.subtrip ADD COLUMN activity smallint;
 UPDATE mnl96.subtrip s
@@ -141,7 +141,7 @@ SET activity =
 )
 WHERE s.tno = 1 AND s.tmode = 97;
 
--- fill in activity of stationarity events to trip data (44,499,897ms, ~12.4h)
+-- fill in activity of stationarity events to trip data (shortened by creating indices, removing activity index: 10,419,494ms, ~2.9h)
 -- assumed home at start of day unless data says otherwise
 WITH stationary AS
 (
@@ -160,7 +160,7 @@ SET activity =
 FROM stationary s2 
 WHERE t.pid = s2.pid AND t.tno = s2.tno;
 
--- fill in activity of non-stationary events to subtrip data (26,679ms, ~27s)
+-- fill in activity of non-stationary events to subtrip data (4,583ms, ~4.6s)
 UPDATE mnl96.subtrip s
 SET activity = 
 (
@@ -170,7 +170,7 @@ SET activity =
 )
 WHERE s.tmode != 97;
 
--- add occupation category to person data (917ms)
+-- add occupation category to person data (573ms)
 -- 1 blue-collar
 -- 2 white-collar
 -- 3 student
@@ -200,7 +200,7 @@ SET occupc =
 	END
 )
 
--- add transportation mode category to subtrip data (6,319ms, ~6s)
+-- add transportation mode category to subtrip data (14,632ms, ~15s)
 -- 1 walking
 -- 2 bicycle
 -- 3 motorcycle
@@ -242,7 +242,7 @@ SET tmodec =
 	END
 )
 
--- create indices for point data table (37,322,158ms, ~10h)
+-- create indices for point data table (48,689,454ms, ~13.5h)
 CREATE UNIQUE INDEX idx_PUID_mnl96_point 
 	ON mnl96.point 
 	USING btree 
@@ -268,7 +268,7 @@ CREATE INDEX idx_GEOM_mnl96_point
 	USING gist 
 	(geom);
 
--- create indices for person data table (1,045ms)
+-- create indices for person data table (313ms)
 CREATE INDEX idx_PID_mnl96_person 
 	ON mnl96.person 
 	USING btree 
@@ -282,7 +282,7 @@ CREATE INDEX idx_OCCUPC_mnl96_person
 	USING btree 
 	(occupc);
 
--- create indices for subtrip data table (1,834ms)
+-- create indices for subtrip data table (7,308ms, ~7s)
 CREATE INDEX idx_PID_mnl96_subtrip 
 	ON mnl96.subtrip 
 	USING btree 
@@ -308,7 +308,7 @@ CREATE INDEX idx_ACTIVITY_mnl96_subtrip
 	USING btree 
 	(activity);
 
--- create indices for trip data table (549ms)
+-- create indices for trip data table (3,573ms, ~3.6s)
 CREATE INDEX idx_PID_mnl96_trip 
 	ON mnl96.trip 
 	USING btree 
@@ -326,38 +326,38 @@ CREATE INDEX idx_ACTIVITY_mnl96_trip
 	USING btree 
 	(activity);
 
--- create constraints for person data table (~2s)
+-- create constraints for person data table (~336ms)
 ALTER TABLE mnl96.person
 ADD CONSTRAINT pkey_PID_mnl96_person PRIMARY KEY(pid);
 
--- create constraints for point data table (3,027,857ms, ~50m)
+-- create constraints for point data table (9,912,652ms, ~2.7h)
 ALTER TABLE mnl96.point 
 ADD CONSTRAINT pkey_PUID_mnl96_point PRIMARY KEY(puid), 
 ADD CONSTRAINT fkey_PID_person_mnl96_point FOREIGN KEY (pid)
 	REFERENCES mnl96.person (pid) MATCH SIMPLE
 	ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE;
 
--- create constraints for subtrip data table (~5s)
+-- create constraints for subtrip data table (6,456ms)
 ALTER TABLE mnl96.subtrip
 ADD CONSTRAINT pkey_PID_TNO_SNO_mnl96_subtrip PRIMARY KEY(pid, tno, sno), 
 ADD CONSTRAINT fkey_PID_person_mnl96_subtrip FOREIGN KEY (pid)
 	REFERENCES mnl96.person (pid) MATCH SIMPLE
 	ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE;
 
--- create constraints for trip data table (~3s)
+-- create constraints for trip data table (6,178ms)
 ALTER TABLE mnl96.trip
 ADD CONSTRAINT pkey_PID_TNO_mnl96_trip PRIMARY KEY(pid, tno), 
 ADD CONSTRAINT fkey_PID_person_mnl96_trip FOREIGN KEY (pid)
 	REFERENCES mnl96.person (pid) MATCH SIMPLE
 	ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE;
 
--- analyze tables for better performance (205,480ms, ~3.5m)
+-- analyze tables for better performance (478,345ms, ~8m)
 ANALYZE mnl96.person;
 ANALYZE mnl96.point;
 ANALYZE mnl96.subtrip;
 ANALYZE mnl96.trip;
 
--- add columns foor distance measurements
+-- add columns for distance measurements (33ms)
 ALTER TABLE mnl96.point
    ADD COLUMN dist double precision;
 ALTER TABLE mnl96.subtrip
@@ -365,7 +365,7 @@ ALTER TABLE mnl96.subtrip
 ALTER TABLE mnl96.trip
    ADD COLUMN dist double precision;
 
--- calculate distance between point positions (193,064,050ms, ~2.2d)
+-- calculate distance between point positions (ms, ~d)
 UPDATE mnl96.point t1
 SET dist = 
 (

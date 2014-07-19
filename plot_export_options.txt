@@ -1,0 +1,6 @@
+slide export
+------------
+
+png("../ .png", width=1024, height=605, res=96)
+# render plot here
+dev.off()
