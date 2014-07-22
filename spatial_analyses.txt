@@ -35,6 +35,22 @@ GROUP BY buff, date_part('hour', pdate)
 ORDER BY date_part('hour', pdate), buff;
 
 
+-- count number of distinct non-stationary people per buffer zone and hour
+WITH non_stationary AS 
+(
+	SELECT pid, tno, sno, MIN(tmodec) 
+	FROM dhk09.subtrip 
+	WHERE tmodec != 97 
+	GROUP BY pid, tno, sno 
+	ORDER BY pid, tno, sno
+) 
+SELECT p.buff, date_part('hour', p.pdate) phour, COUNT(DISTINCT p.pid) pcount 
+FROM dhk09.point p 
+JOIN non_stationary s ON p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno 
+GROUP BY p.buff, date_part('hour', p.pdate) 
+ORDER BY date_part('hour', p.pdate), buff;
+
+
 -- analyze total moved distance per person
 SELECT r.pid, MIN(r.sex) sex, MIN(r.age) age, MIN(r.occupc) occupc, SUM(t.dist) dist 
 FROM dhk09.person r 

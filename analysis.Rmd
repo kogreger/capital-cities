@@ -38,6 +38,7 @@ source("ggplot2Helper.R")
 theme_set(theme_bw())
 gradientAge <- c(220, 350)
 gradientDistance <- c(220, 350)
+linestyleDistance <- rep(c("solid", "twodash", "longdash", "dashed", "dotted"), 2)
 ```
 
 ```{r loadVariableLabels, eval = TRUE, echo = FALSE, message = FALSE, cache = TRUE}
@@ -45,9 +46,10 @@ gradientDistance <- c(220, 350)
 labelsSex <- read.table("labels_all_sex.txt", sep = "\t")
 labelsAge <- read.table("labels_all_age.txt", sep = "\t")
 labelsOccupC <- read.table("labels_all_occupc.txt", sep = "\t")
-labelsOccupC[, 2] <- gsub(" ", "\n", labelsOccupC))
+labelsOccupC[, 2] <- gsub(" ", "\n", labelsOccupC[, 2])
 labelsActivity <- read.table("labels_all_activity.txt", sep = "\t")
 labelsTModeC <- read.table("labels_all_tmodec.txt", sep = "\t")
+labelsTModeC[, 2] <- gsub("-", "-\n", labelsTModeC[, 2], fixed = TRUE)
 labelsNoon <- read.table("labels_all_noon.txt", sep = "\t")
 labelsDhk09Occup <- read.table("labels_dhk09_occup.txt", sep = "\t")
 labelsHni04Occup <- read.table("labels_hni04_occup.txt", sep = "\t")
@@ -111,29 +113,28 @@ plotDhk09Sex <- ggplot(dhk09.person, aes(sex, fill = sex)) +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsSex[, 2]) + 
   scale_fill_brewer(palette = "Set1", drop = FALSE) + 
-  labs(title = "Dhaka 2009, Sex", x = "Sex", y = "Count") + 
+  labs(x = "Sex", y = "Count") + 
   theme(legend.position = "none")
 plotDhk09Age <- ggplot(dhk09.person, aes(age, fill = age)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsAge[, 2]) + 
   scale_fill_discrete(h = gradientAge, drop = FALSE) + 
-  labs(title = "Dhaka 2009, Age", x = "Age", y = "Count") +
+  labs(x = "Age", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
   theme(legend.position = "none")
 plotDhk09Occup <- ggplot(dhk09.person, aes(occup)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsDhk09Occup[, 2]) +
-  labs(title = "Dhaka 2009, Occupation", x = "Occupation", y = "Count") +
+  labs(title = "Dhaka", x = "Occupation", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 plotDhk09OccupC <- ggplot(dhk09.person, aes(occupc, fill = occupc)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsOccupC[, 2]) + 
   scale_fill_brewer(palette = "Set1", drop = FALSE) + 
-  labs(title = "Dhaka 2009, Occupation Group", 
-       x = "Occupation Group", 
+  labs(x = "Occupation Group", 
        y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
   theme(legend.position = "none")
@@ -142,7 +143,7 @@ plotDhk09DistSex <- ggplot(dhk09.person, aes(dist / 1000, fill = sex)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_brewer(palette = "Set1", name = "Sex", drop = FALSE) + 
-  labs(title = "Dhaka 2009, Distance Traveled", 
+  labs(title = "Dhaka", 
        x = "Distance [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
@@ -152,8 +153,7 @@ plotDhk09DistAge <- ggplot(dhk09.person, aes(dist / 1000, fill = age)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_discrete(h = gradientAge, name = "Age", drop = FALSE) + 
-  labs(title = "Dhaka 2009, Distance Traveled", 
-       x = "Distance [km]", 
+  labs(x = "Distance [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank()) + 
@@ -163,8 +163,7 @@ plotDhk09DistOccupC <- ggplot(dhk09.person, aes(dist / 1000, fill = occupc)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_brewer(palette = "Set1", name = "Occupation Group", drop = FALSE) + 
-  labs(title = "Dhaka 2009, Distance Traveled", 
-       x = "Distance [km]", 
+  labs(x = "Distance [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -214,29 +213,28 @@ plotHni04Sex <- ggplot(hni04.person, aes(sex, fill = sex)) +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsSex[, 2]) + 
   scale_fill_brewer(palette = "Set1", drop = FALSE) + 
-  labs(title = "Hanoi 2004, Sex", x = "Sex", y = "Count") + 
+  labs(x = "Sex", y = "Count") + 
   theme(legend.position = "none")
 plotHni04Age <- ggplot(hni04.person, aes(age, fill = age)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsAge[, 2]) + 
   scale_fill_discrete(h = gradientAge, drop = FALSE) + 
-  labs(title = "Hanoi 2004, Age", x = "Age", y = "Count") +
+  labs(x = "Age", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
   theme(legend.position = "none")
 plotHni04Occup <- ggplot(hni04.person, aes(occup)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsHni04Occup[, 2]) +
-  labs(title = "Hanoi 2004, Occupation", x = "Occupation", y = "Count") +
+  labs(x = "Occupation", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 plotHni04OccupC <- ggplot(hni04.person, aes(occupc, fill = occupc)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsOccupC[, 2]) + 
   scale_fill_brewer(palette = "Set1", drop = FALSE) + 
-  labs(title = "Hanoi 2004, Occupation Group", 
-       x = "Occupation Group", 
+  labs(x = "Occupation Group", 
        y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
   theme(legend.position = "none")
@@ -245,8 +243,7 @@ plotHni04DistSex <- ggplot(hni04.person, aes(dist / 1000, fill = sex)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_brewer(palette = "Set1", name = "Sex", drop = FALSE) + 
-  labs(title = "Hanoi 2004, Distance Traveled", 
-       x = "Distance [km]", 
+  labs(x = "Distance [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -255,8 +252,7 @@ plotHni04DistAge <- ggplot(hni04.person, aes(dist / 1000, fill = age)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_discrete(h = gradientAge, name = "Age", drop = FALSE) + 
-  labs(title = "Hanoi 2004, Distance Traveled", 
-       x = "Distance [km]", 
+  labs(x = "Distance [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank()) + 
@@ -266,8 +262,7 @@ plotHni04DistOccupC <- ggplot(hni04.person, aes(dist / 1000, fill = occupc)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_brewer(palette = "Set1", name = "Occupation Group", drop = FALSE) + 
-  labs(title = "Hanoi 2004, Distance Traveled", 
-       x = "Distance [km]", 
+  labs(x = "Distance [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -317,29 +312,28 @@ plotJkt02Sex <- ggplot(jkt02.person, aes(sex, fill = sex)) +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsSex[, 2]) + 
   scale_fill_brewer(palette = "Set1", drop = FALSE) + 
-  labs(title = "Jakarta 2002, Sex", x = "Sex", y = "Count") + 
+  labs(x = "Sex", y = "Count") + 
   theme(legend.position = "none")
 plotJkt02Age <- ggplot(jkt02.person, aes(age, fill = age)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsAge[, 2]) + 
   scale_fill_discrete(h = gradientAge, drop = FALSE) + 
-  labs(title = "Jakarta 2002, Age", x = "Age", y = "Count") +
+  labs(x = "Age", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
   theme(legend.position = "none")
 plotJkt02Occup <- ggplot(jkt02.person, aes(occup)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsJkt02Occup[, 2]) +
-  labs(title = "Jakarta 2002, Occupation", x = "Occupation", y = "Count") +
+  labs(x = "Occupation", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 plotJkt02OccupC <- ggplot(jkt02.person, aes(occupc, fill = occupc)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsOccupC[, 2]) + 
   scale_fill_brewer(palette = "Set1", drop = FALSE) + 
-  labs(title = "Jakarta 2002, Occupation Group", 
-       x = "Occupation Group", 
+  labs(x = "Occupation Group", 
        y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
   theme(legend.position = "none")
@@ -348,8 +342,7 @@ plotJkt02DistSex <- ggplot(jkt02.person, aes(dist / 1000, fill = sex)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_brewer(palette = "Set1", name = "Sex", drop = FALSE) + 
-  labs(title = "Jakarta 2001, Distance Traveled", 
-       x = "Distance [km]", 
+  labs(x = "Distance [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -358,8 +351,7 @@ plotJkt02DistAge <- ggplot(jkt02.person, aes(dist / 1000, fill = age)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_discrete(h = gradientAge, name = "Age", drop = FALSE) + 
-  labs(title = "Jakarta 2001, Distance Traveled", 
-       x = "Distance [km]", 
+  labs(x = "Distance [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank()) + 
@@ -369,8 +361,7 @@ plotJkt02DistOccupC <- ggplot(jkt02.person, aes(dist / 1000, fill = occupc)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_brewer(palette = "Set1", name = "Occupation Group", drop = FALSE) + 
-  labs(title = "Jakarta 2001, Distance Traveled", 
-       x = "Distance [km]", 
+  labs(x = "Distance [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -439,29 +430,28 @@ plotMnl96Sex <- ggplot(mnl96.person, aes(sex, fill = sex)) +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsSex[, 2]) + 
   scale_fill_brewer(palette = "Set1", drop = FALSE) + 
-  labs(title = "Metro Manila 1996, Sex", x = "Sex", y = "Count") + 
+  labs(x = "Sex", y = "Count") + 
   theme(legend.position = "none")
 plotMnl96Age <- ggplot(mnl96.person, aes(age, fill = age)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsAge[, 2]) + 
   scale_fill_discrete(h = gradientAge, drop = FALSE) + 
-  labs(title = "Metro Manila 1996, Age", x = "Age", y = "Count") +
+  labs(x = "Age", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
   theme(legend.position = "none")
 plotMnl96Occup <- ggplot(mnl96.person, aes(occup)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsMnl96Occup[, 2]) +
-  labs(title = "Metro Manila 1996, Occupation", x = "Occupation", y = "Count") +
+  labs(x = "Occupation", y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 plotMnl96OccupC <- ggplot(mnl96.person, aes(occupc, fill = occupc)) +
   geom_bar() +
   scale_y_continuous(labels = comma) +
   scale_x_discrete(limits = labelsOccupC[, 2]) + 
   scale_fill_brewer(palette = "Set1", drop = FALSE) + 
-  labs(title = "Metro Manila 1996, Occupation Group", 
-       x = "Occupation Group", 
+  labs(x = "Occupation Group", 
        y = "Count") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
   theme(legend.position = "none")
@@ -470,8 +460,7 @@ plotMnl96DistSex <- ggplot(mnl96.person, aes(dist / 1000, fill = sex)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_brewer(palette = "Set1", name = "Sex", drop = FALSE) + 
-  labs(title = "Metro Manila 1996, Distance Traveled", 
-       x = "Distance [km]", 
+  labs(x = "Distance [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -480,8 +469,7 @@ plotMnl96DistAge <- ggplot(mnl96.person, aes(dist / 1000, fill = age)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_discrete(h = gradientAge, name = "Age", drop = FALSE) + 
-  labs(title = "Metro Manila 1996, Distance Traveled", 
-       x = "Distance [km]", 
+  labs(x = "Distance [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank()) + 
@@ -491,8 +479,7 @@ plotMnl96DistOccupC <- ggplot(mnl96.person, aes(dist / 1000, fill = occupc)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_brewer(palette = "Set1", name = "Occupation Group", drop = FALSE) + 
-  labs(title = "Metro Manila 1996, Distance Traveled", 
-       x = "Distance [km]", 
+  labs(x = "Distance [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -539,43 +526,43 @@ grid.arrange(plotDhk09OccupC, plotHni04OccupC, plotJkt02OccupC, plotMnl96OccupC,
 
 ```{r plotHistPersonDistAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10, cache = TRUE}
 # extract legends after transposing
-legendDistAge <- extractGgplot2Legend(plotDhk09DistAge + 
-                                        theme(legend.position="bottom") + 
-                                        guides(fill = guide_legend(ncol = 9)))
 legendDistSex <- extractGgplot2Legend(plotDhk09DistSex + 
                                         theme(legend.position="bottom") + 
                                         guides(fill = guide_legend(ncol = 2)))
+legendDistAge <- extractGgplot2Legend(plotDhk09DistAge + 
+                                        theme(legend.position="bottom") + 
+                                        guides(fill = guide_legend(ncol = 9)))
 legendDistOccupC <- extractGgplot2Legend(plotDhk09DistOccupC + 
                                         theme(legend.position="bottom") + 
                                         guides(fill = guide_legend(ncol = 6)))
 grid.arrange(arrangeGrob(plotDhk09DistSex + 
-                           labs(title="Dhaka 2009") + 
+                           labs(title="Dhaka") + 
                            theme(legend.position = "none"),
                          plotHni04DistSex + 
-                           labs(title="Hanoi 2004") + 
+                           labs(title="Hanoi") + 
                            theme(legend.position = "none"),
                          plotJkt02DistSex + 
-                           labs(title="Jakarta 2002") + 
+                           labs(title="Jakarta") + 
                            theme(legend.position = "none"),
                          plotMnl96DistSex + 
-                           labs(title="Metro Manila 1996") + 
+                           labs(title="Metro Manila") + 
                            theme(legend.position = "none"),
-                         main = "Distance Traveled, by Sex", nrow = 2),
+                         nrow = 2),
              legendDistSex, heights=c(8, 2))
 grid.arrange(arrangeGrob(plotDhk09DistAge + 
-                           labs(title="Dhaka 2009") + 
+                           labs(title="Dhaka") + 
                            theme(legend.position = "none"),
                          plotHni04DistAge + 
-                           labs(title="Hanoi 2004") + 
+                           labs(title="Hanoi") + 
                            theme(legend.position = "none"),
                          plotJkt02DistAge + 
-                           labs(title="Jakarta 2002") + 
+                           labs(title="Jakarta") + 
                            theme(legend.position = "none"),
                          plotMnl96DistAge + 
-                           labs(title="Metro Manila 1996") + 
+                           labs(title="Metro Manila") + 
                            theme(legend.position = "none"),
-                         main = "Distance Traveled, by Age", nrow = 2),
-             legendDistAge, heights=c(8, 2))
+                         nrow = 2),
+             legendDistAge, heights=c(9, 1))
 grid.arrange(arrangeGrob(plotDhk09DistOccupC + 
                            labs(title="Dhaka 2009") + 
                            theme(legend.position = "none"),
@@ -628,7 +615,7 @@ plotDhk09Activity <- ggplot(dhk09.trip, aes(activity, fill = activity)) +
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(limits = labelsActivity[, 2]) + 
   scale_fill_brewer(palette = "Set1", name = "Activity", drop = FALSE) + 
-  labs(title = "Dhaka 2009, Activity", x = "Activity", y = "Trips") + 
+  labs(x = "Activity", y = "Trips") + 
   theme(legend.position = "none")
 grid.arrange(plotDhk09Activity, 
              ncol = 1)
@@ -668,7 +655,7 @@ plotHni04Activity <- ggplot(hni04.trip, aes(activity, fill = activity)) +
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(limits = labelsActivity[, 2]) + 
   scale_fill_brewer(palette = "Set1", name = "Activity", drop = FALSE) + 
-  labs(title = "Hanoi 2004, Activity", x = "Activity", y = "Trips") + 
+  labs(x = "Activity", y = "Trips") + 
   theme(legend.position = "none")
 grid.arrange(plotHni04Activity, 
              ncol = 1)
@@ -707,7 +694,7 @@ plotJkt02Activity <- ggplot(jkt02.trip, aes(activity, fill = activity)) +
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(limits = labelsActivity[, 2]) + 
   scale_fill_brewer(palette = "Set1", name = "Activity", drop = FALSE) + 
-  labs(title = "Jakarta 2002, Activity", x = "Activity", y = "Trips") + 
+  labs(x = "Activity", y = "Trips") + 
   theme(legend.position = "none")
 grid.arrange(plotJkt02Activity, 
              ncol = 1)
@@ -766,7 +753,7 @@ plotMnl96Activity <- ggplot(mnl96.trip, aes(activity, fill = activity)) +
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(limits = labelsActivity[, 2]) + 
   scale_fill_brewer(palette = "Set1", name = "Activity", drop = FALSE) + 
-  labs(title = "Metro Manila 1996, Activity", x = "Activity", y = "Trips") + 
+  labs(x = "Activity", y = "Trips") + 
   theme(legend.position = "none")
 grid.arrange(plotMnl96Activity, 
              ncol = 1)
@@ -834,8 +821,7 @@ plotDhk09TModeC <- ggplot(dhk09.subtrip, aes(tmodec, fill = tmodec)) +
   scale_x_discrete(limits = labelsTModeC[c(1:9), 2]) + 
   scale_fill_brewer(palette = "Set1", name = "Mode of Transportation", 
                     drop = FALSE) + 
-  labs(title = "Dhaka 2009, Mode of Transportation", 
-       x = "Mode of Transportation", y = "Subtrips") + 
+  labs(x = "Mode of Transportation", y = "Subtrips") + 
   theme(legend.position = "none")
 grid.arrange(plotDhk09TModeC, 
              ncol = 1)
@@ -890,8 +876,7 @@ plotHni04TModeC <- ggplot(hni04.subtrip, aes(tmodec, fill = tmodec)) +
   scale_x_discrete(limits = labelsTModeC[c(1:9), 2]) + 
   scale_fill_brewer(palette = "Set1", name = "Mode of Transportation", 
                     drop = FALSE) + 
-  labs(title = "Hanoi 2004, Mode of Transportation", 
-       x = "Mode of Transportation", y = "Subtrips") + 
+  labs(x = "Mode of Transportation", y = "Subtrips") + 
   theme(legend.position = "none")
 grid.arrange(plotHni04TModeC, 
              ncol = 1)
@@ -936,13 +921,7 @@ The `r format(nrow(jkt02.person), big.mark=",")` people in the sample made a tot
 Data set description:
 
 ```{r descJkt02Subtrip, cache = TRUE}
-format(object.size(jkt02.subtrip), units = "auto")
-names(jkt02.subtrip)
-str(jkt02.subtrip)
-levels(jkt02.subtrip$tmodec)
-table(jkt02.subtrip$tmodec)
-levels(jkt02.subtrip$activity)
-table(jkt02.subtrip$activity)
+describe(jkt02.subtrip)
 ```
 
 ```{r plotHistJkt02Subtrip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
@@ -952,8 +931,7 @@ plotJkt02TModeC <- ggplot(jkt02.subtrip, aes(tmodec, fill = tmodec)) +
   scale_x_discrete(limits = labelsTModeC[c(1:9), 2]) + 
   scale_fill_brewer(palette = "Set1", name = "Mode of Transportation", 
                     drop = FALSE) + 
-  labs(title = "Jakarta 2002, Mode of Transportation", 
-       x = "Mode of Transportation", y = "Subtrips") + 
+  labs(x = "Mode of Transportation", y = "Subtrips") + 
   theme(legend.position = "none")
 grid.arrange(plotJkt02TModeC, 
              ncol = 1)
@@ -1019,13 +997,7 @@ The `r format(nrow(mnl96.person), big.mark=",")` people in the sample made a tot
 Data set description:
 
 ```{r descMnl96Subtrip, cache = TRUE}
-format(object.size(mnl96.subtrip), units = "auto")
-names(mnl96.subtrip)
-str(mnl96.subtrip)
-levels(mnl96.subtrip$tmodec)
-table(mnl96.subtrip$tmodec)
-levels(mnl96.subtrip$activity)
-table(mnl96.subtrip$activity)
+describe(mnl96.subtrip)
 ```
 
 ```{r plotHistMnl96Subtrip, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
@@ -1035,8 +1007,7 @@ plotMnl96TModeC <- ggplot(mnl96.subtrip, aes(tmodec, fill = tmodec)) +
   scale_x_discrete(limits = labelsTModeC[c(1:9), 2]) + 
   scale_fill_brewer(palette = "Set1", name = "Mode of Transportation", 
                     drop = FALSE) + 
-  labs(title = "Metro Manila 1996, Mode of Transportation", 
-       x = "Mode of Transportation", y = "Subtrips") + 
+  labs(x = "Mode of Transportation", y = "Subtrips") + 
   theme(legend.position = "none")
 grid.arrange(plotMnl96TModeC, 
              ncol = 1)
@@ -1047,8 +1018,7 @@ grid.arrange(plotMnl96TModeC,
 ```{r plotHistSubtripTModeCAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 10, cache = TRUE}
 grid.arrange(plotDhk09TModeC, plotHni04TModeC, 
              plotJkt02TModeC, plotMnl96TModeC, 
-             ncol = 2, 
-             main = "Mode of Transportation Group")
+             ncol = 2)
 ```
 
 
@@ -1104,6 +1074,10 @@ dhk09.commbehav$occupc <- factor(dhk09.commbehav$occupc,
 Data set description:
 
 ```{r descCommBehavDhk09, results = "asis", cache = TRUE}
+dhk09CommBehavNoon <- ddply(dhk09.commbehav, c("noon"), summarize, 
+                            mean_dist = mean(dist), 
+                            mean_duration = mean(duration), 
+                            subtrips = mean(subtrips))
 dhk09CommBehavSexNoon <- ddply(dhk09.commbehav, c("sex", "noon"), summarize, 
                                mean_dist = mean(dist), 
                                mean_duration = mean(duration), 
@@ -1151,8 +1125,7 @@ plotDhk09CommTripStartHourAbs <- ggplot(dhk09.commbehav,
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(breaks = seq(0, 24, 3)) +
   scale_color_brewer(palette = "Set1", name = "Activity") + 
-  labs(title = "Dhaka 2009, Commuting Trips Started per Hour", 
-       x = "Time", 
+  labs(x = "Time", 
        y = "Count") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -1162,8 +1135,7 @@ plotDhk09CommTripStartHourRel <- ggplot(dhk09.commbehav,
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(breaks = seq(0, 24, 3)) +
   scale_fill_brewer(palette = "Set1", name = "Activity") + 
-  labs(title = "Dhaka 2009, Commuting Trips Started per Hour", 
-       x = "Time", 
+  labs(x = "Time", 
        y = "Ratio") +
   theme(legend.justification = c(1, 0), legend.position = c(1, 0), 
         legend.key = element_blank())
@@ -1219,6 +1191,10 @@ hni04.commbehav$occupc <- factor(hni04.commbehav$occupc,
 Data set description:
 
 ```{r descCommBehavHni04, results = "asis", cache = TRUE}
+hni04CommBehavNoon <- ddply(hni04.commbehav, c("noon"), summarize, 
+                            mean_dist = mean(dist), 
+                            mean_duration = mean(duration), 
+                            subtrips = mean(subtrips))
 hni04CommBehavSexNoon <- ddply(hni04.commbehav, c("sex", "noon"), summarize, 
                                mean_dist = mean(dist), 
                                mean_duration = mean(duration), 
@@ -1266,8 +1242,7 @@ plotHni04CommTripStartHourAbs <- ggplot(hni04.commbehav,
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(breaks = seq(0, 24, 3)) +
   scale_color_brewer(palette = "Set1", name = "Activity") + 
-  labs(title = "Hanoi 2004, Commuting Trips Started per Hour", 
-       x = "Time", 
+  labs(x = "Time", 
        y = "Count") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -1277,8 +1252,7 @@ plotHni04CommTripStartHourRel <- ggplot(hni04.commbehav,
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(breaks = seq(0, 24, 3)) +
   scale_fill_brewer(palette = "Set1", name = "Activity") + 
-  labs(title = "Hanoi 2004, Commuting Trips Started per Hour", 
-       x = "Time", 
+  labs(x = "Time", 
        y = "Ratio") +
   theme(legend.justification = c(1, 0), legend.position = c(1, 0), 
         legend.key = element_blank())
@@ -1334,6 +1308,10 @@ jkt02.commbehav$occupc <- factor(jkt02.commbehav$occupc,
 Data set description:
 
 ```{r descCommBehavJkt02, results = "asis", cache = TRUE}
+jkt02CommBehavNoon <- ddply(jkt02.commbehav, c("noon"), summarize, 
+                            mean_dist = mean(dist), 
+                            mean_duration = mean(duration), 
+                            subtrips = mean(subtrips))
 jkt02CommBehavSexNoon <- ddply(jkt02.commbehav, c("sex", "noon"), summarize, 
                                mean_dist = mean(dist), 
                                mean_duration = mean(duration), 
@@ -1381,8 +1359,7 @@ plotJkt02CommTripStartHourAbs <- ggplot(jkt02.commbehav,
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(breaks = seq(0, 24, 3)) +
   scale_color_brewer(palette = "Set1", name = "Activity") + 
-  labs(title = "Jakarta 2002, Commuting Trips Started per Hour", 
-       x = "Time", 
+  labs(x = "Time", 
        y = "Count") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -1392,8 +1369,7 @@ plotJkt02CommTripStartHourRel <- ggplot(jkt02.commbehav,
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(breaks = seq(0, 24, 3)) +
   scale_fill_brewer(palette = "Set1", name = "Activity") + 
-  labs(title = "Jakarta 2002, Commuting Trips Started per Hour", 
-       x = "Time", 
+  labs(x = "Time", 
        y = "Ratio") +
   theme(legend.justification = c(1, 0), legend.position = c(1, 0), 
         legend.key = element_blank())
@@ -1415,26 +1391,26 @@ legendCommTripStartHourRel <- extractGgplot2Legend(plotDhk09CommTripStartHourRel
                                         theme(legend.position="bottom") + 
                                         guides(fill = guide_legend(ncol = 3)))
 grid.arrange(arrangeGrob(plotDhk09CommTripStartHourAbs + 
-                           labs(title="Dhaka 2009") + 
+                           labs(title="Dhaka") + 
                            theme(legend.position = "none"),
                          plotHni04CommTripStartHourAbs + 
-                           labs(title="Hanoi 2004") + 
+                           labs(title="Hanoi") + 
                            theme(legend.position = "none"),
                          plotJkt02CommTripStartHourAbs + 
-                           labs(title="Jakarta 2002") + 
+                           labs(title="Jakarta") + 
                            theme(legend.position = "none"),
-                         main = "Commuting Trips Started per Hour", nrow = 2),
+                         nrow = 2),
              legendCommTripStartHourAbs, heights=c(9, 1))
 grid.arrange(arrangeGrob(plotDhk09CommTripStartHourRel + 
-                           labs(title="Dhaka 2009") + 
+                           labs(title="Dhaka") + 
                            theme(legend.position = "none"),
                          plotHni04CommTripStartHourRel + 
-                           labs(title="Hanoi 2004") + 
+                           labs(title="Hanoi") + 
                            theme(legend.position = "none"),
                          plotJkt02CommTripStartHourRel + 
-                           labs(title="Jakarta 2002") + 
+                           labs(title="Jakarta") + 
                            theme(legend.position = "none"),
-                         main = "Commuting Trips Started per Hour", nrow = 2),
+                         nrow = 2),
              legendCommTripStartHourRel, heights=c(9, 1))
 
 
@@ -1468,18 +1444,48 @@ dhk09.stdist <- psqlQuery(con, query)
 dhk09.stdist$buff <- factor(dhk09.stdist$buff, 
                            levels = seq(5, 50, 5), 
                            labels = paste(seq(5, 50, 5), rep("km", 10)))
+# change column name for pretty legend title
+names(dhk09.stdist) <- c("Buffer", "phour", "pcount")
 ```
 
 ```{r plotSTDistributionDhk09, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
-plotDhk09STDist <- ggplot(dhk09.stdist, aes(x = phour, y = pcount)) + 
-  geom_line(aes(color = buff)) + 
-  labs(title = "Dhaka 2009, Spatio-Temporal Distribution of People", 
+plotDhk09STDist <- ggplot(dhk09.stdist, aes(x = phour, y = pcount, 
+                                            color = Buffer, linetype = Buffer)) + 
+  geom_line() + 
+  labs(title = "Spatio-Temporal Distribution of People, Dhaka", 
        x = "Time", y = "People") + 
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(breaks = seq(0, 24, 3)) +
-  scale_color_discrete(h = gradientDistance, name = "Buffer", drop = FALSE) + 
+  scale_color_discrete(h = gradientDistance) + 
   theme(legend.key = element_blank())
 grid.arrange(plotDhk09STDist, 
+             ncol = 1)
+```
+
+```{r loadNonStationarySTDistributionDhk09, eval = TRUE, echo = FALSE, cache = TRUE}
+# load spatio-temporal distribution data
+query <- "WITH non_stationary AS (SELECT pid, tno, sno, MIN(tmodec) FROM dhk09.subtrip WHERE tmodec != 97 GROUP BY pid, tno, sno ORDER BY pid, tno, sno) SELECT p.buff, date_part('hour', p.pdate) phour, COUNT(DISTINCT p.pid) pcount FROM dhk09.point p JOIN non_stationary s ON p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno GROUP BY p.buff, date_part('hour', p.pdate) ORDER BY date_part('hour', p.pdate), buff;"
+dhk09.stdist_nonstat <- psqlQuery(con, query)
+# factorize buff
+dhk09.stdist_nonstat$buff <- factor(dhk09.stdist_nonstat$buff, 
+                                    levels = seq(5, 50, 5), 
+                                    labels = paste(seq(5, 50, 5), rep("km", 10)))
+# change column name for pretty legend title
+names(dhk09.stdist_nonstat) <- c("Buffer", "phour", "pcount")
+```
+
+```{r plotNonStationarySTDistributionDhk09, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
+plotDhk09NonStatSTDist <- ggplot(dhk09.stdist_nonstat, aes(x = phour, y = pcount, 
+                                                           color = Buffer, 
+                                                           linetype = Buffer)) + 
+  geom_line() + 
+  labs(title = "Spatio-Temporal Distribution of Moving People, Dhaka", 
+       x = "Time", y = "People") + 
+  scale_y_continuous(labels = comma) + 
+  scale_x_discrete(breaks = seq(0, 24, 3)) +
+  scale_color_discrete(h = gradientDistance) + 
+  theme(legend.key = element_blank())
+grid.arrange(plotDhk09NonStatSTDist, 
              ncol = 1)
 ```
 
@@ -1493,18 +1499,48 @@ hni04.stdist <- psqlQuery(con, query)
 hni04.stdist$buff <- factor(hni04.stdist$buff, 
                            levels = seq(5, 50, 5), 
                            labels = paste(seq(5, 50, 5), rep("km", 10)))
+# change column name for pretty legend title
+names(hni04.stdist) <- c("Buffer", "phour", "pcount")
 ```
 
 ```{r plotSTDistributionHni04, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
-plotHni04STDist <- ggplot(hni04.stdist, aes(x = phour, y = pcount)) + 
-  geom_line(aes(color = buff)) + 
-  labs(title = "Hanoi 2004, Spatio-Temporal Distribution of People", 
+plotHni04STDist <- ggplot(hni04.stdist, aes(x = phour, y = pcount, 
+                                            color = Buffer, linetype = Buffer)) + 
+  geom_line() + 
+  labs(title = "Spatio-Temporal Distribution of People, Hanoi", 
        x = "Time", y = "People") + 
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(breaks = seq(0, 24, 3)) +
-  scale_color_discrete(h = gradientDistance, name = "Buffer", drop = FALSE) + 
+  scale_color_discrete(h = gradientDistance) + 
   theme(legend.key = element_blank())
 grid.arrange(plotHni04STDist, 
+             ncol = 1)
+```
+
+```{r loadNonStationarySTDistributionHni04, eval = TRUE, echo = FALSE, cache = TRUE}
+# load spatio-temporal distribution data
+query <- "WITH non_stationary AS (SELECT pid, tno, sno, MIN(tmodec) FROM hni04.subtrip WHERE tmodec != 97 GROUP BY pid, tno, sno ORDER BY pid, tno, sno) SELECT p.buff, date_part('hour', p.pdate) phour, COUNT(DISTINCT p.pid) pcount FROM hni04.point p JOIN non_stationary s ON p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno GROUP BY p.buff, date_part('hour', p.pdate) ORDER BY date_part('hour', p.pdate), buff;"
+hni04.stdist_nonstat <- psqlQuery(con, query)
+# factorize buff
+hni04.stdist_nonstat$buff <- factor(hni04.stdist_nonstat$buff, 
+                                    levels = seq(5, 50, 5), 
+                                    labels = paste(seq(5, 50, 5), rep("km", 10)))
+# change column name for pretty legend title
+names(hni04.stdist_nonstat) <- c("Buffer", "phour", "pcount")
+```
+
+```{r plotNonStationarySTDistributionHni04, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
+plotHni04NonStatSTDist <- ggplot(hni04.stdist_nonstat, aes(x = phour, y = pcount, 
+                                                           color = Buffer, 
+                                                           linetype = Buffer)) + 
+  geom_line() + 
+  labs(title = "Spatio-Temporal Distribution of Moving People, Hanoi", 
+       x = "Time", y = "People") + 
+  scale_y_continuous(labels = comma) + 
+  scale_x_discrete(breaks = seq(0, 24, 3)) +
+  scale_color_discrete(h = gradientDistance) + 
+  theme(legend.key = element_blank())
+grid.arrange(plotHni04NonStatSTDist, 
              ncol = 1)
 ```
 
@@ -1518,18 +1554,48 @@ jkt02.stdist <- psqlQuery(con, query)
 jkt02.stdist$buff <- factor(jkt02.stdist$buff, 
                            levels = seq(5, 50, 5), 
                            labels = paste(seq(5, 50, 5), rep("km", 10)))
+# change column name for pretty legend title
+names(jkt02.stdist) <- c("Buffer", "phour", "pcount")
 ```
 
 ```{r plotSTDistributionJkt02, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
-plotJkt02STDist <- ggplot(jkt02.stdist, aes(x = phour, y = pcount)) + 
-  geom_line(aes(color = buff)) + 
-  labs(title = "Jakarta 2002, Spatio-Temporal Distribution of People", 
+plotJkt02STDist <- ggplot(jkt02.stdist, aes(x = phour, y = pcount, 
+                                            color = Buffer, linetype = Buffer)) + 
+  geom_line() + 
+  labs(title = "Spatio-Temporal Distribution of People, Jakarta", 
        x = "Time", y = "People") + 
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(breaks = seq(0, 24, 3)) +
-  scale_color_discrete(h = gradientDistance, name = "Buffer", drop = FALSE) + 
+  scale_color_discrete(h = gradientDistance) + 
   theme(legend.key = element_blank())
 grid.arrange(plotJkt02STDist, 
+             ncol = 1)
+```
+
+```{r loadNonStationarySTDistributionJkt02, eval = TRUE, echo = FALSE, cache = TRUE}
+# load spatio-temporal distribution data
+query <- "WITH non_stationary AS (SELECT pid, tno, sno, MIN(tmodec) FROM jkt02.subtrip WHERE tmodec != 97 GROUP BY pid, tno, sno ORDER BY pid, tno, sno) SELECT p.buff, date_part('hour', p.pdate) phour, COUNT(DISTINCT p.pid) pcount FROM jkt02.point p JOIN non_stationary s ON p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno GROUP BY p.buff, date_part('hour', p.pdate) ORDER BY date_part('hour', p.pdate), buff;"
+jkt02.stdist_nonstat <- psqlQuery(con, query)
+# factorize buff
+jkt02.stdist_nonstat$buff <- factor(jkt02.stdist_nonstat$buff, 
+                                    levels = seq(5, 50, 5), 
+                                    labels = paste(seq(5, 50, 5), rep("km", 10)))
+# change column name for pretty legend title
+names(jkt02.stdist_nonstat) <- c("Buffer", "phour", "pcount")
+```
+
+```{r plotNonStationarySTDistributionJkt02, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
+plotJkt02NonStatSTDist <- ggplot(jkt02.stdist_nonstat, aes(x = phour, y = pcount, 
+                                                           color = buff, 
+                                                           linetype = buff)) + 
+  geom_line() + 
+  labs(title = "Jakarta 2002, Spatio-Temporal Distribution of Moving People", 
+       x = "Time", y = "People") + 
+  scale_y_continuous(labels = comma) + 
+  scale_x_discrete(breaks = seq(0, 24, 3)) +
+  scale_color_discrete(h = gradientDistance) + 
+  theme(legend.key = element_blank())
+grid.arrange(plotJkt02NonStatSTDist, 
              ncol = 1)
 ```
 
@@ -1540,20 +1606,34 @@ grid.arrange(plotJkt02STDist,
 ```{r plotSTDistAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 5, cache = TRUE}
 # extract legend after transposing
 legendSTDist <- extractGgplot2Legend(plotDhk09STDist + 
-                                       theme(legend.position="bottom"))
+                                       theme(legend.position = "bottom"))
 
 grid.arrange(arrangeGrob(plotDhk09STDist + 
-                           labs(title="Dhaka 2009") + 
+                           labs(title="Dhaka") + 
                            theme(legend.position = "none"),
                          plotHni04STDist + 
-                           labs(title="Hanoi 2004") + 
+                           labs(title="Hanoi") + 
                            theme(legend.position = "none"),
                          plotJkt02STDist + 
-                           labs(title="Jakarta 2002") + 
+                           labs(title="Jakarta") + 
                            theme(legend.position = "none"),
                          nrow=2),
-             legendSTDist, nrow=2,heights=c(10, 1), 
-             main = "Spatio-Temporal Distribution of People")
+             legendSTDist, nrow=2,heights=c(10, 1))
+```
+
+```{r plotNonStationarySTDistAll, eval = TRUE, echo = FALSE, fig.width = 10, fig.height = 5, cache = TRUE}
+# extract legend after transposing
+legendNonStatSTDist <- extractGgplot2Legend(plotDhk09NonStatSTDist + 
+                                       theme(legend.position = "bottom"))
+
+grid.arrange(arrangeGrob(plotDhk09NonStatSTDist + 
+                           labs(title="Dhaka") + 
+                           theme(legend.position = "none"),
+                         plotHni04NonStatSTDist + 
+                           labs(title="Hanoi") + 
+                           theme(legend.position = "none"),
+                         nrow=2),
+             legendNonStatSTDist, nrow=2,heights=c(10, 1))
 ```
 
 

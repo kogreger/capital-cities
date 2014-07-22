@@ -1,6 +1,6 @@
 1	Walking
 2	Bicycle
-3	Motorcycle
+3	Motor-cycle
 4	Taxi
 5	Car
 6	Truck
