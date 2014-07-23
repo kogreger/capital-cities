@@ -28,7 +28,7 @@ con <- dbConnect(drv,
                  port = "1111", 
                  user = "postgres", 
                  password = "postgres", 
-                 dbname = "postgres")
+                 dbname = "pflow")
 
 # helper files
 source("psqlHelper.R")
@@ -144,7 +144,7 @@ plotDhk09DistSex <- ggplot(dhk09.person, aes(dist / 1000, fill = sex)) +
   scale_x_continuous(labels = comma) +
   scale_fill_brewer(palette = "Set1", name = "Sex", drop = FALSE) + 
   labs(title = "Dhaka", 
-       x = "Distance [km]", 
+       x = "Total Distance Covered During the Day [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -153,7 +153,7 @@ plotDhk09DistAge <- ggplot(dhk09.person, aes(dist / 1000, fill = age)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_discrete(h = gradientAge, name = "Age", drop = FALSE) + 
-  labs(x = "Distance [km]", 
+  labs(x = "Total Distance Covered During the Day [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank()) + 
@@ -163,7 +163,7 @@ plotDhk09DistOccupC <- ggplot(dhk09.person, aes(dist / 1000, fill = occupc)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_brewer(palette = "Set1", name = "Occupation Group", drop = FALSE) + 
-  labs(x = "Distance [km]", 
+  labs(x = "Total Distance Covered During the Day [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -176,7 +176,7 @@ grid.arrange(plotDhk09Sex, plotDhk09Age, plotDhk09Occup, plotDhk09OccupC,
 
 ```{r loadHni04Person, eval = TRUE, echo = FALSE, cache = TRUE}
 # load person data incl. total trip distance
-query <- "SELECT r.pid, MIN(r.sex) sex, MIN(r.age) age, MIN(r.occup) occup, MIN(r.occupc) occupc, SUM(t.dist) dist FROM hni04.person r JOIN dhk09.trip t ON r.pid = t.pid GROUP BY r.pid ORDER BY r.pid;"
+query <- "SELECT r.pid, MIN(r.sex) sex, MIN(r.age) age, MIN(r.occup) occup, MIN(r.occupc) occupc, SUM(t.dist) dist FROM hni04.person r JOIN hni04.trip t ON r.pid = t.pid GROUP BY r.pid ORDER BY r.pid;"
 hni04.person <- psqlQuery(con, query)
 # factorize pid
 hni04.person$pid <- factor(hni04.person$pid)
@@ -243,7 +243,7 @@ plotHni04DistSex <- ggplot(hni04.person, aes(dist / 1000, fill = sex)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_brewer(palette = "Set1", name = "Sex", drop = FALSE) + 
-  labs(x = "Distance [km]", 
+  labs(x = "Total Distance Covered During the Day [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -252,7 +252,7 @@ plotHni04DistAge <- ggplot(hni04.person, aes(dist / 1000, fill = age)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_discrete(h = gradientAge, name = "Age", drop = FALSE) + 
-  labs(x = "Distance [km]", 
+  labs(x = "Total Distance Covered During the Day [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank()) + 
@@ -262,7 +262,7 @@ plotHni04DistOccupC <- ggplot(hni04.person, aes(dist / 1000, fill = occupc)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_brewer(palette = "Set1", name = "Occupation Group", drop = FALSE) + 
-  labs(x = "Distance [km]", 
+  labs(x = "Total Distance Covered During the Day [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -275,7 +275,7 @@ grid.arrange(plotHni04Sex, plotHni04Age, plotHni04Occup, plotHni04OccupC,
 
 ```{r loadJkt02Person, eval = TRUE, echo = FALSE, cache = TRUE}
 # load person data incl. total trip distance
-query <- "SELECT r.pid, MIN(r.sex) sex, MIN(r.age) age, MIN(r.occup) occup, MIN(r.occupc) occupc, SUM(t.dist) dist FROM jkt02.person r JOIN dhk09.trip t ON r.pid = t.pid GROUP BY r.pid ORDER BY r.pid;"
+query <- "SELECT r.pid, MIN(r.sex) sex, MIN(r.age) age, MIN(r.occup) occup, MIN(r.occupc) occupc, SUM(t.dist) dist FROM jkt02.person r JOIN jkt02.trip t ON r.pid = t.pid GROUP BY r.pid ORDER BY r.pid;"
 jkt02.person <- psqlQuery(con, query)
 # factorize pid
 jkt02.person$pid <- factor(jkt02.person$pid)
@@ -342,7 +342,7 @@ plotJkt02DistSex <- ggplot(jkt02.person, aes(dist / 1000, fill = sex)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_brewer(palette = "Set1", name = "Sex", drop = FALSE) + 
-  labs(x = "Distance [km]", 
+  labs(x = "Total Distance Covered During the Day [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -351,7 +351,7 @@ plotJkt02DistAge <- ggplot(jkt02.person, aes(dist / 1000, fill = age)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_discrete(h = gradientAge, name = "Age", drop = FALSE) + 
-  labs(x = "Distance [km]", 
+  labs(x = "Total Distance Covered During the Day [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank()) + 
@@ -361,7 +361,7 @@ plotJkt02DistOccupC <- ggplot(jkt02.person, aes(dist / 1000, fill = occupc)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_brewer(palette = "Set1", name = "Occupation Group", drop = FALSE) + 
-  labs(x = "Distance [km]", 
+  labs(x = "Total Distance Covered During the Day [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -374,27 +374,8 @@ grid.arrange(plotJkt02Sex, plotJkt02Age, plotJkt02Occup, plotJkt02OccupC,
 
 ```{r loadMnl96Person, eval = TRUE, echo = FALSE, cache = TRUE}
 # load person data incl. total trip distance
-# @@@ load from database "pflow"
-dbDisconnect(con)
-dbUnloadDriver(drv)
-drv <- dbDriver("PostgreSQL")
-con <- dbConnect(drv, 
-                 host = "localhost", 
-                 port = "1111", 
-                 user = "postgres", 
-                 password = "postgres", 
-                 dbname = "pflow")
 query <- "SELECT r.pid, MIN(r.sex) sex, MIN(r.age) age, MIN(r.occup) occup, MIN(r.occupc) occupc, SUM(t.dist) dist FROM mnl96.person r JOIN mnl96.trip t ON r.pid = t.pid GROUP BY r.pid ORDER BY r.pid;"
 mnl96.person <- psqlQuery(con, query)
-dbDisconnect(con)
-dbUnloadDriver(drv)
-drv <- dbDriver("PostgreSQL")
-con <- dbConnect(drv, 
-                 host = "localhost", 
-                 port = "1111", 
-                 user = "postgres", 
-                 password = "postgres", 
-                 dbname = "postgres")
 # factorize pid
 mnl96.person$pid <- factor(mnl96.person$pid)
 # factorize sex
@@ -460,7 +441,7 @@ plotMnl96DistSex <- ggplot(mnl96.person, aes(dist / 1000, fill = sex)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_brewer(palette = "Set1", name = "Sex", drop = FALSE) + 
-  labs(x = "Distance [km]", 
+  labs(x = "Total Distance Covered During the Day [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -469,7 +450,7 @@ plotMnl96DistAge <- ggplot(mnl96.person, aes(dist / 1000, fill = age)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_discrete(h = gradientAge, name = "Age", drop = FALSE) + 
-  labs(x = "Distance [km]", 
+  labs(x = "Total Distance Covered During the Day [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank()) + 
@@ -479,7 +460,7 @@ plotMnl96DistOccupC <- ggplot(mnl96.person, aes(dist / 1000, fill = occupc)) +
   scale_y_continuous(labels = comma) +
   scale_x_continuous(labels = comma) +
   scale_fill_brewer(palette = "Set1", name = "Occupation Group", drop = FALSE) + 
-  labs(x = "Distance [km]", 
+  labs(x = "Total Distance Covered During the Day [km]", 
        y = "Density") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
@@ -564,18 +545,18 @@ grid.arrange(arrangeGrob(plotDhk09DistAge +
                          nrow = 2),
              legendDistAge, heights=c(9, 1))
 grid.arrange(arrangeGrob(plotDhk09DistOccupC + 
-                           labs(title="Dhaka 2009") + 
+                           labs(title="Dhaka") + 
                            theme(legend.position = "none"),
                          plotHni04DistOccupC + 
-                           labs(title="Hanoi 2004") + 
+                           labs(title="Hanoi") + 
                            theme(legend.position = "none"),
                          plotJkt02DistOccupC + 
-                           labs(title="Jakarta 2002") + 
+                           labs(title="Jakarta") + 
                            theme(legend.position = "none"),
                          plotMnl96DistOccupC + 
-                           labs(title="Metro Manila 1996") + 
+                           labs(title="Metro Manila") + 
                            theme(legend.position = "none"),
-                         main = "Distance Traveled, by Occupation Group", nrow = 2),
+                         nrow = 2),
              legendDistOccupC, heights=c(8, 2))
 ```
 
@@ -704,27 +685,8 @@ grid.arrange(plotJkt02Activity,
 
 ```{r loadTripsMnl96, eval = TRUE, echo = FALSE, cache = TRUE}
 # load trip data
-# @@@ load from database "pflow"
-dbDisconnect(con)
-dbUnloadDriver(drv)
-drv <- dbDriver("PostgreSQL")
-con <- dbConnect(drv, 
-                 host = "localhost", 
-                 port = "1111", 
-                 user = "postgres", 
-                 password = "postgres", 
-                 dbname = "pflow")
 query <- "WITH non_stationary AS (SELECT pid, tno FROM mnl96.subtrip WHERE tmodec != 97 GROUP BY pid, tno) SELECT t.* FROM mnl96.trip t JOIN non_stationary s ON t.pid = s.pid AND t.tno = s.tno ORDER BY t.pid, t.tno;"
 mnl96.trip <- psqlQuery(con, query)
-dbDisconnect(con)
-dbUnloadDriver(drv)
-drv <- dbDriver("PostgreSQL")
-con <- dbConnect(drv, 
-                 host = "localhost", 
-                 port = "1111", 
-                 user = "postgres", 
-                 password = "postgres", 
-                 dbname = "postgres")
 # remove unnecessary column (purpose, puid_s, puid_e)
 # mnl96.trip <- mnl96.trip[, c("pid", "tno", "activity", "dist", 
 #                              "pdate_s", "pdate_e")]
@@ -941,26 +903,7 @@ grid.arrange(plotJkt02TModeC,
 
 ```{r loadSubtripsMnl96, eval = TRUE, echo = FALSE, cache = TRUE}
 # load subtrip data
-# @@@ load from database "pflow"
-dbDisconnect(con)
-dbUnloadDriver(drv)
-drv <- dbDriver("PostgreSQL")
-con <- dbConnect(drv, 
-                 host = "localhost", 
-                 port = "1111", 
-                 user = "postgres", 
-                 password = "postgres", 
-                 dbname = "pflow")
 mnl96.subtrip <- psqlGetTable(con, "mnl96", "subtrip")
-dbDisconnect(con)
-dbUnloadDriver(drv)
-drv <- dbDriver("PostgreSQL")
-con <- dbConnect(drv, 
-                 host = "localhost", 
-                 port = "1111", 
-                 user = "postgres", 
-                 password = "postgres", 
-                 dbname = "postgres")
 # remove unnecessary column (purpose, puid_s, puid_e)
 #mnl96.subtrip <- mnl96.subtrip[, c("pid", "tno", "sno", "tmode", "tmodec", 
 #                                   "activity", "dist", "pdate_s", "pdate_e")]
@@ -1126,7 +1069,7 @@ plotDhk09CommTripStartHourAbs <- ggplot(dhk09.commbehav,
   scale_x_discrete(breaks = seq(0, 24, 3)) +
   scale_color_brewer(palette = "Set1", name = "Activity") + 
   labs(x = "Time", 
-       y = "Count") +
+       y = "Started Commuting Trips") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
 plotDhk09CommTripStartHourRel <- ggplot(dhk09.commbehav, 
@@ -1136,7 +1079,7 @@ plotDhk09CommTripStartHourRel <- ggplot(dhk09.commbehav,
   scale_x_discrete(breaks = seq(0, 24, 3)) +
   scale_fill_brewer(palette = "Set1", name = "Activity") + 
   labs(x = "Time", 
-       y = "Ratio") +
+       y = "Ratio of Started Commuting Trips") +
   theme(legend.justification = c(1, 0), legend.position = c(1, 0), 
         legend.key = element_blank())
 grid.arrange(plotDhk09CommBehavAgeNoon, plotDhk09CommBehavOccupCNoon, 
@@ -1243,7 +1186,7 @@ plotHni04CommTripStartHourAbs <- ggplot(hni04.commbehav,
   scale_x_discrete(breaks = seq(0, 24, 3)) +
   scale_color_brewer(palette = "Set1", name = "Activity") + 
   labs(x = "Time", 
-       y = "Count") +
+       y = "Started Commuting Trips") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
 plotHni04CommTripStartHourRel <- ggplot(hni04.commbehav, 
@@ -1253,7 +1196,7 @@ plotHni04CommTripStartHourRel <- ggplot(hni04.commbehav,
   scale_x_discrete(breaks = seq(0, 24, 3)) +
   scale_fill_brewer(palette = "Set1", name = "Activity") + 
   labs(x = "Time", 
-       y = "Ratio") +
+       y = "Ratio of Started Commuting Trips") +
   theme(legend.justification = c(1, 0), legend.position = c(1, 0), 
         legend.key = element_blank())
 grid.arrange(plotHni04CommBehavAgeNoon, plotHni04CommBehavOccupCNoon, 
@@ -1360,7 +1303,7 @@ plotJkt02CommTripStartHourAbs <- ggplot(jkt02.commbehav,
   scale_x_discrete(breaks = seq(0, 24, 3)) +
   scale_color_brewer(palette = "Set1", name = "Activity") + 
   labs(x = "Time", 
-       y = "Count") +
+       y = "Started Commuting Trips") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
         legend.key = element_blank())
 plotJkt02CommTripStartHourRel <- ggplot(jkt02.commbehav, 
@@ -1370,7 +1313,7 @@ plotJkt02CommTripStartHourRel <- ggplot(jkt02.commbehav,
   scale_x_discrete(breaks = seq(0, 24, 3)) +
   scale_fill_brewer(palette = "Set1", name = "Activity") + 
   labs(x = "Time", 
-       y = "Ratio") +
+       y = "Ratio of Started Commuting Trips") +
   theme(legend.justification = c(1, 0), legend.position = c(1, 0), 
         legend.key = element_blank())
 grid.arrange(plotJkt02CommBehavAgeNoon, plotJkt02CommBehavOccupCNoon, 
@@ -1586,8 +1529,8 @@ names(jkt02.stdist_nonstat) <- c("Buffer", "phour", "pcount")
 
 ```{r plotNonStationarySTDistributionJkt02, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
 plotJkt02NonStatSTDist <- ggplot(jkt02.stdist_nonstat, aes(x = phour, y = pcount, 
-                                                           color = buff, 
-                                                           linetype = buff)) + 
+                                                           color = Buffer, 
+                                                           linetype = Buffer)) + 
   geom_line() + 
   labs(title = "Jakarta 2002, Spatio-Temporal Distribution of Moving People", 
        x = "Time", y = "People") + 
@@ -1631,6 +1574,9 @@ grid.arrange(arrangeGrob(plotDhk09NonStatSTDist +
                            theme(legend.position = "none"),
                          plotHni04NonStatSTDist + 
                            labs(title="Hanoi") + 
+                           theme(legend.position = "none"),
+                         plotJkt02NonStatSTDist + 
+                           labs(title="Jakarta") + 
                            theme(legend.position = "none"),
                          nrow=2),
              legendNonStatSTDist, nrow=2,heights=c(10, 1))
