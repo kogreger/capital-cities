@@ -1586,10 +1586,10 @@ names(jkt02.stdist_nonstat) <- c("Buffer", "phour", "pcount")
 
 ```{r plotNonStationarySTDistributionJkt02, eval = TRUE, echo = FALSE, fig.width = 7, fig.height = 7, cache = TRUE}
 plotJkt02NonStatSTDist <- ggplot(jkt02.stdist_nonstat, aes(x = phour, y = pcount, 
-                                                           color = buff, 
-                                                           linetype = buff)) + 
+                                                           color = Buffer, 
+                                                           linetype = Buffer)) + 
   geom_line() + 
-  labs(title = "Jakarta 2002, Spatio-Temporal Distribution of Moving People", 
+  labs(title = "Spatio-Temporal Distribution of Moving People, Jakarta", 
        x = "Time", y = "People") + 
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(breaks = seq(0, 24, 3)) +
