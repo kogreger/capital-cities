@@ -94,3 +94,19 @@ WHERE t.purpose IN (1, 2, 3)  AND
 	WHERE x.pid = t.pid AND x.tno = (t.tno - 1)
 ) IN (1, 2, 3) AND s.tmodec != 97 
 ORDER BY pid, tno;
+
+
+-- analyze activities at :00 at every hour
+-- (for activities that change exactly at :00 the latter (beginning) activity is kept
+WITH hourly_trips AS
+(
+	SELECT p.pid, date_part('hour', p.pdate) phour, MAX(p.tno) tno 
+	FROM dhk09.point p 
+	WHERE date_part('minute', p.pdate) = 0 
+	GROUP BY p.pid, date_part('hour', p.pdate) 
+	ORDER BY p.pid, phour
+)
+SELECT h.pid, h.phour, t.activity 
+FROM hourly_trips h 
+JOIN dhk09.trip t ON h.pid = t.pid AND h.tno = t.tno 
+ORDER BY h.pid, h.phour
