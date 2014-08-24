@@ -28,13 +28,28 @@ psqlQuery <- function(connection, queryString) {
 
 
 ## psqlGetTable is a wrapper to the RPostgreSQL function dbReadTable. It takes 
-## an RPostgreSQL connection, a PostgreSQL schema name and a a PostgreSQL 
+## an RPostgreSQL connection, a PostgreSQL schema name and a PostgreSQL 
 ## table name and returns a data.frame.
 ##
 psqlGetTable <- function(connection, schema, table) {
   queryString = paste("SET search_path TO ", schema, "")
-  dbGetQuery(con, queryString)
-  data <- dbReadTable(con, table)
-  dbGetQuery(con, "SET search_path TO \"$user\",public")
+  dbGetQuery(connection, queryString)
+  data <- dbReadTable(connection, table)
+  dbGetQuery(connection, "SET search_path TO \"$user\",public")
   data
+}
+
+
+## psqlGetTable is a wrapper to the RPostgreSQL function dbWriteTable. It takes 
+## an RPostgreSQL connection, a PostgreSQL schema name and a data.frame 
+## (or an object that can be coerced to one) and returns a boolean.
+##
+psqlPutTable <- function(connection, schema, table, dataframe, 
+                         rownames = FALSE, ...) {
+  queryString = paste("SET search_path TO ", schema, "")
+  dbGetQuery(connection, queryString)
+  success <- dbWriteTable(connection, table, dataframe, 
+                          row.names = rownames, ...)
+  dbGetQuery(con, "SET search_path TO \"$user\",public")
+  success
 }

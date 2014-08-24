@@ -7,10 +7,10 @@ library(geosphere)
 setwd("~/Documents/University of Tsukuba/Capital Cities Project/capital-cities")
 options(fftempdir = "/Volumes/LaCie/fftemp/")
 # initialize source data folder, data set names, and file name patterns
-folder <- "/Volumes/LaCie/"
-#folder <- "../raw_data/"
-datasets <- c("dhk09", "hni04", "jkt02", "mnl96")
-sourcefiles <- c("09dhk", "04hni", "02jkt", "96mnl")
+#folder <- "/Volumes/LaCie/"
+folder <- "../raw_data/"
+datasets <- c("mnl96")
+sourcefiles <- c("96mnl")
 
 
 # loop through all data sets
@@ -29,7 +29,7 @@ for (d in 1:length(datasets)) {
                  "> ", folder, datasets[d], "/", datasets[d], "_.csv")
   print(system.time(system(bash)))
   # load data set from CSV
-  print("(3) fread into ffdf")
+  print("(3) read.table.ffdf")
   filename <- paste0(folder, datasets[d], "/", datasets[d], "_.csv")
   print(system.time(data <- read.table.ffdf(file = filename, 
                                             FUN = "read.csv", 
@@ -63,13 +63,13 @@ for (d in 1:length(datasets)) {
   pointDistances <- function (dat, lon, lat) {
     # extract point coordinates
     print("(7.1) pts")
-    pts <- as.ffdf(data[, c("lon", "lat")])
+    print(system.time(pts <- as.ffdf(data[, c("lon", "lat")])))
 #     pts <- data[, c("lon", "lat")]
     #   	pts <- dat[, list(lon, lat)]
     # calculate distances between point positions and subsequent point positions
     print("(7.2) distHaversine")
-    dist <- ff(distHaversine(p1 = pts[-nrow(data), ], 
-                             p2 = pts[-1, ]))
+    print(system.time(dist <- ff(distHaversine(p1 = pts[-nrow(data), ], 
+                                               p2 = pts[-1, ]))))
 #     dist <- distHaversine(p1 = pts[-nrow(data), ], 
 #                       p2 = pts[-1, ])
     # append 0 distance to last point and return
@@ -116,8 +116,8 @@ for (d in 1:length(datasets)) {
   rm(distances)
   print(gc())
   # remove ff temporary files
-  bash <- paste0("rm ", folder, "fftemp/", "*")
-  print(system.time(system(bash)))
+  #bash <- paste0("rm ", folder, "fftemp/", "*")
+  #print(system.time(system(bash)))
   # empty trash
   print(system.time(system("rm -rf ~/.Trash/*")))
 

@@ -374,7 +374,7 @@ SET dist =
   WHERE t1.pid = t2.pid AND t1.tno = t2.tno AND t1.sno = t2.sno AND t2.pdate = (t1.pdate + interval '1 minute') 
 );
 
--- calculate distance of subtrips (171421198ms, ~2d)
+-- calculate distance of subtrips (ms, ~d)
 UPDATE mnl96.subtrip s 
 SET dist = 
 (
@@ -384,7 +384,7 @@ SET dist =
 	GROUP BY p.pid, p.tno, p.sno
 );
 
--- calculate distance of trips (34,224ms, ~34s)
+-- calculate distance of trips (ms, ~s)
 UPDATE mnl96.trip t 
 SET dist = 
 (
@@ -394,13 +394,13 @@ SET dist =
 	GROUP BY s.pid, s.tno
 );
 
--- add columns for subtrip start & end identification (83ms)
+-- add columns for subtrip start & end identification (ms)
 ALTER TABLE mnl96.subtrip ADD COLUMN puid_s bigint;
 ALTER TABLE mnl96.subtrip ADD COLUMN puid_e bigint;
 ALTER TABLE mnl96.subtrip ADD COLUMN pdate_s timestamp without time zone;
 ALTER TABLE mnl96.subtrip ADD COLUMN pdate_e timestamp without time zone;
 
--- identify subtrip start & end times (188,265,630ms, ~2.1d)
+-- identify subtrip start & end times (ms, ~d)
 UPDATE mnl96.subtrip s 
 SET pdate_s =
 (
@@ -416,7 +416,7 @@ SET pdate_s =
 	GROUP BY pid, tno, sno
 );
 
--- identify subtrip start & end point positions (199,001,258ms, ~2.3h)
+-- identify subtrip start & end point positions (ms, ~h)
 UPDATE mnl96.subtrip s 
 SET puid_s =
 (
@@ -432,13 +432,13 @@ SET puid_s =
 	GROUP BY pid, tno, sno
 );
 
--- add columns for trip start & end identification (49ms)
+-- add columns for trip start & end identification (ms)
 ALTER TABLE mnl96.trip ADD COLUMN puid_s bigint;
 ALTER TABLE mnl96.trip ADD COLUMN puid_e bigint;
 ALTER TABLE mnl96.trip ADD COLUMN pdate_s timestamp without time zone;
 ALTER TABLE mnl96.trip ADD COLUMN pdate_e timestamp without time zone;
 
--- identify trip start & end times (68,267,537ms, ~18.9h)
+-- identify trip start & end times (ms, ~h)
 UPDATE mnl96.trip t 
 SET pdate_s =
 (
@@ -454,7 +454,7 @@ SET pdate_s =
 	GROUP BY pid, tno
 );
 
--- identify trip start & end point positions (64,975,405ms, ~18h)
+-- identify trip start & end point positions (ms, ~h)
 UPDATE mnl96.trip t 
 SET puid_s =
 (
@@ -470,7 +470,7 @@ SET puid_s =
 	GROUP BY pid, tno
 );
 
--- add column for 5km buffer zone (18ms)
+-- add column for 5km buffer zone (123ms)
 ALTER TABLE mnl96.point ADD COLUMN buff bigint;
 
 -- identify point positions' 5km buffer zone (ms, ~d)
