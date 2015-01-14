@@ -16,6 +16,15 @@ plotDhk09Activity <- ggplot(dhk09.trip, aes(activity)) +
   labs(x = NULL, y = NULL) + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
   theme(legend.position = "none")
+# plotDhk09Activity <- ggplot(data.frame(table(dhk09.trip$activity) / 
+#                                          (nrow(dhk09.trip) / 100)), 
+#                             aes(Var1, Freq)) + 
+#   geom_bar(fill = "black", stat = "identity") + 
+#   scale_y_continuous(labels = comma) + 
+#   scale_x_discrete(limits = labelsActivity[, 2]) + 
+#   labs(x = NULL, y = NULL) + 
+#   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+#   theme(legend.position = "none")
 title.grob <- textGrob(
   label = "a) Dhaka",
   x = unit(0, "lines"), 
@@ -31,6 +40,15 @@ plotHni04Activity <- ggplot(hni04.trip, aes(activity)) +
   labs(x = NULL, y = NULL) + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
   theme(legend.position = "none")
+# plotHni04Activity <- ggplot(data.frame(table(hni04.trip$activity) / 
+#                                          (nrow(hni04.trip) / 100)), 
+#                             aes(Var1, Freq)) + 
+#   geom_bar(fill = "black", stat = "identity") + 
+#   scale_y_continuous(labels = comma) + 
+#   scale_x_discrete(limits = labelsActivity[, 2]) + 
+#   labs(x = NULL, y = NULL) + 
+#   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+#   theme(legend.position = "none")
 title.grob <- textGrob(
   label = "b) Hanoi",
   x = unit(0, "lines"), 
@@ -46,6 +64,15 @@ plotJkt02Activity <- ggplot(jkt02.trip, aes(activity)) +
   labs(x = NULL, y = NULL) + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
   theme(legend.position = "none")
+# plotJkt02Activity <- ggplot(data.frame(table(jkt02.trip$activity) / 
+#                                          (nrow(jkt02.trip) / 100)), 
+#                             aes(Var1, Freq)) + 
+#   geom_bar(fill = "black", stat = "identity") + 
+#   scale_y_continuous(labels = comma) + 
+#   scale_x_discrete(limits = labelsActivity[, 2]) + 
+#   labs(x = NULL, y = NULL) + 
+#   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+#   theme(legend.position = "none")
 title.grob <- textGrob(
   label = "c) Jakarta",
   x = unit(0, "lines"), 
@@ -61,8 +88,17 @@ plotMnl96Activity <- ggplot(mnl96.trip, aes(activity)) +
   labs(x = NULL, y = NULL) + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
   theme(legend.position = "none")
+# plotMnl96Activity <- ggplot(data.frame(table(mnl96.trip$activity) / 
+#                                          (nrow(mnl96.trip) / 100)), 
+#                             aes(Var1, Freq)) + 
+#   geom_bar(fill = "black", stat = "identity") + 
+#   scale_y_continuous(labels = comma) + 
+#   scale_x_discrete(limits = labelsActivity[, 2]) + 
+#   labs(x = NULL, y = NULL) + 
+#   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+#   theme(legend.position = "none")
 title.grob <- textGrob(
-  label = "d) Metro Manila",
+  label = "d) Manila",
   x = unit(0, "lines"), 
   y = unit(0, "lines"),
   hjust = 0, vjust = 0,
@@ -87,6 +123,15 @@ plotDhk09TModeC <- ggplot(dhk09.subtrip, aes(tmodec)) +
   labs(x = NULL, y = NULL) + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
   theme(legend.position = "none")
+# plotDhk09TModeC <- ggplot(data.frame(table(dhk09.subtrip$tmodec) / 
+#                                        (nrow(dhk09.subtrip) / 100)), 
+#                           aes(Var1, Freq)) + 
+#   geom_bar(fill = "black", stat = "identity") + 
+#   scale_y_continuous(labels = comma) + 
+#   scale_x_discrete(limits = labelsTModeC[c(1:9), 2]) + 
+#   labs(x = NULL, y = NULL) + 
+#   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+#   theme(legend.position = "none")
 title.grob <- textGrob(
   label = "a) Dhaka",
   x = unit(0, "lines"), 
@@ -102,6 +147,15 @@ plotHni04TModeC <- ggplot(hni04.subtrip, aes(tmodec)) +
   labs(x = NULL, y = NULL) + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
   theme(legend.position = "none")
+# plotHni04TModeC <- ggplot(data.frame(table(hni04.subtrip$tmodec) / 
+#                                        (nrow(hni04.subtrip) / 100)), 
+#                           aes(Var1, Freq)) + 
+#   geom_bar(fill = "black", stat = "identity") + 
+#   scale_y_continuous(labels = comma) + 
+#   scale_x_discrete(limits = labelsTModeC[c(1:9), 2]) + 
+#   labs(x = NULL, y = NULL) + 
+#   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+#   theme(legend.position = "none")
 title.grob <- textGrob(
   label = "b) Hanoi",
   x = unit(0, "lines"), 
@@ -117,6 +171,15 @@ plotJkt02TModeC <- ggplot(jkt02.subtrip, aes(tmodec)) +
   labs(x = NULL, y = NULL) + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
   theme(legend.position = "none")
+# plotJkt02TModeC <- ggplot(data.frame(table(jkt02.subtrip$tmodec) / 
+#                                        (nrow(jkt02.subtrip) / 100)), 
+#                           aes(Var1, Freq)) + 
+#   geom_bar(fill = "black", stat = "identity") + 
+#   scale_y_continuous(labels = comma) + 
+#   scale_x_discrete(limits = labelsTModeC[c(1:9), 2]) + 
+#   labs(x = NULL, y = NULL) + 
+#   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+#   theme(legend.position = "none")
 title.grob <- textGrob(
   label = "c) Jakarta",
   x = unit(0, "lines"), 
@@ -132,8 +195,17 @@ plotMnl96TModeC <- ggplot(mnl96.subtrip, aes(tmodec)) +
   labs(x = NULL, y = NULL) + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
   theme(legend.position = "none")
+# plotMnl96TModeC <- ggplot(data.frame(table(mnl96.subtrip$tmodec) / 
+#                                        (nrow(mnl96.subtrip) / 100)), 
+#                           aes(Var1, Freq)) + 
+#   geom_bar(fill = "black", stat = "identity") + 
+#   scale_y_continuous(labels = comma) + 
+#   scale_x_discrete(limits = labelsTModeC[c(1:9), 2]) + 
+#   labs(x = NULL, y = NULL) + 
+#   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + 
+#   theme(legend.position = "none")
 title.grob <- textGrob(
-  label = "d) Metro Manila",
+  label = "d) Manila",
   x = unit(0, "lines"), 
   y = unit(0, "lines"),
   hjust = 0, vjust = 0,
@@ -156,7 +228,8 @@ plotDhk09DistSex <- ggplot(dhk09.person, aes(x = sex, y = dist / 1000)) +
   geom_boxplot(outlier.size = 1, size = .5) + 
   guides(fill = FALSE) + 
   coord_flip() +
-  scale_y_continuous(labels = comma) +
+  scale_y_continuous(breaks = c(0, 50, 100, 150), 
+                     labels = c("0", "50", "100", "150 km")) +
   scale_x_discrete(limits = labelsSex[, 2]) +
   labs(y = NULL, 
        x = NULL)
@@ -166,7 +239,8 @@ plotDhk09DistAge <- ggplot(dhk09.person, aes(x = age, y = dist / 1000)) +
   geom_boxplot(outlier.size = 1, size = .5) + 
   guides(fill = FALSE) + 
   coord_flip() + 
-  scale_y_continuous(labels = comma) +
+  scale_y_continuous(breaks = c(0, 50, 100, 150), 
+                     labels = c("0", "50", "100", "150 km")) +
   scale_x_discrete(limits = labelsAge[, 2]) +
   labs(y = NULL, 
        x = NULL)
@@ -183,7 +257,8 @@ plotDhk09DistOccupC <- ggplot(dhk09.person, aes(x = occupc, y = dist / 1000)) +
   geom_boxplot(outlier.size = 1, size = .5) + 
   guides(fill = FALSE) + 
   coord_flip() +
-  scale_y_continuous(labels = comma) +
+  scale_y_continuous(breaks = c(0, 50, 100, 150), 
+                     labels = c("0", "50", "100", "150 km")) +
   scale_x_discrete(limits = labelsOccupC[, 2]) +
   labs(y = NULL, 
        x = NULL)
@@ -201,7 +276,8 @@ plotHni04DistSex <- ggplot(hni04.person, aes(x = sex, y = dist / 1000)) +
   geom_boxplot(outlier.size = 1, size = .5) + 
   guides(fill = FALSE) + 
   coord_flip() +
-  scale_y_continuous(labels = comma) +
+  scale_y_continuous(breaks = c(0, 50, 100, 150, 200, 250), 
+                     labels = c("0", "50", "100", "150", "200", "250 km")) +
   scale_x_discrete(limits = labelsSex[, 2]) +
   labs(y = NULL, 
        x = NULL)
@@ -211,7 +287,8 @@ plotHni04DistAge <- ggplot(hni04.person, aes(x = age, y = dist / 1000)) +
   geom_boxplot(outlier.size = 1, size = .5) + 
   guides(fill = FALSE) + 
   coord_flip() +
-  scale_y_continuous(labels = comma) +
+  scale_y_continuous(breaks = c(0, 50, 100, 150, 200, 250), 
+                     labels = c("0", "50", "100", "150", "200", "250 km")) +
   scale_x_discrete(limits = labelsAge[, 2]) +
   labs(y = NULL, 
        x = NULL)
@@ -228,7 +305,8 @@ plotHni04DistOccupC <- ggplot(hni04.person, aes(x = occupc, y = dist / 1000)) +
   geom_boxplot(outlier.size = 1, size = .5) + 
   guides(fill = FALSE) + 
   coord_flip() +
-  scale_y_continuous(labels = comma) +
+  scale_y_continuous(breaks = c(0, 50, 100, 150, 200, 250), 
+                     labels = c("0", "50", "100", "150", "200", "250 km")) +
   scale_x_discrete(limits = labelsOccupC[, 2]) +
   labs(y = NULL, 
        x = NULL)
@@ -246,7 +324,8 @@ plotJkt02DistSex <- ggplot(jkt02.person, aes(x = sex, y = dist / 1000)) +
   geom_boxplot(outlier.size = 1, size = .5) + 
   guides(fill = FALSE) + 
   coord_flip() +
-  scale_y_continuous(labels = comma) +
+  scale_y_continuous(breaks = c(0, 100, 200, 300, 400, 500), 
+                     labels = c("0", "100", "200", "300", "400", "500 km")) +
   scale_x_discrete(limits = labelsSex[, 2]) +
   labs(y = NULL, 
        x = NULL)
@@ -256,7 +335,8 @@ plotJkt02DistAge <- ggplot(jkt02.person, aes(x = age, y = dist / 1000)) +
   geom_boxplot(outlier.size = 1, size = .5) + 
   guides(fill = FALSE) + 
   coord_flip() +
-  scale_y_continuous(labels = comma) +
+  scale_y_continuous(breaks = c(0, 100, 200, 300, 400, 500), 
+                     labels = c("0", "100", "200", "300", "400", "500 km")) +
   scale_x_discrete(limits = labelsAge[, 2]) +
   labs(y = NULL, 
        x = NULL)
@@ -273,7 +353,8 @@ plotJkt02DistOccupC <- ggplot(jkt02.person, aes(x = occupc, y = dist / 1000)) +
   geom_boxplot(outlier.size = 1, size = .5) + 
   guides(fill = FALSE) + 
   coord_flip() +
-  scale_y_continuous(labels = comma) +
+  scale_y_continuous(breaks = c(0, 100, 200, 300, 400, 500), 
+                     labels = c("0", "100", "200", "300", "400", "500 km")) +
   scale_x_discrete(limits = labelsOccupC[, 2]) +
   labs(y = NULL, 
        x = NULL)
@@ -291,7 +372,8 @@ plotMnl96DistSex <- ggplot(mnl96.person, aes(x = sex, y = dist / 1000)) +
   geom_boxplot(outlier.size = 1, size = .5) + 
   guides(fill = FALSE) + 
   coord_flip() +
-  scale_y_continuous(labels = comma) +
+  scale_y_continuous(breaks = c(0, 100, 200, 300), 
+                     labels = c("0", "100", "200", "300 km")) +
   scale_x_discrete(limits = labelsSex[, 2]) +
   labs(y = NULL, 
        x = NULL)
@@ -301,12 +383,13 @@ plotMnl96DistAge <- ggplot(mnl96.person, aes(x = age, y = dist / 1000)) +
   geom_boxplot(outlier.size = 1, size = .5) + 
   guides(fill = FALSE) + 
   coord_flip() +
-  scale_y_continuous(labels = comma) +
+  scale_y_continuous(breaks = c(0, 100, 200, 300), 
+                     labels = c("0", "100", "200", "300 km")) +
   scale_x_discrete(limits = labelsAge[, 2]) +
   labs(y = NULL, 
        x = NULL)
 title.grob <- textGrob(
-  label = "g) Metro Manila, by age group",
+  label = "g) Manila, by age group",
   x = unit(0, "lines"), 
   y = unit(0, "lines"),
   hjust = 0, vjust = 0,
@@ -318,12 +401,13 @@ plotMnl96DistOccupC <- ggplot(mnl96.person, aes(x = occupc, y = dist / 1000)) +
   geom_boxplot(outlier.size = 1, size = .5) + 
   guides(fill = FALSE) + 
   coord_flip() +
-  scale_y_continuous(labels = comma) +
+  scale_y_continuous(breaks = c(0, 100, 200, 300), 
+                     labels = c("0", "100", "200", "300 km")) +
   scale_x_discrete(limits = labelsOccupC[, 2]) +
   labs(y = NULL, 
        x = NULL)
 title.grob <- textGrob(
-  label = "h) Metro Manila, by occupation group",
+  label = "h) Manila, by occupation group",
   x = unit(0, "lines"), 
   y = unit(0, "lines"),
   hjust = 0, vjust = 0,
@@ -350,7 +434,13 @@ plotDhk09CommTripStartHourAbs <- ggplot(dhk09.commbehav,
                                         aes(phour_s, linetype = Activity)) +
   geom_freqpoly(aes(group = Activity), size = .5) +
   scale_y_continuous(labels = comma) + 
-  scale_x_discrete(breaks = seq(0, 24, 3)) +
+  scale_x_discrete(breaks = seq(0, 24, 3), 
+                   limits = c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", 
+                              "10", "11", "12", "13", "14", "15", "16", "17", 
+                              "18", "19", "20", "21", "22", "23"), 
+                   labels = c("00:00", "03:00", "06:00", "09:00", "12:00", 
+                              "15:00", "18:00", "21:00", "24:00")) + 
+  scale_linetype_discrete(name = "Activity:") +
   labs(x = NULL, 
        y = NULL) +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1), 
@@ -374,7 +464,12 @@ plotHni04CommTripStartHourAbs <- ggplot(hni04.commbehav,
                                         aes(phour_s, linetype = activity)) +
   geom_freqpoly(aes(group = activity), size = .5) +
   scale_y_continuous(labels = comma) + 
-  scale_x_discrete(breaks = seq(0, 24, 3)) +
+  scale_x_discrete(breaks = seq(0, 24, 3), 
+                   limits = c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", 
+                              "10", "11", "12", "13", "14", "15", "16", "17", 
+                              "18", "19", "20", "21", "22", "23"), 
+                   labels = c("00:00", "03:00", "06:00", "09:00", "12:00", 
+                              "15:00", "18:00", "21:00", "24:00")) +
   labs(x = NULL, 
        y = NULL) +
   theme(legend.position = "none")
@@ -391,7 +486,12 @@ plotJkt02CommTripStartHourAbs <- ggplot(jkt02.commbehav,
                                         aes(phour_s, linetype = activity)) +
   geom_freqpoly(aes(group = activity), size = .5) +
   scale_y_continuous(labels = comma) + 
-  scale_x_discrete(breaks = seq(0, 24, 3)) +
+  scale_x_discrete(breaks = seq(0, 24, 3), 
+                   limits = c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", 
+                              "10", "11", "12", "13", "14", "15", "16", "17", 
+                              "18", "19", "20", "21", "22", "23"), 
+                   labels = c("00:00", "03:00", "06:00", "09:00", "12:00", 
+                              "15:00", "18:00", "21:00", "24:00")) +
   labs(x = NULL, 
        y = NULL) +
   theme(legend.position = "none")
@@ -408,12 +508,17 @@ plotMnl96CommTripStartHourAbs <- ggplot(mnl96.commbehav,
                                         aes(phour_s, linetype = activity)) +
   geom_freqpoly(aes(group = activity), size = .5) +
   scale_y_continuous(labels = comma) + 
-  scale_x_discrete(breaks = seq(0, 24, 3)) +
+  scale_x_discrete(breaks = seq(0, 24, 3), 
+                   limits = c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", 
+                              "10", "11", "12", "13", "14", "15", "16", "17", 
+                              "18", "19", "20", "21", "22", "23"), 
+                   labels = c("00:00", "03:00", "06:00", "09:00", "12:00", 
+                              "15:00", "18:00", "21:00", "24:00")) +
   labs(x = NULL, 
        y = NULL) +
   theme(legend.position = "none")
 title.grob <- textGrob(
-  label = "d) Metro Manila",
+  label = "d) Manila",
   x = unit(0, "lines"), 
   y = unit(0, "lines"),
   hjust = 0, vjust = 0,
@@ -439,7 +544,7 @@ title.grob <- textGrob(
   y = unit(0, "lines"),
   hjust = 0, vjust = 0,
   gp = gpar(fontsize = 10))
-mapdhk09Points <- arrangeGrob(mapdhk09Points, 
+mapDhk09Points <- arrangeGrob(mapDhk09Points, 
                               main = title.grob)
 
 title.grob <- textGrob(
@@ -448,7 +553,7 @@ title.grob <- textGrob(
   y = unit(0, "lines"),
   hjust = 0, vjust = 0,
   gp = gpar(fontsize = 10))
-maphni04Points <- arrangeGrob(maphni04Points, 
+mapHni04Points <- arrangeGrob(mapHni04Points, 
                               main = title.grob)
 
 title.grob <- textGrob(
@@ -457,36 +562,39 @@ title.grob <- textGrob(
   y = unit(0, "lines"),
   hjust = 0, vjust = 0,
   gp = gpar(fontsize = 10))
-mapjkt02Points <- arrangeGrob(mapjkt02Points, 
+mapJkt02Points <- arrangeGrob(mapJkt02Points, 
                               main = title.grob)
 
 title.grob <- textGrob(
-  label = "d) Metro Manila",
+  label = "d) Manila",
   x = unit(0, "lines"), 
   y = unit(0, "lines"),
   hjust = 0, vjust = 0,
   gp = gpar(fontsize = 10))
-mapmnl96Points <- arrangeGrob(mapmnl96Points, 
+mapMnl96Points <- arrangeGrob(mapMnl96Points, 
                               main = title.grob)
 
 png(filename = "/Users/konstantingreger/Documents/University of Tsukuba/Publications/pub004/img/fig5.png",
     width = 17, height = 18, units = "cm", res = 300, pointsize = 10)
-grid.arrange(arrangeGrob(mapdhk09Points,
-                         maphni04Points,
-                         mapjkt02Points,
-                         mapmnl96Points,
+grid.arrange(arrangeGrob(mapDhk09Points,
+                         mapHni04Points,
+                         mapJkt02Points,
+                         mapMnl96Points,
                          nrow = 2))
 dev.off()
 
 
 ## Fig. 6
 plotDhk09StatSTDist <- ggplot(dhk09.stdist_stat, aes(x = phour, y = pcount, 
-                                                     linetype = Buffer)) + 
+                                                     color = Buffer)) + 
   geom_line(, size = .5) + 
   labs(x = NULL, y = NULL) + 
   scale_y_continuous(labels = comma) + 
-  scale_x_discrete(breaks = seq(0, 24, 3)) + 
-  scale_linetype_discrete() + 
+  scale_x_discrete(breaks = seq(0, 24, 3), 
+                   labels = c("00:00", "03:00", "06:00", "09:00", "12:00", 
+                              "15:00", "18:00", "21:00", "24:00")) + 
+  scale_linetype_discrete(name = "Buffer:") + 
+  scale_color_brewer(palette = "Paired") + 
   theme(legend.key = element_blank())
 legendStatSTDist <- 
   extractGgplot2Legend(plotDhk09StatSTDist + 
@@ -504,12 +612,15 @@ plotDhk09StatSTDist <- arrangeGrob(plotDhk09StatSTDist,
                                    main = title.grob)
 
 plotHni04StatSTDist <- ggplot(hni04.stdist_stat, aes(x = phour, y = pcount, 
-                                                     linetype = Buffer)) + 
+                                                     color = Buffer)) + 
   geom_line(, size = .5) + 
   labs(x = NULL, y = NULL) + 
   scale_y_continuous(labels = comma) + 
-  scale_x_discrete(breaks = seq(0, 24, 3)) + 
+  scale_x_discrete(breaks = seq(0, 24, 3), 
+                   labels = c("00:00", "03:00", "06:00", "09:00", "12:00", 
+                              "15:00", "18:00", "21:00", "24:00")) + 
   scale_linetype_discrete() + 
+  scale_color_brewer(palette = "Paired") + 
   theme(legend.position = "none")
 title.grob <- textGrob(
   label = "b) Hanoi",
@@ -521,12 +632,15 @@ plotHni04StatSTDist <- arrangeGrob(plotHni04StatSTDist,
                                    main = title.grob)
 
 plotJkt02StatSTDist <- ggplot(jkt02.stdist_stat, aes(x = phour, y = pcount, 
-                                                     linetype = Buffer)) + 
+                                                     color = Buffer)) + 
   geom_line(, size = .5) + 
   labs(x = NULL, y = NULL) + 
   scale_y_continuous(labels = comma) + 
-  scale_x_discrete(breaks = seq(0, 24, 3)) + 
+  scale_x_discrete(breaks = seq(0, 24, 3), 
+                   labels = c("00:00", "03:00", "06:00", "09:00", "12:00", 
+                              "15:00", "18:00", "21:00", "24:00")) + 
   scale_linetype_discrete() + 
+  scale_color_brewer(palette = "Paired") + 
   theme(legend.position = "none")
 title.grob <- textGrob(
   label = "c) Jakarta",
@@ -538,15 +652,18 @@ plotJkt02StatSTDist <- arrangeGrob(plotJkt02StatSTDist,
                                    main = title.grob)
 
 plotMnl96StatSTDist <- ggplot(mnl96.stdist_stat, aes(x = phour, y = pcount, 
-                                                     linetype = Buffer)) + 
+                                                     color = Buffer)) + 
   geom_line(, size = .5) + 
   labs(x = NULL, y = NULL) + 
   scale_y_continuous(labels = comma) + 
-  scale_x_discrete(breaks = seq(0, 24, 3)) + 
+  scale_x_discrete(breaks = seq(0, 24, 3), 
+                   labels = c("00:00", "03:00", "06:00", "09:00", "12:00", 
+                              "15:00", "18:00", "21:00", "24:00")) + 
   scale_linetype_discrete() + 
+  scale_color_brewer(palette = "Paired") + 
   theme(legend.position = "none")
 title.grob <- textGrob(
-  label = "d) Metro Manila",
+  label = "d) Manila",
   x = unit(0, "lines"), 
   y = unit(0, "lines"),
   hjust = 0, vjust = 0,
@@ -567,90 +684,94 @@ dev.off()
 
 ## Fig. 7
 title.grob <- textGrob(
-  label = "a)",
+  label = "a) Dhaka, at 00:00",
   x = unit(0, "lines"), 
   y = unit(0, "lines"),
   hjust = 0, vjust = 0,
   gp = gpar(fontsize = 10))
-mapdhk09Density0 <- arrangeGrob(mapdhk09Density0, 
+mapDhk09Density0 <- arrangeGrob(mapDhk09Density0, 
                               main = title.grob)
 
 title.grob <- textGrob(
-  label = "b)",
+  label = "b) Dhaka, at 12:00",
   x = unit(0, "lines"), 
   y = unit(0, "lines"),
   hjust = 0, vjust = 0,
   gp = gpar(fontsize = 10))
-mapdhk09Density12 <- arrangeGrob(mapdhk09Density12, 
+mapDhk09Density12 <- arrangeGrob(mapDhk09Density12, 
                               main = title.grob)
 
 title.grob <- textGrob(
-  label = "c)",
+  label = "c) Hanoi, at 00:00",
   x = unit(0, "lines"), 
   y = unit(0, "lines"),
   hjust = 0, vjust = 0,
   gp = gpar(fontsize = 10))
-maphni04Density0 <- arrangeGrob(maphni04Density0, 
+mapHni04Density0 <- arrangeGrob(mapHni04Density0, 
                                 main = title.grob)
 
 title.grob <- textGrob(
-  label = "d)",
+  label = "d) Hanoi, at 12:00",
   x = unit(0, "lines"), 
   y = unit(0, "lines"),
   hjust = 0, vjust = 0,
   gp = gpar(fontsize = 10))
-maphni04Density12 <- arrangeGrob(maphni04Density12, 
+mapHni04Density12 <- arrangeGrob(mapHni04Density12, 
                                  main = title.grob)
 
+# title.grob <- textGrob(
+#   label = "e)",
+#   x = unit(0, "lines"), 
+#   y = unit(0, "lines"),
+#   hjust = 0, vjust = 0,
+#   gp = gpar(fontsize = 10))
+# mapJkt02Density0 <- arrangeGrob(mapJkt02Density0, 
+#                                 main = title.grob)
+# 
+# title.grob <- textGrob(
+#   label = "f)",
+#   x = unit(0, "lines"), 
+#   y = unit(0, "lines"),
+#   hjust = 0, vjust = 0,
+#   gp = gpar(fontsize = 10))
+# mapJkt02Density12 <- arrangeGrob(mapJkt02Density12, 
+#                                  main = title.grob)
+
 title.grob <- textGrob(
-  label = "e)",
+  label = "e) Manila, at 00:00",
   x = unit(0, "lines"), 
   y = unit(0, "lines"),
   hjust = 0, vjust = 0,
   gp = gpar(fontsize = 10))
-mapjkt02Density0 <- arrangeGrob(mapjkt02Density0, 
+mapMnl96Density0 <- arrangeGrob(mapMnl96Density0, 
                                 main = title.grob)
 
 title.grob <- textGrob(
-  label = "f)",
+  label = "f) Manila, at 12:00",
   x = unit(0, "lines"), 
   y = unit(0, "lines"),
   hjust = 0, vjust = 0,
   gp = gpar(fontsize = 10))
-mapjkt02Density12 <- arrangeGrob(mapjkt02Density12, 
-                                 main = title.grob)
-
-title.grob <- textGrob(
-  label = "g)",
-  x = unit(0, "lines"), 
-  y = unit(0, "lines"),
-  hjust = 0, vjust = 0,
-  gp = gpar(fontsize = 10))
-mapmnl96Density0 <- arrangeGrob(mapmnl96Density0, 
-                                main = title.grob)
-
-title.grob <- textGrob(
-  label = "h)",
-  x = unit(0, "lines"), 
-  y = unit(0, "lines"),
-  hjust = 0, vjust = 0,
-  gp = gpar(fontsize = 10))
-mapmnl96Density12 <- arrangeGrob(mapmnl96Density12, 
+mapMnl96Density12 <- arrangeGrob(mapMnl96Density12, 
                                  main = title.grob)
 
 png(filename = "/Users/konstantingreger/Documents/University of Tsukuba/Publications/pub004/img/fig7.png",
     width = 17, height = 24, units = "cm", res = 300, pointsize = 10)
-grid.arrange(arrangeGrob(mapdhk09Density0,
-                         mapdhk09Density12,
-                         maphni04Density0,
-                         maphni04Density12,
-                         mapjkt02Density0,
-                         mapjkt02Density12,
-                         mapmnl96Density0,
-                         mapmnl96Density12,
-                         nrow = 4))
+grid.arrange(arrangeGrob(mapDhk09Density0,
+                         mapDhk09Density12,
+                         mapHni04Density0,
+                         mapHni04Density12,
+                         mapMnl96Density0,
+                         mapMnl96Density12,
+                         nrow = 3))
 dev.off()
 
+
+
+
+
+
+### unused
 
 ## Fig. 8
 legendMapBins <- 
@@ -724,11 +845,6 @@ table(subset(hni04.trip, activity != "Home", activity)) / (sum(table(subset(hni0
 table(subset(jkt02.trip, activity != "Home", activity)) / (sum(table(subset(jkt02.trip, activity != "Home", activity))) / 100)
 table(subset(mnl96.trip, activity != "Home", activity)) / (sum(table(subset(mnl96.trip, activity != "Home", activity))) / 100)
 
-
-
-
-
-### unused
 
 ## comparison age distributio of sample pop vs. country pop
 # load country population data

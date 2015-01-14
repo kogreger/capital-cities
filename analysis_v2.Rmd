@@ -1624,7 +1624,7 @@ grid.arrange(plotHni04NonStatSTDist,
 ```
 
 ```{r loadStationarySTDistributionHni04, eval = TRUE, echo = FALSE, cache = TRUE}
-# load spatio-temporal distribution data
+  # load spatio-temporal distribution data
 query <- "WITH stationary AS (SELECT pid, tno, sno, MIN(tmodec) FROM hni042.subtrip WHERE tmodec = 97 GROUP BY pid, tno, sno ORDER BY pid, tno, sno) SELECT p.buff, date_part('hour', p.pdate) phour, COUNT(DISTINCT p.pid) pcount FROM hni042.point p JOIN stationary s ON p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno GROUP BY p.buff, date_part('hour', p.pdate) ORDER BY date_part('hour', p.pdate), buff;"
 hni04.stdist_stat <- psqlQuery(con, query)
 # factorize buff
@@ -1750,7 +1750,7 @@ names(mnl96.stdist) <- c("Buffer", "phour", "pcount")
 plotMnl96STDist <- ggplot(mnl96.stdist, aes(x = phour, y = pcount, 
                                             color = Buffer, linetype = Buffer)) + 
   geom_line() + 
-  labs(title = "Spatio-Temporal Distribution of People, Metro Manila", 
+  labs(title = "Spatio-Temporal Distribution of People, Manila", 
        x = "Time", y = "People") + 
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(breaks = seq(0, 24, 3)) +
@@ -1777,7 +1777,7 @@ plotMnl96NonStatSTDist <- ggplot(mnl96.stdist_nonstat, aes(x = phour, y = pcount
                                                            color = Buffer, 
                                                            linetype = Buffer)) + 
   geom_line() + 
-  labs(title = "Spatio-Temporal Distribution of Moving People, Metro Manila", 
+  labs(title = "Spatio-Temporal Distribution of Moving People, Manila", 
        x = "Time", y = "People") + 
   scale_y_continuous(labels = comma) + 
   scale_x_discrete(breaks = seq(0, 24, 3)) +
@@ -1866,6 +1866,6 @@ It's always a good idea to clean up after you're done...
 
 ```{r cleanup, eval = TRUE, echo = FALSE, message = FALSE, cache = TRUE}
 ## clean up database connection and database driver
-dbDisconnect(con)
-dbUnloadDriver(drv)
+##dbDisconnect(con)
+##dbUnloadDriver(drv)
 ```

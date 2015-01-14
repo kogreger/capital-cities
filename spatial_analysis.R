@@ -2,6 +2,8 @@
 # load libraries
 #install.packages("maptools")
 library(ggmap)
+library(gridExtra)
+library(Hmisc)
 library(maptools)
 library(rgdal)
 library(rgeos)
@@ -33,7 +35,7 @@ labelsTModeC[, 2] <- gsub("-", "-\n", labelsTModeC[, 2], fixed = TRUE)
 query <- "SELECT gid, name, ST_X(geom) longitude, ST_Y(geom) latitude FROM geodata.capital_cities;"
 capital.cities <- psqlQuery(con, query)
 
-# load buffer rings from databas
+# load buffer rings from database
 query <- "SELECT gid, ST_AsText(geom) AS wkt_geometry, name, radius FROM geodata.buffers_5km;"
 buffers_raw <- psqlQuery(con, query)
 row.names(buffers_raw) <- buffers_raw$gid
@@ -60,31 +62,39 @@ rm(buffers_raw)
 rm(buffers_temp)
 rm(buffers_spdf)
 
-# create background map, centered on city centroid, incl. buffer rings
-centroid = as.numeric(capital.cities[capital.cities$gid == 1, 
-                                     c("longitude", "latitude")])
-map <- qmap(location = centroid, zoom = 10, 
-            source = "stamen", maptype = "toner") + 
-  geom_path(aes(x = long, y = lat), 
-               data = buffers, color = "blue", size = .1)
-
 
 ## maps of point distribution
+# (for some reason doesn't work in loop ... therefore manually)
 for (d in 1:length(datasets)) {
   # load point data from database
   query <- paste0("SELECT p.longitude, p.latitude FROM ", datasets[d], "2.point p JOIN ", datasets[d], "2.subtrip s ON p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno WHERE s.tmodec <> 97;")
   data <- psqlQuery(con, query)
-  # create background map, centered on city centroid, incl. buffer rings
+  # create background map, centered on city centroid, 
+  # incl. buffer rings and buffer ring labels
   centroid = as.numeric(capital.cities[capital.cities$gid == d, 
                                        c("longitude", "latitude")])
-  map <- qmap(location = centroid, zoom = 10, 
+  buff_label_coeff <- cbind(c(.03, .03, -.03, .03), c(.304, .306, -.316, .312))
+  longitude <- centroid[1] + seq(from = buff_label_coeff[d, 1], 
+                                 to = buff_label_coeff[d, 2], 
+                                 length.out = 10)
+  latitude <- centroid[2] + seq(from = buff_label_coeff[d, 1], 
+                                  to = buff_label_coeff[d, 2], 
+                                  length.out = 10)
+  buff_label_pos <- 
+    data.frame(logitude = longitude, 
+               latitude = latitude, 
+               label = paste(seq(5, 50, 5), rep("km", 10)))
+  assign(paste0("map", capitalize(datasets[d]), "Points"), 
+         qmap(location = centroid, zoom = 10, 
               source = "stamen", maptype = "toner") + 
-    geom_path(aes(x = long, y = lat), 
-              data = buffers, color = "blue", size = .1)
-  # add point locations to map
-  assign(paste0("map", datasets[d], "Points"), map +
-    geom_point(data = data, aes(x = longitude, y = latitude), 
-               size = .5, color = "red", alpha = .1))
+           geom_path(data = buffers, aes(x = long, y = lat), 
+                     color = "blue", size = .1) + 
+           geom_text(data = buff_label_pos, 
+                     aes(x = longitude, y = latitude, label = label), 
+                     color = "blue", angle = -45, 
+                     size = 2) + 
+           geom_point(data = data, aes(x = longitude, y = latitude), 
+                      size = .5, color = "red", alpha = .1))
 }
 rm(data)
 gc()
@@ -95,25 +105,41 @@ for (d in 1:length(datasets)) {
   # load point data from database
   query <- paste0("WITH stationary AS (SELECT pid, tno, sno, MIN(activity) activity FROM ", datasets[d], "2.subtrip WHERE tmodec = 97 GROUP BY pid, tno, sno ORDER BY pid, tno, sno) SELECT p.pid, date_part('hour', p.pdate) phour, MIN(s.activity) activity, MIN(p.longitude) longitude, MIN(p.latitude) latitude FROM ", datasets[d], "2.point p JOIN stationary s ON p.pid = s.pid AND p.tno = s.tno AND p.sno = s.sno GROUP BY p.pid, phour ORDER BY p.pid, phour;")
   data <- psqlQuery(con, query)
-  # create background map, centered on city centroid, incl. buffer rings
+  # create background map, centered on city centroid, 
+  # incl. buffer rings and buffer ring labels
   centroid = as.numeric(capital.cities[capital.cities$gid == d, 
                                        c("longitude", "latitude")])
-  map <- qmap(location = centroid, zoom = 11, 
-              source = "stamen", maptype = "toner") + 
-    geom_path(aes(x = long, y = lat), 
-              data = buffers, color = "blue", size = .1)
-  # add point locations density surface to map
+  buff_label_coeff <- cbind(c(.0303, .0306, -.03, .03), c(.303, .306, -.316, .317))
+  longitude <- centroid[1] + seq(from = buff_label_coeff[d, 1], 
+                                 to = buff_label_coeff[d, 2], 
+                                 length.out = 10)
+  latitude <- centroid[2] + seq(from = buff_label_coeff[d, 1], 
+                                to = buff_label_coeff[d, 2], 
+                                length.out = 10)
+  buff_label_pos <- 
+    data.frame(logitude = longitude, 
+               latitude = latitude, 
+               label = paste(seq(5, 50, 5), rep("km", 10)))
+  zoom_levels <- c(12, 13, 11, 12)
   for (hour in c(0, 12)) {
-    mapDensity <- map + 
-      stat_density2d(
-        aes(x = longitude, y = latitude, fill = ..level.., alpha = ..level..),
-        size = .01, bins = 16, 
-        data = data[data$phour == hour, ],
-        geom = "polygon"
-      ) + 
-      scale_fill_gradient(low = "white", high = "red", guide = FALSE) +
-      scale_alpha(range = c(0, .7), guide = FALSE)
-    assign(paste0("map", datasets[d], "Density", hour), mapDensity)
+    assign(paste0("map", capitalize(datasets[d]), "Density", hour), 
+           qmap(location = centroid, zoom = zoom_levels[d], 
+                source = "stamen", maptype = "toner") + 
+             geom_path(data = buffers, aes(x = long, y = lat), 
+                       color = "blue", size = .1) + 
+             geom_text(data = buff_label_pos, 
+                       aes(x = longitude, y = latitude, label = label), 
+                       color = "blue", angle = -45, 
+                       size = 2) + 
+             stat_density2d(
+               aes(x = longitude, y = latitude, 
+                   fill = ..level.., alpha = ..level..), 
+               size = .01, bins = 16, 
+               data = data[data$phour == hour, ], 
+               geom = "polygon"
+             ) + 
+             scale_fill_gradient(low = "white", high = "red", guide = FALSE) +
+             scale_alpha(range = c(0, .7), guide = FALSE))
   }
 }
 rm(data)
@@ -129,13 +155,35 @@ for (d in 1:length(datasets)) {
   data$activity <- factor(data$activity, 
                           levels = c(1:6, 99), 
                           labels = labelsActivity[, 2])
-  # create background map, centered on city centroid, incl. buffer rings
+  # create background map, centered on city centroid, 
+  # incl. buffer rings and buffer ring labels
   centroid = as.numeric(capital.cities[capital.cities$gid == d, 
                                        c("longitude", "latitude")])
+  buff_label_coeff <- cbind(c(.03, .03, -.03, .03), c(.295, .302, -.32, .312))
+  longitude <- centroid[1] + seq(from = buff_label_coeff[d, 1], 
+                                 to = buff_label_coeff[d, 2], 
+                                 length.out = 10)
+  if(buff_label_coeff[d, 1] > 0) {
+    latitude <- centroid[2] + seq(from = buff_label_coeff[d, 1], 
+                                  to = buff_label_coeff[d, 2], 
+                                  length.out = 10)
+  } else {
+    latitude <- centroid[2] - seq(from = buff_label_coeff[d, 1], 
+                                  to = buff_label_coeff[d, 2], 
+                                  length.out = 10)
+  }
+  buff_label_pos <- 
+    data.frame(logitude = longitude, 
+               latitude = latitude, 
+               label = paste(seq(5, 50, 5), rep("km", 10)))
   map <- qmap(location = centroid, zoom = 10, 
               source = "stamen", maptype = "toner") + 
     geom_path(aes(x = long, y = lat), 
-              data = buffers, color = "blue", size = .1)
+              data = buffers, color = "blue", size = .1) + 
+    geom_text(data = buff_label_pos, 
+              aes(x = longitude, y = latitude, label = label), 
+              color = "blue", 
+              angle = -45)
   # add binned stationarity locations to map
   # binwidth of .005 equals distance of:
   # N/S: 556.6m
